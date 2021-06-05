@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 
-
-
 let allowStaging = false;
 const beginStaging = (ev) => {
   ev.preventDefault();
@@ -29,6 +27,8 @@ const logElementCoords = (ev) => {
     ev.preventDefault();
     console.log(ev.target.id);
 };
+
+
 
 const MapGrid = ({ Props }) => {
     // const divArray = useMemo(()=>
