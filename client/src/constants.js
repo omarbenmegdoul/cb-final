@@ -6,8 +6,8 @@
 
 import { toLonLat } from 'ol/proj';
 
-export const CHI_SUBDIVISIONS = 16;
-export const PSI_SUBDIVISIONS = 30;
+export const CHI_SUBDIVISIONS = 32;
+export const PSI_SUBDIVISIONS = 60;
 
 export const TL_PX = [-8190390.92229111, 5718720.025639196];
 export const TR_PX = [-8180022.1271212865, 5712037.323447103];

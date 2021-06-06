@@ -1,4 +1,8 @@
+
+
 import React, { useState } from 'react';
+import simpleData from "./simpleData.js"
+
 // import './App.css';
 import Map from './components/Map/Map';
 import Layers from './components/Map/Layers/Layers';
@@ -13,17 +17,23 @@ import FullScreenControls from './components/Map/Controls/Controls';
 import MapBgBlock from './components/Map';
 import GlobalStyles from './components/GlobalStyles';
 import MapStack from './components/MapStack';
-import styled from "styled-components"
+import styled from 'styled-components';
 import {
-    TL_PX,
+  TL_PX,
     SUBDIVISION_0_0_CENTER,
     POINT_AT_CHI_1_PSI_0,
     POINT_AT_CHI_0_PSI_1,
     POINT_AT_CHI_1_PSI_1,
     toPrint,
 } from './constants';
+import Header from './components/Header';
+import Divider from './components/Bits/Divider';
+import Listing from './components/Listing/Listing.js';
+
+const testListing = simpleData["https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/1-1-2-furnished-all-included/1570141857"]
+console.log(`❗ App.js:8 'testListing' <${typeof testListing}>`,testListing);
 console.log(
-    `TL_PX,
+  `TL_PX,
     subdivISION_00_CEN,
     POINT_AT_CHI_1_PSI_0,
     POINT_AT_CHI_0_PSI_1,
@@ -59,13 +69,29 @@ const geojsonObject = undefined; // see full geojson object in Github
 const geojsonObject2 = undefined; // see full geojson object in Github
 const App = () => {
     return (
-
-            <div>
-              <GlobalStyles />
-              <MapStack />
-              
-            </div> 
+        <div>
+            <GlobalStyles />
+            <Header></Header>
+            <PageWrapper>
+                {/* <MapStack /> */}
+                <Divider />
+                <Listing {...testListing} ></Listing>
+            </PageWrapper>
+        </div>
     );
 };
 export default App;
 
+const PageWrapper = styled.div`
+    padding: 15px;
+    background-color: var(--blackPurple);
+    min-width: 600px;
+    width: 80%;
+    margin: 0px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    z-index: 0;
+`;

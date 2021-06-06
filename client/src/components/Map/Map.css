@@ -1,6 +1,7 @@
 .ol-map {
   height: 600px;
   width: 320px;
+  border-radius:3px;
 }
 .ol-control {
   position: absolute;
@@ -11,6 +12,9 @@
 .ol-full-screen {
   top: .5em;
   right: .5em;
+}
+.ol-viewport {
+  border-radius:3px;
 }
 
 /*with thanks to https://medium.com/swlh/how-to-incorporate-openlayers-maps-into-react-65b411985744*/
