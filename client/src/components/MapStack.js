@@ -4,8 +4,8 @@ import MapBgBlock from './Map';
 import MapGrid from './MapGrid';
 const MapStack = () => {
     return <Wrapper>
-      {/* <MapGrid/> */}
-      <MapBgBlock/>
+      <MapGrid/>
+      {/* <MapBgBlock/> */}
     </Wrapper>;
 };
 const Wrapper = styled.div`
