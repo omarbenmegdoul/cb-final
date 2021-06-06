@@ -5,6 +5,7 @@ import {
     CHI_SUBDIVISIONS,
     PSI_HOP_TL_BL,
     PSI_SUBDIVISIONS,
+    toPrint
 } from '../constants';
 import { toLonLat } from 'ol/proj';
 
@@ -19,27 +20,24 @@ const beginStaging = (ev) => {
     console.log('Begin staging');
     allowStaging = true;
 };
-const stopStaging = (ev) => {
-    ev.preventDefault();
-    if (!allowStaging) {
-        return;
-    }
-    console.log('commit');
-    allowStaging = false;
-    const SubDs = document.getElementById('map-grid-wrapper').childNodes;
-    const toggledSubDs = [...SubDs]
-        .filter((node) => {
-            return node.classList.contains('selected');
-        })
-        .map((node) => {
-           const [longitude,latitude] = toLonLat(idToChiPsiCoords(node.id))
-            return [latitude,longitude];
-        });
-    console.log(
-        `❗ MapGrid.js:23 'toggledSubDs' <${typeof toggledSubDs}>`,
-        toggledSubDs
-    );
-};
+// const stopStaging = (ev) => {
+//     ev.preventDefault();
+//     if (!allowStaging) {
+//         return;
+//     }
+//     console.log('commit');
+//     allowStaging = false;
+//     const SubDs = document.getElementById('map-grid-wrapper').childNodes;
+//     const toggledSubDs = [...SubDs]
+//         .filter((node) => {
+//             return node.classList.contains('selected');
+//         })
+//         .map((node) => {
+//            const [longitude,latitude] = toLonLat(idToChiPsiCoords(node.id))
+//             return [latitude,longitude];
+//         });
+//     setSelectedSubdivisions(toggledSubDs)
+// };
 
 const markHover = (ev) => {
     ev.preventDefault();
@@ -68,28 +66,64 @@ const MapGrid = ({ Props }) => {
     const wrapperRef = React.useRef(null);
     const rows = new Array(PSI_SUBDIVISIONS).fill(0);
     const columns = new Array(CHI_SUBDIVISIONS).fill(0);
-
+    const stopStaging = (ev) => {
+      ev.preventDefault();
+      if (!allowStaging) {
+          return;
+      }
+      console.log('commit');
+      allowStaging = false;
+      const SubDs = document.getElementById('map-grid-wrapper').childNodes;
+      const toggledSubDs = [...SubDs]
+          .filter((node) => {
+              return node.classList.contains('selected');
+          })
+          .map((node) => {
+             const [longitude,latitude] = toLonLat(idToChiPsiCoords(node.id))
+              return [latitude,longitude];
+          });
+      setSelectedSubdivisions(toggledSubDs)
+  };
     // console.log(`❗ MapGrid.js:14 'myArr' <${typeof myArr}>`,myArr);
     return (
-        <Wrapper
-            id="map-grid-wrapper"
-            onMouseDown={beginStaging}
-            onMouseUp={stopStaging}
-            onMouseLeave={stopStaging}
-        >
-            {rows.map((x, xIndex) => {
-                return columns.map((y, yIndex) => {
-                    return (
-                        <div
-                            id={`${xIndex}-${yIndex}`}
-                            className="grid-slots"
-                            onMouseLeave={markHover}
-                            onMouseEnter={markHover}
-                        />
-                    );
-                });
-            })}
-        </Wrapper>
+        <TestFlex>
+          <Wrapper
+              id="map-grid-wrapper"
+              onMouseDown={beginStaging}
+              onMouseUp={stopStaging}
+              onMouseLeave={stopStaging}
+          >
+              {rows.map((x, xIndex) => {
+                  return columns.map((y, yIndex) => {
+                      return (
+                          <div
+                              id={`${xIndex}-${yIndex}`}
+                              className="grid-slots"
+                              onMouseLeave={markHover}
+                              onMouseEnter={markHover}
+                          />
+                      );
+                  });
+              })}
+          </Wrapper>
+          <div>
+          {selectedSubdivisions.map((x) => (
+              <p>
+                  {x[0]},{x[1]}
+              </p>
+          ))}
+          
+        </div>
+        <div>
+          {toPrint.map((x) => (
+              <p>
+                  {x[0]},{x[1]}
+              </p>
+          ))}
+          
+        </div>
+        </TestFlex>
+
     );
 };
 const Wrapper = styled.div`
@@ -124,6 +158,10 @@ const Wrapper = styled.div`
         z-index: -1;
     }
 `;
+
+const TestFlex = styled.div`
+display:flex;justify-content:row,`
+
 
 // selectionAnimation = styled.keyframes`
 // 0% {

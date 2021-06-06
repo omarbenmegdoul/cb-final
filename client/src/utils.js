@@ -1,6 +1,6 @@
 import {
     TR_PX,
-    CHI_HOP_TR_TL,
+    CHI_HOP_TL_TR,
     PSI_HOP_TL_BL,
     CENTER_FROM_SUBDIVISION_CORNER_HOP,
     SUBDIVISION_0_0_CENTER,
@@ -33,10 +33,10 @@ export const subdivisionCenterFromChiPsiCoords = (coord_chi, coord_psi) => {
 
     return [
         SUBDIVISION_0_0_CENTER[0] +
-            coord_chi * CHI_HOP_TR_TL[0] +
-            coord_psi * PSI_HOP_TR_BR[0],
+            coord_psi * CHI_HOP_TL_TR[0] -
+            coord_chi * PSI_HOP_TL_BL[0],
         SUBDIVISION_0_0_CENTER[1] +
-            coord_chi * CHI_HOP_TR_TL[1] +
-            coord_psi * PSI_HOP_TR_BR[1],
+            coord_psi * CHI_HOP_TL_TR[1] -
+            coord_chi * PSI_HOP_TL_BL[1],
     ];
 };

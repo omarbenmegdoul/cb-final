@@ -13,13 +13,14 @@ import FullScreenControls from './components/Map/Controls/Controls';
 import MapBgBlock from './components/Map';
 import GlobalStyles from './components/GlobalStyles';
 import MapStack from './components/MapStack';
-
+import styled from "styled-components"
 import {
     TL_PX,
     SUBDIVISION_0_0_CENTER,
     POINT_AT_CHI_1_PSI_0,
     POINT_AT_CHI_0_PSI_1,
     POINT_AT_CHI_1_PSI_1,
+    toPrint,
 } from './constants';
 console.log(
     `TL_PX,
@@ -58,10 +59,13 @@ const geojsonObject = undefined; // see full geojson object in Github
 const geojsonObject2 = undefined; // see full geojson object in Github
 const App = () => {
     return (
-        <div>
-            <GlobalStyles />
-            <MapStack />
-        </div>
+
+            <div>
+              <GlobalStyles />
+              <MapStack />
+              
+            </div> 
     );
 };
 export default App;
+
