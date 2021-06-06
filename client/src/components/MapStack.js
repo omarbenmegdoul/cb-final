@@ -5,7 +5,7 @@ import MapGrid from './MapGrid';
 const MapStack = () => {
     return <Wrapper>
       <MapGrid/>
-      {/* <MapBgBlock/> */}
+      <MapBgBlock/>
     </Wrapper>;
 };
 const Wrapper = styled.div`

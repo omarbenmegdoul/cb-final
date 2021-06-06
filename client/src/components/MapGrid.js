@@ -16,8 +16,11 @@ const idToChiPsiCoords = (id) => {
 
 let allowStaging = false;
 const beginStaging = (ev) => {
+
     ev.preventDefault();
+
     console.log('Begin staging');
+    ev.target.classList.add('selected');
     allowStaging = true;
 };
 // const stopStaging = (ev) => {
@@ -99,7 +102,6 @@ const MapGrid = ({ Props }) => {
                           <div
                               id={`${xIndex}-${yIndex}`}
                               className="grid-slots"
-                              onMouseLeave={markHover}
                               onMouseEnter={markHover}
                           />
                       );

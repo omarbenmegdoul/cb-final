@@ -36,19 +36,7 @@ const MapBgBlock = () => {
     const [showLayer2, setShowLayer2] = useState(true);
     return (
         <Wrapper>
-            <input
-                type="number"
-                onChange={(ev) => {
-                    console.log(
-                        `❗ MapBgBlock.js:37 'ev.target.value' <${typeof ev
-                            .target.value}>`,
-                        ev.target.value
-                    );
-                    setZoom(
-                        parseInt(ev.target.value) || parseFloat(ev.target.value)
-                    );
-                }}
-            ></input>
+            
             <Map center={fromLonLat(center)} zoom={zoom} rotation={rotation}>
                 <Layers>
                     <TileLayer source={osm()} zIndex={0} />
