@@ -11,7 +11,7 @@ const Header = () => {
 };
 const Wrapper = styled.div`
 width:100%;
-height:100px;
+height:var(--header-height);
 background-color:var(--black);
 display:flex;
 flex-direction:row;

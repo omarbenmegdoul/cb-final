@@ -23,7 +23,7 @@ const niceKeys = {
 
     balcony_s: 'Balcony',
 
-    barrierfreeentrancesandramps_s: 'Barrier-free entrance & ramps',
+    barrierfreeentrancesandramps_s: 'Barrier-free Entrance & Ramps',
 
     bicycleparking_s: 'Bicycle Parking',
 
@@ -39,9 +39,9 @@ const niceKeys = {
 
     elevator_s: 'Elevator',
 
-    forrentbyhousing_s: 'For Rent By Housing',
+    forrentbyhousing_s: 'Leased By',
 
-    fridgefreezer_s: 'Fridge & Frezer',
+    fridgefreezer_s: 'Fridge & Freezer',
 
     furnished_s: 'Furnished',
 
@@ -127,7 +127,7 @@ const Listing = (props) => {
                         return <RentalAttribute className={!valueIsBinary(val) ? "" : parseInt(val)===0 ? "false-binary-attribute" : "true-binary-attribute"}>
                               {valueIsBinary(val)?
                               niceKeys[key] :
-                              niceKeys[key]+":"+val
+                              niceKeys[key]+": "+val
                             }
                           </RentalAttribute>
                       })}
@@ -223,10 +223,10 @@ const RentalAttribute = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.8em;
+    font-size: 0.75em;
 
-    margin: 5px;
-    padding: 10px;
+    margin: 3px;
+    padding: 8px;
     border-radius: 1000px;
     background-color: var(--whiteLight);
     border:2px var(--white-500) solid;

@@ -29,6 +29,8 @@ import {
 import Header from './components/Header';
 import Divider from './components/Bits/Divider';
 import Listing from './components/Listing/Listing.js';
+import QuickControls from './components/Sidebars/QuickControls.js';
+import AssetDisplay from './components/Sidebars/AssetDisplay'
 
 const testListing = simpleData["https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/1-1-2-furnished-all-included/1570141857"]
 console.log(`❗ App.js:8 'testListing' <${typeof testListing}>`,testListing);
@@ -72,22 +74,24 @@ const App = () => {
         <div>
             <GlobalStyles />
             <Header></Header>
-            <PageWrapper>
+            <QuickControls/>
+            <ContentWrapper>
                 {/* <MapStack /> */}
                 <Divider />
                 <Listing {...testListing} ></Listing>
-            </PageWrapper>
+            </ContentWrapper>
+            <AssetDisplay/>
         </div>
     );
 };
 export default App;
 
-const PageWrapper = styled.div`
+const ContentWrapper = styled.div`
     padding: 15px;
     background-color: var(--blackPurple);
     min-width: 600px;
-    width: 80%;
-    margin: 0px auto;
+    width: 55%;
+    margin: 0px 30% 0% 15%;
     display: flex;
     flex-direction: column;
     align-items: center;

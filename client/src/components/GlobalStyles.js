@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 // export const breakpoints = { tablet: "600px" };
 
@@ -15,58 +15,63 @@ export default createGlobalStyle`
     }  */
 
     :root {
+      --header-height:100px;
+
+
       --montserrat: 'Montserrat', sans-serif;
       --karla: 'Karla', sans-serif;
       --raleway: 'Raleway', sans-serif;
-	--black: #21222c;
-	--blackSecondary: #414558;
-	--blackTernary: #a7abbe;
-	--blackLight: hsla(230, 15%, 15%, 5%);
-  --blackPurple:#383A59;
 
-	--white: #f8f8f2;
-	--whiteSecondary: #fff;
-	--whiteLight: hsla(60, 30%, 96%, 5%);
 
-	--cyan: #80ffea;
-	--cyanSecondary: #ccfff6;
-	--cyanLight: hsla(170, 100%, 75%, 5%);
+      --black: #21222c;
+      --blackSecondary: #414558;
+      --blackTernary: #a7abbe;
+      --blackLight: hsla(230, 15%, 15%, 5%);
+      --blackPurple:#383A59;
 
-	--green: #8aff80;
-	--greenSecondary: #d0ffcc;
-	--greenLight: hsla(115, 100%, 75%, 5%);
+      --white: #f8f8f2;
+      --whiteSecondary: #fff;
+      --whiteLight: hsla(60, 30%, 96%, 5%);
 
-	--orange: #ffca80;
-	--orangeSecondary: #ffeacc;
-	--orangeLight: hsla(35, 100%, 75%, 5%);
+      --cyan: #80ffea;
+      --cyanSecondary: #ccfff6;
+      --cyanLight: hsla(170, 100%, 75%, 5%);
 
-	--pink: #ff80bf;
-	--pinkSecondary: #ffcce6;
-	--pinkLight: hsla(330, 100%, 75%, 5%);
+      --green: #8aff80;
+      --greenSecondary: #d0ffcc;
+      --greenLight: hsla(115, 100%, 75%, 5%);
 
-	--purple: #9580ff;
-	--purpleSecondary: #d5ccff;
-	--purpleLight: hsl(250, 100%, 75%, 5%);
+      --orange: #ffca80;
+      --orangeSecondary: #ffeacc;
+      --orangeLight: hsla(35, 100%, 75%, 5%);
 
-	--red: #ff9580;
-	--redSecondary: #ffd5cc;
-	--redLight: hsla(10, 100%, 75%, 5%);
+      --pink: #ff80bf;
+      --pinkSecondary: #ffcce6;
+      --pinkLight: hsla(330, 100%, 75%, 5%);
 
-	--yellow: #ffff80;
-	--yellowSecondary: #ffc;
-	--yellowLight: hsla(60, 100%, 75%, 5%);
-  --red-500: rgba(255, 149, 128, 0.5);
-	--green-500: rgba(138, 255, 128, 0.5);
-  --white-500: rgba(248, 248, 242,0.5);
-	--cyan-transparent: rgba(128, 255, 234, 0.1);
-	--green-transparent: rgba(138, 255, 128, 0.1);
-	--orange-transparent: rgba(255, 202, 128, 0.1);
-	--pink-transparent: rgba(255, 128, 191, 0.1);
-	--purple-transparent: rgba(149, 128, 255, 0.1);
-	--red-transparent: rgba(255, 149, 128, 0.1);
-	--yellow-transparent: rgba(255, 255, 128, 0.1);
+      --purple: #9580ff;
+      --purpleSecondary: #d5ccff;
+      --purpleLight: hsl(250, 100%, 75%, 5%);
 
-	--accentColor: var(--purple);
+      --red: #ff9580;
+      --redSecondary: #ffd5cc;
+      --redLight: hsla(10, 100%, 75%, 5%);
+
+      --yellow: #ffff80;
+      --yellowSecondary: #ffc;
+      --yellowLight: hsla(60, 100%, 75%, 5%);
+      --red-500: rgba(255, 149, 128, 0.5);
+      --green-500: rgba(138, 255, 128, 0.5);
+      --white-500: rgba(248, 248, 242,0.5);
+      --cyan-transparent: rgba(128, 255, 234, 0.1);
+      --green-transparent: rgba(138, 255, 128, 0.1);
+      --orange-transparent: rgba(255, 202, 128, 0.1);
+      --pink-transparent: rgba(255, 128, 191, 0.1);
+      --purple-transparent: rgba(149, 128, 255, 0.1);
+      --red-transparent: rgba(255, 149, 128, 0.1);
+      --yellow-transparent: rgba(255, 255, 128, 0.1);
+
+      --accentColor: var(--purple);
 }
 
     html, body, div, span, applet, object, iframe,
