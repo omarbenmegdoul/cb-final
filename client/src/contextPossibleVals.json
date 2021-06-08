@@ -1,0 +1,184 @@
+{
+    "accessiblewashroomsinsuite_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "agreementtype_s": [
+        "\"one-year\"",
+        "\"month-to-month\""
+    ],
+    "airconditioning_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "audioprompts_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "balcony_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "barrierfreeentrancesandramps_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "bicycleparking_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "braillelabels_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "cabletv_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "concierge_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "dishwasher_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "elevator_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "forrentbyhousing_s": [
+        "\"reprofessional\"",
+        "\"ownr\""
+    ],
+    "fridgefreezer_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "furnished_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "gym_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "heat_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "hydro_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "internet_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "laundryinbuilding_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "laundryinunit_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "numberbathrooms_s": [
+        "\"45\"",
+        "\"25\"",
+        "\"30\"",
+        "\"10\"",
+        "\"15\"",
+        "\"40\"",
+        "\"55\"",
+        "\"35\"",
+        "\"60\"",
+        "\"20\""
+    ],
+    "numberbedrooms_s": [
+        "\"0\"",
+        "\"1.5\"",
+        "\"5\"",
+        "\"3.5\"",
+        "\"1\"",
+        "\"4\"",
+        "\"4.5\"",
+        "\"2\"",
+        "\"2.5\"",
+        "\"3\""
+    ],
+    "numberparkingspots_s": [
+        "\"2\"",
+        "\"1\"",
+        "\"0\"",
+        "\"3\""
+    ],
+    "petsallowed_s": [
+        "\"1\"",
+        "\"limited\"",
+        "\"0\""
+    ],
+    "pool_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "rentalsvirtualoptions_s": [
+        "",
+        "\"onlineapplication\"",
+        "\"onlineapplication,videochat\"",
+        "\"onlineapplication,virtualtour,videochat\"",
+        "\"virtualtour\"",
+        "\"onlineapplication,virtualtour\"",
+        "\"virtualtour,videochat,onlineapplication\"",
+        "\"videochat,virtualtour,onlineapplication\"",
+        "\"videochat,onlineapplication,virtualtour\"",
+        "\"videochat,onlineapplication\"",
+        "\"videochat,virtualtour\"",
+        "\"virtualtour,onlineapplication\"",
+        "\"videochat\"",
+        "\"virtualtour,onlineapplication,videochat\"",
+        "\"onlineapplication,videochat,virtualtour\"",
+        "\"virtualtour,videochat\""
+    ],
+    "smokingpermitted_s": [
+        "\"2\"",
+        "\"1\"",
+        "\"0\""
+    ],
+    "storagelocker_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "termagreement_s": [
+        "",
+        "\"rentdeferral\""
+    ],
+    "twentyfourhoursecurity_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "unittype_s": [
+        "\"townhouse\"",
+        "\"condo\"",
+        "\"basement-apartment\"",
+        "\"apartment\"",
+        "\"duplex-triplex\"",
+        "\"house\""
+    ],
+    "visualaids_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "water_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "wheelchairaccessible_s": [
+        "\"1\"",
+        "\"0\""
+    ],
+    "yard_s": [
+        "\"1\"",
+        "\"0\""
+    ]
+}

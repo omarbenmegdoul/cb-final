@@ -40,3 +40,8 @@ export const subdivisionCenterFromChiPsiCoords = (coord_chi, coord_psi) => {
             coord_chi * PSI_HOP_TL_BL[1],
     ];
 };
+
+export const deJSONizeValue = (x) => {
+  const quoteWrapped = x[0] === '\u0022' && x[x.length - 1] === '"';
+  return quoteWrapped ? x.slice(1, x.length - 1) : x;
+};

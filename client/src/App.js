@@ -1,7 +1,5 @@
-
-
 import React, { useState } from 'react';
-import simpleData from "./simpleData.js"
+import simpleData from './simpleData.js';
 
 // import './App.css';
 import Map from './components/Map/Map';
@@ -19,7 +17,7 @@ import GlobalStyles from './components/GlobalStyles';
 import MapStack from './components/MapStack';
 import styled from 'styled-components';
 import {
-  TL_PX,
+    TL_PX,
     SUBDIVISION_0_0_CENTER,
     POINT_AT_CHI_1_PSI_0,
     POINT_AT_CHI_0_PSI_1,
@@ -30,12 +28,17 @@ import Header from './components/Header';
 import Divider from './components/Bits/Divider';
 import Listing from './components/Listing/Listing.js';
 import QuickControls from './components/Sidebars/QuickControls.js';
-import AssetDisplay from './components/Sidebars/AssetDisplay'
+import AssetDisplay from './components/Sidebars/AssetDisplay';
+import { Filter } from './components/Filters/FilterOptions';
+import { attributeDisplay } from './components/Filters/FilterConfig';
 
-const testListing = simpleData["https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/1-1-2-furnished-all-included/1570141857"]
-console.log(`❗ App.js:8 'testListing' <${typeof testListing}>`,testListing);
+const testListing =
+    simpleData[
+        'https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/1-1-2-furnished-all-included/1570141857'
+    ];
+console.log(`❗ App.js:8 'testListing' <${typeof testListing}>`, testListing);
 console.log(
-  `TL_PX,
+    `TL_PX,
     subdivISION_00_CEN,
     POINT_AT_CHI_1_PSI_0,
     POINT_AT_CHI_0_PSI_1,
@@ -74,13 +77,15 @@ const App = () => {
         <div>
             <GlobalStyles />
             <Header></Header>
-            <QuickControls/>
+            <QuickControls />
             <ContentWrapper>
                 {/* <MapStack /> */}
                 <Divider />
-                <Listing {...testListing} ></Listing>
+                {Object.keys(attributeDisplay).map((key) => {
+                    return <Filter attribute={key} />;
+                })}
             </ContentWrapper>
-            <AssetDisplay/>
+            <AssetDisplay />
         </div>
     );
 };

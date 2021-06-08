@@ -3,88 +3,14 @@ import styled from 'styled-components';
 import Divider from '../Bits/Divider';
 import * as mapmarker from '../../map-marker-1.png';
 
-const deJSONizeValue = (x)=>{
-  const quoteWrapped = x[0]==='\u0022' && x[x.length-1]==='"';
-  return quoteWrapped ? x.slice(1,x.length-1) : x
-}
+import {attributeDisplay, keyGroupings, niceKeyGroupings} from "../Filters/FilterConfig"
 
-const valueIsBinary = (x)=>{return [0,1].includes(parseInt(x))}
+import {deJSONizeValue} from '../../utils'
 
-const niceKeys = {
-    accessiblewashroomsinsuite_s: 'Has accessible washroom',
-
-    agreementtype_s: 'Agreement',
-
-    airconditioning_s: 'A/C',
-
-    areainfeet_i: 'Area',
-
-    audioprompts_s: 'Audio Prompts',
-
-    balcony_s: 'Balcony',
-
-    barrierfreeentrancesandramps_s: 'Barrier-free Entrance & Ramps',
-
-    bicycleparking_s: 'Bicycle Parking',
-
-    braillelabels_s: 'Braille Labels',
-
-    cabletv_s: 'Cable TV',
-
-    concierge_s: 'Concierge',
-
-    dateavailable_tdt: 'Date Available',
-
-    dishwasher_s: 'Dishwasher',
-
-    elevator_s: 'Elevator',
-
-    forrentbyhousing_s: 'Leased By',
-
-    fridgefreezer_s: 'Fridge & Freezer',
-
-    furnished_s: 'Furnished',
-
-    gym_s: 'Gym',
-
-    heat_s: 'Heat Included',
-
-    hydro_s: 'Hydro Included',
-
-    internet_s: 'Internet Included',
-
-    laundryinbuilding_s: 'Laundry room',
-
-    laundryinunit_s: 'Laundry in unit',
-
-    numberbathrooms_s: 'Bathrooms',
-
-    numberbedrooms_s: 'Bedrooms',
-
-    numberparkingspots_s: 'Parking Spots',
-
-    petsallowed_s: 'Pets',
-
-    pool_s: 'Pool',
-
-    prc: 'Price',
-
-    smokingpermitted_s: 'Smoking',
-
-    storagelocker_s: 'Storage locker',
-
-    twentyfourhoursecurity_s: '24/7 Security',
-
-    unittype_s: 'Type',
-
-    visualaids_s: 'Visual Aids',
-
-    water_s: 'Water included',
-
-    wheelchairaccessible_s: 'Wheelchair Accessible',
-
-    yard_s: 'Yard',
+const valueIsBinary = (x) => {
+    return [0, 1].includes(parseInt(x));
 };
+
 
 const Listing = (props) => {
     return (
@@ -100,44 +26,62 @@ const Listing = (props) => {
                     return x + ' / ';
                 })}
             </p>
-            <p>-</p>
+            <p>-</p>*/}
             <p>
                 {Object.keys(props.cntxt.d).map((x) => {
                     return <p>{x + ':"",'}</p>;
                 })}
-            </p> */}
+            </p>
             <Wrapper>
                 <h2>{`${props.title} \u22C5 $${
                     parseInt(props.cntxt.d.prc) / 100
                 }`}</h2>
                 <SubWrapper>
-                  <TextWrapper>
-                      <DescQuoteWrapper>
-                          {props.cntxt.map.mapAddress} | {props.cntxt.timeposted}
-                      </DescQuoteWrapper>
-                      <DescQuoteWrapper>
-                          <CurlyQuote>{'Description'}</CurlyQuote>
-                          <Description>{props.cntxt.description}</Description>
-                      </DescQuoteWrapper>
-                  </TextWrapper>
-                  <DataTray>
-                      {Object.keys(props.cntxt.d).map((key) => {
-                        const val = deJSONizeValue(props.cntxt.d[key])
-                        console.log(`❗ Listing.js:125 'val' <${typeof val}>`,val);
-                        return <RentalAttribute className={!valueIsBinary(val) ? "" : parseInt(val)===0 ? "false-binary-attribute" : "true-binary-attribute"}>
-                              {valueIsBinary(val)?
-                              niceKeys[key] :
-                              niceKeys[key]+": "+val
-                            }
-                          </RentalAttribute>
-                      })}
-                  </DataTray>
-                  <ThumbnailTray>
-                      {props.cntxt.imgs.map((x) => (
-                          <img src={x.href}></img>
-                      ))}
-                      <img className="map-marker" src="http://simpleicon.com/wp-content/uploads/map-marker-1.png" />
-                  </ThumbnailTray>
+                    <TextWrapper>
+                        <DescQuoteWrapper>
+                            {props.cntxt.map.mapAddress} |{' '}
+                            {props.cntxt.timeposted}
+                        </DescQuoteWrapper>
+                        <DescQuoteWrapper>
+                            <CurlyQuote>{'Description'}</CurlyQuote>
+                            <Description>{props.cntxt.description}</Description>
+                        </DescQuoteWrapper>
+                    </TextWrapper>
+                    <DataTray>
+                        {Object.keys(props.cntxt.d).map((key) => {
+                            const val = deJSONizeValue(props.cntxt.d[key]);
+                            console.log(
+                                `❗ Listing.js:125 'val' <${typeof val}>`,
+                                val
+                            );
+                            return (
+                                <RentalAttribute
+                                    className={
+                                        !valueIsBinary(val)
+                                            ? ''
+                                            : parseInt(val) === 0
+                                            ? 'false-binary-attribute'
+                                            : 'true-binary-attribute'
+                                    }
+                                >
+                                    {valueIsBinary(val)
+                                        ? attributeDisplay[key].pretty
+                                        : attributeDisplay[key].pretty +
+                                          ': ' +
+                                          val}
+                                </RentalAttribute>
+                            );
+                        })}
+                    </DataTray>
+                    <ThumbnailTray>
+                        {props.cntxt.imgs.map((x) => (
+                            <img src={x.href}></img>
+                        ))}
+                        <img
+                            className="map-marker"
+                            src="http://simpleicon.com/wp-content/uploads/map-marker-1.png"
+                        />
+                    </ThumbnailTray>
                 </SubWrapper>
             </Wrapper>
         </>
@@ -155,12 +99,11 @@ const SubWrapper = styled.div`
     align-items: center;
     margin-top: 10px;
     background-color: var(--blackSecondary);
-    border-radius:5px;
-    padding:0 40px;
+    border-radius: 5px;
+    padding: 0 40px;
 `;
 
 const TextWrapper = styled.div`
-    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -210,8 +153,8 @@ const ThumbnailTray = styled.div`
     }
     .map-marker {
         filter: invert(100%);
-        border: 2px rgba(0,0,0,0.5) solid;
-        padding:30px;
+        border: 2px rgba(0, 0, 0, 0.5) solid;
+        padding: 30px;
     }
 `;
 const DataTray = styled.div`
@@ -229,13 +172,13 @@ const RentalAttribute = styled.div`
     padding: 8px;
     border-radius: 1000px;
     background-color: var(--whiteLight);
-    border:2px var(--white-500) solid;
+    border: 2px var(--white-500) solid;
 
     &.true-binary-attribute {
-      border:2px var(--green-500) solid;
+        border: 2px var(--green-500) solid;
     }
     &.false-binary-attribute {
-      border:2px var(--red-500) solid;
+        border: 2px var(--red-500) solid;
     }
 `;
 
