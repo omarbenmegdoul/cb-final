@@ -140,6 +140,63 @@ export default createGlobalStyle`
       scrollbar-color:black white;
     }
 
+    .rounded-container-with-label {
+    display: flex;
+    border: 1px var(--white-500) solid;
+    border-radius: 5px;
+    position: relative;
+    padding: 12px;
+    margin: 20px 0;
+    width: calc(100% - 30px);
+    flex-wrap: wrap;
+
+    & .filter-name {
+        position: absolute;
+        top: -12px;
+        left:7px;
+        background-color: var(--blackWhiteLight);
+        padding: 0 3px;
+    }
+
+    &.lite {
+      border-width:1px 0px 0px 0px;
+      margin:10px 0px 5px;
+    }
+    }
+
+    .attribute-selection {
+        color: var(--white);
+        border: 1px var(--white-500) solid;
+        transition: all 0.1s ease-out;
+        border-radius: 3px;
+        margin: 3px;
+        background-color: rgba(0, 0, 0, 0);
+        font-family: var(--karla);
+        padding: 3px 6px;
+        min-width: 28px;
+    }
+    .attribute-selection.button-behaviour:hover {
+        background-color: var(--whiteLight);
+        box-shadow:0 0 4px 2px var(--white);
+    }
+    .attribute-selection.selected {
+        background-color: var(--green-500);
+        color: #000;
+    }
+    .attribute-selection.excluded {
+        background-color: var(--red-500);
+        color: #000;
+    }
+
+    &.lite {
+      padding:5px 2px;
+      font-size:0.9em;
+      min-width:18px;
+      margin:8px;
+      &.filter-name {
+        top:-8px;
+      }
+    }
 `;
 /* 
 

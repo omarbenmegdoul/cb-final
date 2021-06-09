@@ -65,7 +65,7 @@ const handleRequireClick = (ev)=>{
 }
 
 export const RequireFilter = ({ attribute }) => {
-    return <button onClick={handleRequireClick} id={attribute}>{attributeDisplay[attribute].pretty}</button>;
+    return <button className="attribute-selection button-behaviour" onClick={handleRequireClick} id={attribute}>{attributeDisplay[attribute].pretty}</button>;
 };
 
 // export const Radio = ({ attribute }) => {
@@ -107,16 +107,16 @@ export const MultipleChoice = ({ attribute }) => {
 
     return (
         <Options id={attribute + '_options'}>
-            <button
+            <button 
                 onClick={(ev) => handleMultipleChoiceButtonClick(ev, attribute)}
                 id={attribute + '_reset'}
-                className="selected"
+                className="attribute-selection button-behaviour selected"
             >
                 No Preference
             </button>
             {cleanPossibleValues.map((handledValue) => {
                 return (
-                    <button
+                    <button className="button-behaviour attribute-selection"
                         onClick={(ev) =>
                             handleMultipleChoiceButtonClick(ev, attribute)
                         }
@@ -141,7 +141,7 @@ export const Filter = ({ attribute }) => {
 
     const InnerInputElement = InnerComponentDictionary[filterType];
     return (
-        <Wrapper>
+        <Wrapper className="rounded-container-with-label">
             <span class="filter-name">
                 {attributeDisplay[attribute].pretty}
             </span>
@@ -155,7 +155,7 @@ export const GroupedRequireFilter = ({ attributes }) => {
         return null;
     }
     return (
-        <Wrapper>
+        <Wrapper className="rounded-container-with-label">
             <span class="filter-name">Require these attributes</span>
             {attributes.map((attribute) => (
                 <RequireFilter attribute={attribute} />
@@ -174,7 +174,7 @@ const Options = styled.div`
 `;
 
 const Wrapper = styled.div`
-    display: flex;
+    /* display: flex;
     border: 1px var(--white-500) solid;
     border-radius: 5px;
     position: relative;
@@ -189,10 +189,10 @@ const Wrapper = styled.div`
         background-color: var(--blackWhiteLight);
         padding: 0 3px;
     }
-    & button {
+    & .attribute-selection {
         color: var(--white);
         border: 1px var(--white-500) solid;
-        transition: all 0.1s ease-in-out;
+        transition: all 0.1s ease-out;
         border-radius: 3px;
         margin: 3px;
         background-color: rgba(0, 0, 0, 0);
@@ -200,15 +200,16 @@ const Wrapper = styled.div`
         padding: 3px 6px;
         min-width: 28px;
     }
-    & button:hover {
+    & .attribute-selection:hover {
         background-color: var(--whiteLight);
+        box-shadow:0 0 4px 2px var(--white);
     }
-    & button.selected {
+    & .attribute-selection.selected {
         background-color: var(--green-500);
         color: var(--black);
     }
-    & button.excluded {
+    & .attribute-selection.excluded {
         background-color: var(--red-500);
         color: var(--black);
-    }
+    } */
 `;

@@ -34,7 +34,7 @@ import { attributeDisplay } from './components/Filters/FilterConfig';
 import Filters from './components/Filters/Filters.js';
 import SearchContainer from './components/SearchContainer.js';
 
-const listingKeys = Object.keys(simpleData).slice(0, 30);
+const listingKeys = Object.keys(simpleData).slice(0, 1);
 console.log(
     `TL_PX,
     subdivISION_00_CEN,

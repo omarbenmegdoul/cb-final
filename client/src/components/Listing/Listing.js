@@ -7,6 +7,7 @@ import {
     attributeDisplay,
     keyGroupings,
     niceKeyGroupings,
+    prettyKeyGroupings,
 } from '../Filters/FilterConfig';
 
 import { deJSONizeValue } from '../../utils';
@@ -15,65 +16,83 @@ const valueIsBinary = (x) => {
     return [0, 1].includes(parseInt(x));
 };
 
+const TextSection = (props) => {
+    return (
+        <TextWrapper>
+            <DescQuoteWrapper>
+                {props.cntxt.map.mapAddress} | {props.cntxt.timeposted}
+            </DescQuoteWrapper>
+            <DescQuoteWrapper>
+                <CurlyQuote>{'Description'}</CurlyQuote>
+                <Description>{props.cntxt.description}</Description>
+            </DescQuoteWrapper>
+        </TextWrapper>
+    );
+};
+
+const Attributes = (props) => {
+    return Object.keys(keyGroupings).map((key) => {
+      console.log(`❗ Listing.js:35 'key' <${typeof key}>`,key);
+        const expandedProps = {...props, group:key}
+        return <AttributeGroup {...expandedProps} />;
+    });
+};
+
+const AttributeGroup = (props) => {
+
+    return (
+        <div className="rounded-container-with-label lite">
+            <span className="filter-name">{prettyKeyGroupings[props.group]}</span>
+            {keyGroupings[props.group].map((key) => {
+                const val = deJSONizeValue(props.cntxt.d[key]);
+                const className =
+                    'attribute-selection ' +
+                    (!valueIsBinary(val)
+                        ? ''
+                        : parseInt(val) === 0
+                        ? 'excluded'
+                        : 'selected');
+                return (
+                    <div className={className}>
+                        {valueIsBinary(val)
+                            ? attributeDisplay[key].pretty
+                            : attributeDisplay[key].pretty + ': ' + val}
+                    </div>
+                );
+            })}
+        </div>
+    );
+};
+
 const Listing = (props) => {
     return (
-            <Wrapper>
-                <a href={props.cntxt.url}><h2>{`${props.title} \u22C5 $${
+        <Wrapper>
+            <a href={props.cntxt.url}>
+                <h2>{`${props.title} \u22C5 $${
                     parseInt(props.cntxt.d.prc) / 100
-                }`}</h2></a>
-                <SubWrapper>
-                    <TextWrapper>
-                        <DescQuoteWrapper>
-                            {props.cntxt.map.mapAddress} |{' '}
-                            {props.cntxt.timeposted}
-                        </DescQuoteWrapper>
-                        <DescQuoteWrapper>
-                            <CurlyQuote>{'Description'}</CurlyQuote>
-                            <Description>{props.cntxt.description}</Description>
-                        </DescQuoteWrapper>
-                    </TextWrapper>
-                    <DataTray>
-                        {Object.keys(props.cntxt.d).filter(key=>!["prc","rentalsvirtualoptions_s"].includes(key)).map((key) => {
-                            const val = deJSONizeValue(props.cntxt.d[key]);
-                            !attributeDisplay[key] && console.log(`❗ Listing.js:38 '["Warning: key not in attributeDisplay",key]' <${typeof ["Warning: key not in attributeDisplay",key]}>`,["Warning: key not in attributeDisplay",key]);
-                            return (
-                                <RentalAttribute
-                                    className={
-                                        !valueIsBinary(val)
-                                            ? ''
-                                            : parseInt(val) === 0
-                                            ? 'false-binary-attribute'
-                                            : 'true-binary-attribute'
-                                    }
-                                >
-                                    {valueIsBinary(val)
-                                        ? attributeDisplay[key].pretty
-                                        : attributeDisplay[key].pretty +
-                                          ': ' +
-                                          val}
-                                </RentalAttribute>
-                            );
-                        })}
-                    </DataTray>
-                    <ThumbnailTray>
-                        {props.cntxt.imgs.map((x) => (
-                            <img src={x.href}></img>
-                        ))}
-                        <img
-                            className="map-marker"
-                            src="http://simpleicon.com/wp-content/uploads/map-marker-1.png"
-                        />
-                    </ThumbnailTray>
-                </SubWrapper>
-            </Wrapper>
-        
+                }`}</h2>
+            </a>
+            <SubWrapper>
+                <TextSection {...props} />
+                <Attributes {...props} />
+                <ThumbnailTray>
+                    {props.cntxt.imgs.map((x) => (
+                        <img src={x.href}></img>
+                    ))}
+                    <img
+                        className="map-marker"
+                        src="http://simpleicon.com/wp-content/uploads/map-marker-1.png"
+                    />
+                </ThumbnailTray>
+            </SubWrapper>
+        </Wrapper>
     );
 };
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin:10px;
+    margin: 10px;
 `;
 
 const SubWrapper = styled.div`
@@ -128,7 +147,7 @@ const ThumbnailTray = styled.div`
     margin: 10px;
     width: 100%;
     display: flex;
-    flex-wrap:wrap;
+    flex-wrap: wrap;
     justify-content: center;
     img {
         max-height: 100px;
