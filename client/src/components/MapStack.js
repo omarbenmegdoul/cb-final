@@ -5,7 +5,6 @@ import MapGrid from './MapGrid';
 const MapStack = () => {
     return (
       <>
-        <h2>Select search area</h2>
           <Wrapper>
             
               <MapGrid />
@@ -16,6 +15,6 @@ const MapStack = () => {
 };
 const Wrapper = styled.div`
     position: relative;
-    margin:10px 0;
+    margin:0;
 `;
 export default MapStack;

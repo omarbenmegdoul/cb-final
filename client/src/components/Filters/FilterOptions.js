@@ -3,85 +3,81 @@ import styled from 'styled-components';
 import {
     attributeDisplay,
     keyGroupings,
-    niceKeyGroupings,
+    prettyKeyGroupings,
 } from './FilterConfig';
 import possibleAttributes from '../../contextPossibleVals.json';
 import { deJSONizeValue } from '../../utils';
 
-const handleButtonClick = (ev, attribute) => {
-  const resetButton = (button) => {
-      if (button.id === attribute + '_reset') {
-          button.classList.add('selected');
-      } else {
-          button.classList.remove('selected', 'excluded');
-      }
-  };
+const handleMultipleChoiceButtonClick = (ev, attribute) => {
+    const resetButton = (button) => {
+        if (button.id === attribute + '_reset') {
+            button.classList.add('selected');
+        } else {
+            button.classList.remove('selected', 'excluded');
+        }
+    };
 
-  const keepOrExclude = (button) => {
-      const isSelected = button.classList.contains('selected');
-      const isExcluded = button.classList.contains('excluded');
-      if (button === ev.target) {
-          if (!isSelected && !isExcluded) {
-              button.classList.add('selected');
-          } else if (isSelected || isExcluded) {
-              button.classList.toggle('selected');
-              button.classList.toggle('excluded');
-          }
-      } else if (button.id === attribute + '_reset') {
-          button.classList.remove('selected');
-      } else {
-          button.classList.contains('selected');
-          if (!button.classList.contains('selected')) {
-              button.classList.add('excluded');
-          }
-      }
-  };
+    const keepOrExclude = (button) => {
+        const isSelected = button.classList.contains('selected');
+        const isExcluded = button.classList.contains('excluded');
+        if (button === ev.target) {
+            if (!isSelected && !isExcluded) {
+                button.classList.add('selected');
+            } else if (isSelected || isExcluded) {
+                button.classList.toggle('selected');
+                button.classList.toggle('excluded');
+            }
+        } else if (button.id === attribute + '_reset') {
+            button.classList.remove('selected');
+        } else {
+            button.classList.contains('selected');
+            if (!button.classList.contains('selected')) {
+                button.classList.add('excluded');
+            }
+        }
+    };
 
-  const childButtons = Array.from(
-      document.getElementById(attribute + '_options').childNodes
-  );
-  console.log(
-      `❗ Filters.js:74 'childButtons' <${typeof childButtons}>`,
-      childButtons
-  );
-  if (ev.target.id === attribute + '_reset') {
-      childButtons.forEach((button) => resetButton(button));
-  } else {
-      childButtons.forEach((button) => keepOrExclude(button));
-  }
-  const noneSelected = childButtons.every((button) => {
-      return !button.classList.contains('selected');
-  });
-  const allSelected = childButtons.every((button) => {
-      return (
-          button.id === attribute + '_reset' ||
-          button.classList.contains('selected')
-      );
-  });
+    const childButtons = Array.from(
+        document.getElementById(attribute + '_options').childNodes
+    );
 
-  (noneSelected || allSelected) &&
-      childButtons.forEach((button) => resetButton(button));
+    if (ev.target.id === attribute + '_reset') {
+        childButtons.forEach((button) => resetButton(button));
+    } else {
+        childButtons.forEach((button) => keepOrExclude(button));
+    }
+    const noneSelected = childButtons.every((button) => {
+        return !button.classList.contains('selected');
+    });
+    const allSelected = childButtons.every((button) => {
+        return (
+            button.id === attribute + '_reset' ||
+            button.classList.contains('selected')
+        );
+    });
+
+    (noneSelected || allSelected) &&
+        childButtons.forEach((button) => resetButton(button));
 };
+
+const handleRequireClick = (ev)=>{
+  ev.target.classList.toggle("selected")
+}
 
 export const RequireFilter = ({ attribute }) => {
-    return (
-        <Options>
-            <label for={attribute}>Require</label>
-            <input type="checkbox" name={attribute} id={attribute}></input>
-        </Options>
-    );
+    return <button onClick={handleRequireClick} id={attribute}>{attributeDisplay[attribute].pretty}</button>;
 };
 
-export const Radio = ({ attribute }) => {
-    <Options>
-        <label for={attribute}>Any {attributeDisplay[attribute].pretty}</label>
-        <input type="radio" name={attribute} id={attribute + '-ignore'}></input>
-        <label for={attribute}>Require """"</label>
-        <input type="radio" name={attribute} id={attribute + ''}></input>
-        <label for={attribute}>Require """"</label>
-        <input type="radio" name={attribute} id={attribute + ''}></input>
-    </Options>;
-};
+// export const Radio = ({ attribute }) => {
+//     <Options>
+//         <label for={attribute}>Any {attributeDisplay[attribute].pretty}</label>
+//         <input type="radio" name={attribute} id={attribute + '-ignore'}></input>
+//         <label for={attribute}>Require """"</label>
+//         <input type="radio" name={attribute} id={attribute + ''}></input>
+//         <label for={attribute}>Require """"</label>
+//         <input type="radio" name={attribute} id={attribute + ''}></input>
+//     </Options>;
+// };
 
 export const NumRange = ({ attribute, date }) => {
     <Options>
@@ -100,8 +96,6 @@ export const NumRange = ({ attribute, date }) => {
     </Options>;
 };
 
-
-
 export const MultipleChoice = ({ attribute }) => {
     const cleanPossibleValues = possibleAttributes[attribute]
         .map(
@@ -114,7 +108,7 @@ export const MultipleChoice = ({ attribute }) => {
     return (
         <Options id={attribute + '_options'}>
             <button
-                onClick={(ev) => handleButtonClick(ev, attribute)}
+                onClick={(ev) => handleMultipleChoiceButtonClick(ev, attribute)}
                 id={attribute + '_reset'}
                 className="selected"
             >
@@ -122,7 +116,11 @@ export const MultipleChoice = ({ attribute }) => {
             </button>
             {cleanPossibleValues.map((handledValue) => {
                 return (
-                    <button onClick={(ev) => handleButtonClick(ev, attribute)}>
+                    <button
+                        onClick={(ev) =>
+                            handleMultipleChoiceButtonClick(ev, attribute)
+                        }
+                    >
                         {handledValue}
                     </button>
                 );
@@ -140,18 +138,28 @@ export const Filter = ({ attribute }) => {
     if (!['multiple_choice'].includes(filterType)) {
         return null;
     }
-    console.log(
-        `❗ Filters.js:52 'filterType' <${typeof filterType}>`,
-        filterType
-    );
-    const InnerInputElement = InnerComponentDictionary[filterType];
 
+    const InnerInputElement = InnerComponentDictionary[filterType];
     return (
         <Wrapper>
             <span class="filter-name">
                 {attributeDisplay[attribute].pretty}
             </span>
             <InnerInputElement attribute={attribute}></InnerInputElement>
+        </Wrapper>
+    );
+};
+
+export const GroupedRequireFilter = ({ attributes }) => {
+    if (!attributes.length) {
+        return null;
+    }
+    return (
+        <Wrapper>
+            <span class="filter-name">Require these attributes</span>
+            {attributes.map((attribute) => (
+                <RequireFilter attribute={attribute} />
+            ))}
         </Wrapper>
     );
 };
@@ -170,14 +178,15 @@ const Wrapper = styled.div`
     border: 1px var(--white-500) solid;
     border-radius: 5px;
     position: relative;
-    padding: 10px;
-    margin: 5px;
-    width: 100%;
+    padding: 12px;
+    margin: 20px 0;
+    width: calc(100% - 30px);
+    flex-wrap: wrap;
 
     & .filter-name {
         position: absolute;
-        top: -10px;
-        background-color: var(--blackPurple);
+        top: -12px;
+        background-color: var(--blackWhiteLight);
         padding: 0 3px;
     }
     & button {

@@ -109,7 +109,7 @@ const MapGrid = ({ Props }) => {
                     });
                 })}
             </Wrapper>
-            <div>
+            {/* <div>
                 {selectedSubdivisions.map((x) => (
                     <p>
                         {x[0]},{x[1]}
@@ -122,7 +122,7 @@ const MapGrid = ({ Props }) => {
                         {x[0]},{x[1]}
                     </p>
                 ))}
-            </div>
+            </div> */}
         </TestFlex>
     );
 };
@@ -144,7 +144,7 @@ opacity:0;
 };
 `;
 const Wrapper = styled.div`
-    margin: 10px;
+    
     position: relative;
     width: 320px;
     height: 600px;

@@ -31,6 +31,8 @@ import QuickControls from './components/Sidebars/QuickControls.js';
 import AssetDisplay from './components/Sidebars/AssetDisplay';
 import { Filter } from './components/Filters/FilterOptions';
 import { attributeDisplay } from './components/Filters/FilterConfig';
+import Filters from './components/Filters/Filters.js';
+import SearchContainer from './components/SearchContainer.js';
 
 const testListing =
     simpleData[
@@ -79,11 +81,9 @@ const App = () => {
             <Header></Header>
             <QuickControls />
             <ContentWrapper>
-                {/* <MapStack /> */}
+                <SearchContainer/>
                 <Divider />
-                {Object.keys(attributeDisplay).map((key) => {
-                    return <Filter attribute={key} />;
-                })}
+                <Listing {...testListing}></Listing>
             </ContentWrapper>
             <AssetDisplay />
         </div>

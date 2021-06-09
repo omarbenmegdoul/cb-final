@@ -25,6 +25,7 @@ export default createGlobalStyle`
 
       --black: #21222c;
       --blackSecondary: #414558;
+      --blackWhiteLight: #424460;
       --blackTernary: #a7abbe;
       --blackLight: hsla(230, 15%, 15%, 5%);
       --blackPurple:#383A59;
@@ -32,6 +33,7 @@ export default createGlobalStyle`
       --white: #f8f8f2;
       --whiteSecondary: #fff;
       --whiteLight: hsla(60, 30%, 96%, 5%);
+      --whiteSemiLight: hsla(60, 30%, 96%, 10%);
 
       --cyan: #80ffea;
       --cyanSecondary: #ccfff6;

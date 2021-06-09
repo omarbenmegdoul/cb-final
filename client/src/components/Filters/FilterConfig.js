@@ -130,7 +130,9 @@ export const attributeDisplay = {
         pretty: 'Pets',
         filterType: 'multiple_choice',
         prettyValues: {
+          '"0"':'Forbidden',
             '"limited"': 'Limited',
+            '"1"':'Allowed',
         },
     },
     pool_s: { pretty: 'Pool', filterType: 'require', prettyValues: {} },
@@ -139,7 +141,9 @@ export const attributeDisplay = {
         pretty: 'Smoking',
         filterType: 'multiple_choice',
         prettyValues: {
-            '"2"': 'Outdoors only',
+          '"0"':'Forbidden',
+          '"1"':'Allowed',
+        '"2"': 'Outdoors only',
         },
     },
     storagelocker_s: {
@@ -188,7 +192,6 @@ export const keyGroupings = {
         'numberbedrooms_s',
         'areainfeet_i',
         'unittype_s',
-        'balcony_s',
     ],
     g_features: [
         'dishwasher_s',
@@ -206,6 +209,7 @@ export const keyGroupings = {
         'storagelocker_s',
         'yard_s',
         'balcony_s',
+        'smokingpermitted_s',
     ],
     g_lease: ['agreementtype_s', 'forrentbyhousing_s'],
     g_building_features: [
@@ -213,7 +217,7 @@ export const keyGroupings = {
         'concierge_s',
         'gym_s',
         'pool_s',
-        'smokingpermitted_s',
+
         'twentyfourhoursecurity_s',
         'elevator_s',
     ],

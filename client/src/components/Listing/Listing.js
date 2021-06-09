@@ -3,35 +3,20 @@ import styled from 'styled-components';
 import Divider from '../Bits/Divider';
 import * as mapmarker from '../../map-marker-1.png';
 
-import {attributeDisplay, keyGroupings, niceKeyGroupings} from "../Filters/FilterConfig"
+import {
+    attributeDisplay,
+    keyGroupings,
+    niceKeyGroupings,
+} from '../Filters/FilterConfig';
 
-import {deJSONizeValue} from '../../utils'
+import { deJSONizeValue } from '../../utils';
 
 const valueIsBinary = (x) => {
     return [0, 1].includes(parseInt(x));
 };
 
-
 const Listing = (props) => {
     return (
-        <>
-            {/* <p>
-                {Object.keys(props).map((x) => {
-                    return x + ' - ';
-                })}
-            </p>
-            <p>-</p>
-            <p>
-                {Object.keys(props.cntxt).map((x) => {
-                    return x + ' / ';
-                })}
-            </p>
-            <p>-</p>*/}
-            <p>
-                {Object.keys(props.cntxt.d).map((x) => {
-                    return <p>{x + ':"",'}</p>;
-                })}
-            </p>
             <Wrapper>
                 <h2>{`${props.title} \u22C5 $${
                     parseInt(props.cntxt.d.prc) / 100
@@ -84,7 +69,7 @@ const Listing = (props) => {
                     </ThumbnailTray>
                 </SubWrapper>
             </Wrapper>
-        </>
+        
     );
 };
 const Wrapper = styled.div`
