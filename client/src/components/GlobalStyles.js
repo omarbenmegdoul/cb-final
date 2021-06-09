@@ -136,6 +136,9 @@ export default createGlobalStyle`
       font-family:var(--montserrat);
       color:var(--yellow)
     }
+    div {
+      scrollbar-color:black white;
+    }
 
 `;
 /* 

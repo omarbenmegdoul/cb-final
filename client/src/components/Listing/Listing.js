@@ -18,9 +18,9 @@ const valueIsBinary = (x) => {
 const Listing = (props) => {
     return (
             <Wrapper>
-                <h2>{`${props.title} \u22C5 $${
+                <a href={props.cntxt.url}><h2>{`${props.title} \u22C5 $${
                     parseInt(props.cntxt.d.prc) / 100
-                }`}</h2>
+                }`}</h2></a>
                 <SubWrapper>
                     <TextWrapper>
                         <DescQuoteWrapper>
@@ -33,12 +33,9 @@ const Listing = (props) => {
                         </DescQuoteWrapper>
                     </TextWrapper>
                     <DataTray>
-                        {Object.keys(props.cntxt.d).map((key) => {
+                        {Object.keys(props.cntxt.d).filter(key=>!["prc","rentalsvirtualoptions_s"].includes(key)).map((key) => {
                             const val = deJSONizeValue(props.cntxt.d[key]);
-                            console.log(
-                                `❗ Listing.js:125 'val' <${typeof val}>`,
-                                val
-                            );
+                            !attributeDisplay[key] && console.log(`❗ Listing.js:38 '["Warning: key not in attributeDisplay",key]' <${typeof ["Warning: key not in attributeDisplay",key]}>`,["Warning: key not in attributeDisplay",key]);
                             return (
                                 <RentalAttribute
                                     className={
@@ -76,6 +73,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin:10px;
 `;
 
 const SubWrapper = styled.div`
@@ -130,6 +128,7 @@ const ThumbnailTray = styled.div`
     margin: 10px;
     width: 100%;
     display: flex;
+    flex-wrap:wrap;
     justify-content: center;
     img {
         max-height: 100px;

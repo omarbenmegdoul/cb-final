@@ -34,11 +34,7 @@ import { attributeDisplay } from './components/Filters/FilterConfig';
 import Filters from './components/Filters/Filters.js';
 import SearchContainer from './components/SearchContainer.js';
 
-const testListing =
-    simpleData[
-        'https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/1-1-2-furnished-all-included/1570141857'
-    ];
-console.log(`❗ App.js:8 'testListing' <${typeof testListing}>`, testListing);
+const listingKeys = Object.keys(simpleData).slice(0, 30);
 console.log(
     `TL_PX,
     subdivISION_00_CEN,
@@ -81,9 +77,11 @@ const App = () => {
             <Header></Header>
             <QuickControls />
             <ContentWrapper>
-                <SearchContainer/>
+                <SearchContainer />
                 <Divider />
-                <Listing {...testListing}></Listing>
+                {listingKeys.map((k) => (
+                    <Listing {...simpleData[k]}></Listing>
+                ))}
             </ContentWrapper>
             <AssetDisplay />
         </div>
