@@ -6,9 +6,11 @@ const FilterContext = React.createContext({});
 
 export const FilterProvider = ({ children }) => {
     const [userFilters, setUserFilters] = React.useState({});
+    const [collapsedFilterControls, setCollapsedFilterControls] =
+        React.useState(false);
     const defaultFilterHiding = Object.keys(keyGroupings).reduce(
         (accumulator, key) => {
-            accumulator[key] = key === "g_lease";
+            accumulator[key] = key === 'g_lease';
             return accumulator;
         },
         {}
@@ -21,12 +23,12 @@ export const FilterProvider = ({ children }) => {
         console.log(`❗ FilterContext.js:21 '[state,action]'`, [state, action]);
         const output = { ...state };
         switch (action.type) {
-            case 'all':
+            case 'selectedAll':
                 Object.keys(state).forEach(
                     (key) => (output[key] = action.value)
                 );
                 return output;
-            case 'one':
+            case 'selectedOne':
                 output[action.key] = action.value;
                 return output;
             default:
@@ -45,6 +47,8 @@ export const FilterProvider = ({ children }) => {
                 setUserFilters,
                 attrHidingSettings,
                 attrHidingSettingsDispatch,
+                collapsedFilterControls,
+                setCollapsedFilterControls
             }}
         >
             {children}

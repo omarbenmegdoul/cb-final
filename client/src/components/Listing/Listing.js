@@ -114,6 +114,8 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     margin: 10px;
+    /* width:100%; */
+    
 `;
 
 const SubWrapper = styled.div`

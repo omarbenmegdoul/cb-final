@@ -102,6 +102,8 @@ const constructGroupRequiresSummary = (group) => {
         return accumulator;
     }, {});
 };
+//1) determines data type
+//2) functions for handling data type
 
 const constructSingleAttributeSummary = (attribute) => {
     const getMultipleChoiceSummaryObject = () => {
@@ -138,6 +140,8 @@ const constructSingleAttributeSummary = (attribute) => {
     if (buttonNodes.length) {
         return getMultipleChoiceSummaryObject();
     }
+
+    //we know its a range
     const [minInput, maxInput] = [
         document.getElementById(attribute + '_min').value,
         document.getElementById(attribute + '_max').value,
@@ -156,19 +160,15 @@ const constructAllFilterSummary = () => {
         Object.keys(groupSummary).forEach((key) => {
             accumulator[key] = groupSummary[key];
         });
-        // console.log(`❗ Filters.js:164 'accumulator'`,accumulator);
         return accumulator;
     }, {});
-    console.log(
-        `❗ Filters.js:167 'mergedRequireSummary'`,
-        mergedRequireSummary
-    );
 
     return Object.keys(attributeDisplay)
         .filter(
             (attribute) => attributeDisplay[attribute].filterType !== 'require'
         )
         .reduce((accumulator, attribute) => {
+            //what kidn?
             accumulator[attribute] = constructSingleAttributeSummary(attribute);
             return accumulator;
         }, mergedRequireSummary);
@@ -190,8 +190,11 @@ const FilterGroup = ({ group }) => {
                 onClick={handleGroupClick}
                 className=""
             >
-                <span>{prettyKeyGroupings[group]}</span>
+                {/* <div style={{ position: 'relative' }}> */}
+                    <span>{prettyKeyGroupings[group]}</span>
+                {/* </div> */}
             </button>
+
             <FilterContainer id={group + '_options'}>
                 <GroupedRequireFilter
                     attributes={requireKeys}
@@ -218,7 +221,10 @@ const Filters = () => {
             <SearchButton
                 onClick={() => {
                     const filterSummary = constructAllFilterSummary();
-                    console.log(`❗ Filters.js:221 'filterSummary'`,filterSummary);
+                    console.log(
+                        `❗ Filters.js:221 'filterSummary'`,
+                        filterSummary
+                    );
                     setUserFilters(filterSummary);
                 }}
             >
@@ -292,6 +298,7 @@ const GroupWrapper = styled.div`
         border-radius: 5px;
         margin: 5px 0 0 0;
         border: 1px var(--whiteLight) solid;
+        position:relative;
 
         & span {
             display: inline-block;

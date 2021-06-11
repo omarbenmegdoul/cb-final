@@ -8,21 +8,37 @@ import {
 } from '../Filters/FilterConfig';
 import Sidebar from './Sidebar';
 const QuickControls = ({ Props }) => {
-    const { attrHidingSettings, attrHidingSettingsDispatch } =
-        React.useContext(FilterContext);
-        console.log(`❗ QuickControls.js:13 'attrHidingSettings'`,attrHidingSettings);
+    const {
+        attrHidingSettings,
+        attrHidingSettingsDispatch,
+        collapsedFilterControls,
+        setCollapsedFilterControls,
+    } = React.useContext(FilterContext);
+    console.log(
+        `❗ QuickControls.js:13 'attrHidingSettings'`,
+        attrHidingSettings
+    );
     return (
         <Sidebar>
-            <h2>Display attributes:</h2>
+            <Heading>
+                <h2>View settings</h2>
+                <h2
+                    onClick={() =>
+                        setCollapsedFilterControls(!collapsedFilterControls)
+                    }
+                >
+                    {collapsedFilterControls ? '\u9650' : '\u9668'}
+                </h2>
+            </Heading>
             {Object.keys(prettyKeyGroupings).map((key) => {
                 const selected = !attrHidingSettings[key];
                 return (
                     <button
                         onClick={() => {
                             const action = {
-                                type: 'one',
+                                type: 'selectedOne',
                                 key: key,
-                                value: selected
+                                value: selected,
                             };
                             attrHidingSettingsDispatch(action);
                         }}
@@ -37,5 +53,20 @@ const QuickControls = ({ Props }) => {
         </Sidebar>
     );
 };
+
+const Heading = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition:all 0.1s  ease-out;
+    /* background-color:#f00; */
+    width:15vh;
+    min-width:100%;
+    white-space:no-wrap;
+    & h2 {
+      white-space:no-wrap;
+      margin:0 5px;
+    }
+`;
 
 export default QuickControls;

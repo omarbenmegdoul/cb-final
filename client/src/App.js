@@ -37,6 +37,7 @@ import FilterContext, {
     FilterProvider,
 } from './components/Context/FilterContext.js';
 import SearchResults from './components/SearchResults/SearchResults.js';
+import ContentWrapper from './components/ContentWrapper.js';
 
 console.log(
     `TL_PX,
@@ -74,6 +75,7 @@ let styles = {
 const geojsonObject = undefined; // see full geojson object in Github
 const geojsonObject2 = undefined; // see full geojson object in Github
 const App = () => {
+  
     return (
         <AppWrapper>
             <FilterProvider>
@@ -85,7 +87,6 @@ const App = () => {
                     <Divider />
                     <SearchResults />
                 </ContentWrapper>
-                {/* <AssetDisplay /> */}
             </FilterProvider>
         </AppWrapper>
     );
@@ -97,17 +98,20 @@ const AppWrapper = styled.div`
     position:relative;
 `;
 
-const ContentWrapper = styled.div`
-    padding: 15px;
-    background-color: var(--blackPurple);
-    min-width: 600px;
-    width: 55%;
-    margin: 0px 30% 0% 15%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    position: relative;
-    z-index: 0;
-    
-`;
+// const ContentWrapper = styled.div`
+//     padding: 15px;
+//     background-color: var(--blackPurple);
+//     min-width: 600px;
+//     width: 55%;
+//     margin: 0px 30% 0% 15%;
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: flex-start;
+//     position: relative;
+//     z-index: 0;
+//     &.expanded {
+//       margin: 0 30% 0 50px;
+//       background-color:#000;
+//     }
+// `;

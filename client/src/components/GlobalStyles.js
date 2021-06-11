@@ -176,9 +176,11 @@ export default createGlobalStyle`
         padding: 3px 6px;
         min-width: 28px;
     }
-    .attribute-selection.button-behaviour:hover {
-        background-color: var(--whiteLight);
+    .attribute-selection.button-behaviour:hover{
         box-shadow:0 0 4px 2px var(--white);
+    }
+    .attribute-selection.button-behaviour:hover:not(.selected,.excluded){
+        background-color: var(--whiteLight);
     }
     .attribute-selection.selected {
         background-color: var(--green-500);
@@ -200,7 +202,7 @@ export default createGlobalStyle`
     }
     .attribute-selection.fat {
       padding:8px;
-      font-size:1.1em;
+      font-size:1em;
       margin:16px;
     }
 
