@@ -10,7 +10,7 @@ import { deJSONizeValue } from '../../utils';
 
 const handleMultipleChoiceButtonClick = (ev, attribute) => {
     const resetButton = (button) => {
-        if (button.id === attribute + '_reset') {
+        if (button.id === attribute + '__reset') {
             button.classList.add('selected');
         } else {
             button.classList.remove('selected', 'excluded');
@@ -27,7 +27,7 @@ const handleMultipleChoiceButtonClick = (ev, attribute) => {
                 button.classList.toggle('selected');
                 button.classList.toggle('excluded');
             }
-        } else if (button.id === attribute + '_reset') {
+        } else if (button.id === attribute + '__reset') {
             button.classList.remove('selected');
         } else {
             button.classList.contains('selected');
@@ -60,12 +60,20 @@ const handleMultipleChoiceButtonClick = (ev, attribute) => {
         childButtons.forEach((button) => resetButton(button));
 };
 
-const handleRequireClick = (ev)=>{
-  ev.target.classList.toggle("selected")
-}
+const handleRequireClick = (ev) => {
+    ev.target.classList.toggle('selected');
+};
 
 export const RequireFilter = ({ attribute }) => {
-    return <button className="attribute-selection button-behaviour" onClick={handleRequireClick} id={attribute}>{attributeDisplay[attribute].pretty}</button>;
+    return (
+        <button
+            className="attribute-selection button-behaviour"
+            onClick={handleRequireClick}
+            id={attribute + '_selector'}
+        >
+            {attributeDisplay[attribute].pretty}
+        </button>
+    );
 };
 
 // export const Radio = ({ attribute }) => {
@@ -80,48 +88,101 @@ export const RequireFilter = ({ attribute }) => {
 // };
 
 export const NumRange = ({ attribute, date }) => {
-    <Options>
-        <label for={attribute}>
-            {attributeDisplay[attribute].pretty} minimum
-        </label>
-        <input
-            type={date ? 'date' : 'number'}
-            name={attribute}
-            id={attribute + '-min'}
-        ></input>
-        <label for={attribute}>
-            {attributeDisplay[attribute].pretty} maximum
-        </label>
-        <input type="number" name={attribute} id={attribute + '-max'}></input>
-    </Options>;
+    const minInput = React.useRef(null);
+    const maxInput = React.useRef(null);
+    const handleChange = (ev) => {
+        const [minChanged, maxChanged] = [
+            ev.target === minInput.current,
+            ev.target === maxInput.current,
+        ];
+        const parser = !date
+            ? parseInt
+            : (someDate) => {
+                  return new Date(someDate);
+              };
+
+        const [minVal, maxVal] = [
+            parser(minInput.current.value),
+            parser(maxInput.current.value),
+        ];
+        console.log(`❗ FilterOptions.js:101 '[minVal,maxVal]'`, [
+            minVal,
+            maxVal,
+        ]);
+
+        const isIncoherent = date
+            ? ![minVal, maxVal].includes(NaN) && minVal > maxVal
+            : ![minVal, maxVal].includes('Invalid Date') &&
+              minVal.valueOf() > maxVal.valueOf;
+        console.log(`❗ FilterOptions.js:117 '[attribute,minVal,maxVal]'`,[attribute,minVal,maxVal,isIncoherent]);
+        if (!isIncoherent) {
+            return;
+        }
+
+
+        if (minChanged) {
+            maxInput.current.value = ev.target.value;
+        } else {
+            minInput.current.value = ev.target.value;
+        }
+    };
+
+    const inputType = date ? 'date' : 'number';
+    return (
+        <Options>
+            <label for={attribute}>From:</label>
+            <RangeInput
+                type={inputType}
+                name={attribute}
+                id={attribute + '_min'}
+                date={date}
+                ref={minInput}
+                onBlur={handleChange}
+            />
+            <label for={attribute}>To:</label>
+            <RangeInput
+                type={inputType}
+                name={attribute}
+                id={attribute + '_max'}
+                date={date}
+                ref={maxInput}
+                onChange={handleChange}
+            />
+        </Options>
+    );
 };
 
 export const MultipleChoice = ({ attribute }) => {
     const cleanPossibleValues = possibleAttributes[attribute]
-        .map(
-            (value) =>
-                attributeDisplay[attribute].prettyValues[value] ||
-                deJSONizeValue(value)
-        )
+        .map((value) => {
+            return {
+                raw: value,
+                pretty:
+                    attributeDisplay[attribute].prettyValues[value] ||
+                    deJSONizeValue(value),
+            };
+        })
         .sort();
 
     return (
         <Options id={attribute + '_options'}>
-            <button 
+            <button
                 onClick={(ev) => handleMultipleChoiceButtonClick(ev, attribute)}
-                id={attribute + '_reset'}
+                id={attribute + '__reset'}
                 className="attribute-selection button-behaviour selected"
             >
                 No Preference
             </button>
-            {cleanPossibleValues.map((handledValue) => {
+            {cleanPossibleValues.map((value) => {
                 return (
-                    <button className="button-behaviour attribute-selection"
+                    <button
+                        id={attribute + '__' + value.raw}
+                        className="button-behaviour attribute-selection"
                         onClick={(ev) =>
                             handleMultipleChoiceButtonClick(ev, attribute)
                         }
                     >
-                        {handledValue}
+                        {value.pretty}
                     </button>
                 );
             })}
@@ -133,29 +194,39 @@ export const Filter = ({ attribute }) => {
     const InnerComponentDictionary = {
         require: RequireFilter,
         multiple_choice: MultipleChoice,
+        range: NumRange,
+        daterange: NumRange,
     };
     const filterType = attributeDisplay[attribute].filterType;
-    if (!['multiple_choice'].includes(filterType)) {
+    if (!['multiple_choice', 'range', 'daterange'].includes(filterType)) {
         return null;
     }
 
+    const props = { attribute: attribute, date: filterType === 'daterange' };
+
     const InnerInputElement = InnerComponentDictionary[filterType];
     return (
-        <Wrapper className="rounded-container-with-label">
+        <Wrapper
+            id={attribute + '_single_container'}
+            className="rounded-container-with-label"
+        >
             <span class="filter-name">
                 {attributeDisplay[attribute].pretty}
             </span>
-            <InnerInputElement attribute={attribute}></InnerInputElement>
+            <InnerInputElement {...props}></InnerInputElement>
         </Wrapper>
     );
 };
 
-export const GroupedRequireFilter = ({ attributes }) => {
+export const GroupedRequireFilter = ({ attributes, group }) => {
     if (!attributes.length) {
         return null;
     }
     return (
-        <Wrapper className="rounded-container-with-label">
+        <Wrapper
+            id={group + '_requires_container'}
+            className="rounded-container-with-label"
+        >
             <span class="filter-name">Require these attributes</span>
             {attributes.map((attribute) => (
                 <RequireFilter attribute={attribute} />
@@ -164,10 +235,20 @@ export const GroupedRequireFilter = ({ attributes }) => {
     );
 };
 
+const RangeInput = styled.input`
+    width: ${(props) => (props.date ? '140px' : '60px')};
+    padding: 4px;
+    height: 1em;
+    border-radius: 5px;
+    margin: 0 6px 0 10px;
+    font-family: var(--karla);
+`;
+
 const Options = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: center;
     /* &>input {
   appearance:none;
 } */

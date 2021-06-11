@@ -33,8 +33,9 @@ import { Filter } from './components/Filters/FilterOptions';
 import { attributeDisplay } from './components/Filters/FilterConfig';
 import Filters from './components/Filters/Filters.js';
 import SearchContainer from './components/SearchContainer.js';
+import FilterContext, { FilterProvider } from './components/Context/FilterContext.js';
 
-const listingKeys = Object.keys(simpleData).slice(0, 1);
+const listingKeys = Object.keys(simpleData).slice(0, 30);
 console.log(
     `TL_PX,
     subdivISION_00_CEN,
@@ -73,18 +74,21 @@ const geojsonObject2 = undefined; // see full geojson object in Github
 const App = () => {
     return (
         <div>
-            <GlobalStyles />
-            <Header></Header>
-            <QuickControls />
-            <ContentWrapper>
-                <SearchContainer />
-                <Divider />
-                {listingKeys.map((k) => (
-                    <Listing {...simpleData[k]}></Listing>
-                ))}
-            </ContentWrapper>
-            <AssetDisplay />
+            <FilterProvider>
+              <GlobalStyles />
+              <Header></Header>
+              <QuickControls />
+              <ContentWrapper>
+                  <SearchContainer />
+                  <Divider />
+                  {listingKeys.map((k) => (
+                      <Listing {...simpleData[k]}></Listing>
+                  ))}
+              </ContentWrapper>
+              <AssetDisplay />
+            </FilterProvider>
         </div>
+        
     );
 };
 export default App;

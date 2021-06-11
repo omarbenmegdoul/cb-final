@@ -1,3 +1,21 @@
+import { arrayFromYYYYMMDDint, deJSONizeValue } from '../../utils';
+
+export const specialAttributePrettyize = (attribute, value) => {
+    if (!['prc', 'areainfeet_i', 'dateavailable_tdt'].includes(attribute)) {
+        return deJSONizeValue(value);
+    }
+    const dJSONd = parseInt(deJSONizeValue(value)) || deJSONizeValue(value);
+    switch (attribute) {
+        case 'prc':
+            return "$"+parseInt(value) / 100;
+        case 'areainfeet_i':
+            return dJSONd + 'ft\u00B2';
+        case 'dateavailable_tdt':
+            const dateArr = arrayFromYYYYMMDDint(dJSONd,{padStart:1})
+            return dateArr.join("-");
+    }
+};
+
 export const attributeDisplay = {
     accessiblewashroomsinsuite_s: {
         pretty: 'Accessible washroom in unit',
@@ -123,16 +141,16 @@ export const attributeDisplay = {
     },
     numberparkingspots_s: {
         pretty: 'Parking Spots',
-        filterType: 'range',
+        filterType: 'multiple_choice',
         prettyValues: {},
     },
     petsallowed_s: {
         pretty: 'Pets',
         filterType: 'multiple_choice',
         prettyValues: {
-          '"0"':'Forbidden',
+            '"0"': 'Forbidden',
             '"limited"': 'Limited',
-            '"1"':'Allowed',
+            '"1"': 'Allowed',
         },
     },
     pool_s: { pretty: 'Pool', filterType: 'require', prettyValues: {} },
@@ -141,9 +159,9 @@ export const attributeDisplay = {
         pretty: 'Smoking',
         filterType: 'multiple_choice',
         prettyValues: {
-          '"0"':'Forbidden',
-          '"1"':'Allowed',
-        '"2"': 'Outdoors only',
+            '"0"': 'Forbidden',
+            '"1"': 'Allowed',
+            '"2"': 'Outdoors only',
         },
     },
     storagelocker_s: {

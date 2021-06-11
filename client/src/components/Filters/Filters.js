@@ -7,6 +7,9 @@ import {
 } from './FilterConfig';
 import possibleAttributes from '../../contextPossibleVals.json';
 import { Filter, GroupedRequireFilter } from './FilterOptions';
+import SearchContainer from '../SearchContainer';
+
+//submit click -> constructAllFilterSummary -> groups * constructGroupRequiresSummary -> constructRequiresSummary + non-require-attributes * constructNonRequireSummary
 
 const handleButtonClick = (ev, attribute) => {
     const resetButton = (button) => {
@@ -72,17 +75,106 @@ const handleGroupClick = (ev) => {
     //   "";
     //   console.log(`❗ Filters.js:71 'splitId' <${typeof splitId}>`,splitId);
 
-    const splitId = ev.currentTarget.id.split('_')
-    const optionsId = `${splitId.slice(0, splitId.length-1).join("_")}_options`;
+    const splitId = ev.currentTarget.id.split('_');
+    const optionsId = `${splitId
+        .slice(0, splitId.length - 1)
+        .join('_')}_options`;
     const filterContainer = document.getElementById(optionsId);
-    console.log(`❗ Filters.js:78 'ev.currentTarget' <${typeof ev.currentTarget}>`,ev.currentTarget);
-    console.log(`❗ Filters.js:79 'optionsId' <${typeof optionsId}>`,optionsId);
-    console.log(`❗ Filters.js:80 'filterContainer' <${typeof filterContainer}>`,filterContainer);
     const currentDisplay = filterContainer.style.display;
 
-    filterContainer.style.display = ["","none"].includes(currentDisplay) ? 'flex' : 'none';
+    filterContainer.style.display = ['', 'none'].includes(currentDisplay)
+        ? 'flex'
+        : 'none';
     ev.currentTarget.classList.toggle('sibling-is-expanded');
 };
+
+const constructGroupRequiresSummary = (group) => {
+    const container = document.getElementById(group + '_requires_container');
+    if (!container) {
+        return {};
+    }
+    const buttonNodes = container.getElementsByClassName('attribute-selection');
+
+    return Array.from(buttonNodes).reduce((accumulator, node) => {
+        const attribute = node.id.split('_selector')[0];
+        accumulator[attribute] = node.classList.contains('selected');
+        return accumulator;
+    }, {});
+};
+
+const constructSingleAttributeSummary = (attribute) => {
+    const getMultipleChoiceSummaryObject = () => {
+        const noPreferenceButton = document.getElementById(
+            attribute + '__reset'
+        );
+
+
+        const userHasNoPreference =
+            noPreferenceButton.classList.contains('selected');
+        const out=  Array.from(buttonNodes).reduce(
+                (accumulator, node) => {
+                    if (node === noPreferenceButton) {
+                        accumulator.noPreference = userHasNoPreference;
+                        return accumulator;
+                    }
+                    const attributeOption = node.id.replace(
+                        attribute + '__',
+                        ''
+                    );
+                    accumulator[attributeOption] = userHasNoPreference
+                        ? null
+                        : node.classList.contains('selected');
+                    return accumulator;
+                },
+                { noPreference: false }
+            )
+        ;
+
+        return out;
+    };
+
+    const container = document.getElementById(attribute + '_single_container');
+
+    if (!container) {
+        return;
+    }
+    const buttonNodes = container.getElementsByClassName('attribute-selection');
+
+    if (buttonNodes.length) {
+        return getMultipleChoiceSummaryObject();
+    }
+    const [minInput, maxInput] = [
+        document.getElementById(attribute + '_min').value,
+        document.getElementById(attribute + '_max').value,
+    ];
+    return {
+        [attribute + '_min']: parseInt(minInput.split('-').join('')),
+        [attribute + '_max']: parseInt(maxInput.split('-').join('')),
+    };
+};
+
+const constructAllFilterSummary = () => {
+    const groups = Object.keys(keyGroupings);
+
+    const mergedRequireSummary = groups.reduce((accumulator, group) => {
+        const groupSummary = constructGroupRequiresSummary(group);
+        Object.keys(groupSummary).forEach((key) => {
+            accumulator[key] = groupSummary[key];
+        });
+        // console.log(`❗ Filters.js:164 'accumulator'`,accumulator);
+        return accumulator;
+    }, {});
+    console.log(`❗ Filters.js:167 'mergedRequireSummary'`,mergedRequireSummary);
+
+    return Object.keys(attributeDisplay)
+        .filter((attribute) => attributeDisplay[attribute].filterType !== 'require')
+        .reduce((accumulator, attribute) => {
+            accumulator[attribute] = constructSingleAttributeSummary(attribute);
+            return accumulator;
+        }, mergedRequireSummary);
+};
+
+const handleSubmit = (ev) => {};
 
 const FilterGroup = ({ group }) => {
     const requireKeys = keyGroupings[group].filter(
@@ -116,11 +208,23 @@ const FilterGroup = ({ group }) => {
 const Filters = () => {
     const groups = Object.keys(keyGroupings);
     return (
-        <Wrapper>
-            {groups.map((group) => {
-                return <FilterGroup group={group} />;
-            })}
-        </Wrapper>
+        <MetaWrapper>
+            <Wrapper>
+                {groups.map((group) => {
+                    return <FilterGroup group={group} />;
+                })}
+            </Wrapper>
+            <SearchButton
+                onClick={() => {
+                    console.log(
+                        `❗ Filters.js:222 'constructAllFilterSummary()'`,
+                        constructAllFilterSummary()
+                    );
+                }}
+            >
+                Search
+            </SearchButton>
+        </MetaWrapper>
     );
 };
 
@@ -132,9 +236,41 @@ const Filters = () => {
 // }
 
 const Wrapper = styled.div`
-width:100%;
-overflow-y:auto;
-max-height:100%;`
+    width: 100%;
+    overflow-y: auto;
+    max-height: 100%;
+`;
+
+const MetaWrapper = styled.div`
+    max-height: 100%;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
+
+const SearchButton = styled.div`
+    font-weight: 700;
+    width: 100px;
+    padding: 8px;
+    border-radius: 1000px;
+    background-color: var(--blackTernary);
+    color: var(--black);
+    &:hover {
+        background-color: var(--purpleSecondary);
+    }
+    font-size: 1.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: -0.05em;
+    margin: 20px 0 0 0;
+`;
+
 const GroupWrapper = styled.div`
     margin: 5px 5px 0 5px;
     padding: 10px 10px 0 10px;
@@ -175,7 +311,7 @@ const GroupWrapper = styled.div`
 
     & > button::after {
         content: '+';
-        font-size:14px;
+        font-size: 14px;
         width: 19px;
         height: 19px;
         border: var(--white-500) 1px solid;
@@ -184,13 +320,12 @@ const GroupWrapper = styled.div`
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding:0;
-        margin:0;
+        padding: 0;
+        margin: 0;
     }
 
     & > button.sibling-is-expanded::after {
         content: '−';
-        
     }
 `;
 

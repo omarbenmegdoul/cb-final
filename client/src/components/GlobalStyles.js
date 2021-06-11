@@ -128,7 +128,7 @@ export default createGlobalStyle`
     a:visited {
       color:inherit;
     }
-    * {border:1px pink dotted}
+    /* * {border:1px pink dotted} */
     h1 {
       font-size:2em;
     }

@@ -6,7 +6,6 @@ const MapStack = () => {
     return (
       <>
           <Wrapper>
-            
               <MapGrid />
               <MapBgBlock />
           </Wrapper>

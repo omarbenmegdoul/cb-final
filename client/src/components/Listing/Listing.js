@@ -8,15 +8,33 @@ import {
     keyGroupings,
     niceKeyGroupings,
     prettyKeyGroupings,
+    specialAttributePrettyize,
 } from '../Filters/FilterConfig';
 
 import { deJSONizeValue } from '../../utils';
+import { Filter } from '../Filters/FilterOptions';
 
 const valueIsBinary = (x) => {
     return [0, 1].includes(parseInt(x));
 };
 
 const TextSection = (props) => {
+    const desc =
+        1 + props.cntxt.description.indexOf('<p>')
+            ? props.cntxt.description
+            : props.cntxt.description
+                  .split('\n')
+                  .filter((line) => line !== '')
+                  .map((line) => `<p>${line}</p>`)
+                  .join('');
+    props.cntxt.url ===
+        'https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/1-5-1-1-2-a-louer-apartment-for-rent-ville-saint-laurent/1505793112' &&
+        console.log(
+            `❗ Listing.js:24 '  props.cntxt.description.split("\n").filter(line=>line!=="")' <${typeof props.cntxt.description
+                .split('\n')
+                .filter((line) => line !== '')}>`,
+            props.cntxt.description.split('\n').filter((line) => line !== '')
+        );
     return (
         <TextWrapper>
             <DescQuoteWrapper>
@@ -24,7 +42,9 @@ const TextSection = (props) => {
             </DescQuoteWrapper>
             <DescQuoteWrapper>
                 <CurlyQuote>{'Description'}</CurlyQuote>
-                <Description>{props.cntxt.description}</Description>
+                <Description>
+                    <div dangerouslySetInnerHTML={{ __html: desc }}></div>
+                </Description>
             </DescQuoteWrapper>
         </TextWrapper>
     );
@@ -32,31 +52,34 @@ const TextSection = (props) => {
 
 const Attributes = (props) => {
     return Object.keys(keyGroupings).map((key) => {
-      console.log(`❗ Listing.js:35 'key' <${typeof key}>`,key);
-        const expandedProps = {...props, group:key}
+        const expandedProps = { ...props, group: key };
         return <AttributeGroup {...expandedProps} />;
     });
 };
 
 const AttributeGroup = (props) => {
-
     return (
         <div className="rounded-container-with-label lite">
-            <span className="filter-name">{prettyKeyGroupings[props.group]}</span>
+            <span className="filter-name">
+                {prettyKeyGroupings[props.group]}
+            </span>
             {keyGroupings[props.group].map((key) => {
-                const val = deJSONizeValue(props.cntxt.d[key]);
+                const val = props.cntxt.d[key];
                 const className =
                     'attribute-selection ' +
-                    (!valueIsBinary(val)
+                    (!valueIsBinary(deJSONizeValue(val))
                         ? ''
-                        : parseInt(val) === 0
+                        : parseInt(deJSONizeValue(val)) === 0
                         ? 'excluded'
                         : 'selected');
                 return (
                     <div className={className}>
-                        {valueIsBinary(val)
+                        {valueIsBinary(deJSONizeValue(val))
                             ? attributeDisplay[key].pretty
-                            : attributeDisplay[key].pretty + ': ' + val}
+                            : attributeDisplay[key].pretty +
+                              ': ' +
+                              (attributeDisplay[key].prettyValues[val] ||
+                                  specialAttributePrettyize(key, val))}
                     </div>
                 );
             })}
@@ -131,6 +154,7 @@ const CurlyQuote = styled.div`
 `;
 
 const Description = styled.div`
+    line-height: 1.5em;
     background-color: var(--black);
     border-radius: 5px;
     width: calc(100% - 100px);
@@ -140,7 +164,17 @@ const Description = styled.div`
     padding: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
+    & > div {
+        margin: auto;
+    }
+    & p {
+        line-height:1.4em;
+        
+    }
+    & p:not(:last-child) {
+      margin-bottom: 0.75em;
+    }
 `;
 
 const ThumbnailTray = styled.div`
