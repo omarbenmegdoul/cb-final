@@ -102,6 +102,7 @@ export default createGlobalStyle`
         display: block;
     }
     body {
+        height:100%;
         line-height: 1;
         color:var(--white);
         background-color:var(--blackSecondary);
@@ -188,7 +189,7 @@ export default createGlobalStyle`
         color: #000;
     }
 
-    &.lite {
+    .attribute-selection.lite {
       padding:5px 2px;
       font-size:0.9em;
       min-width:18px;
@@ -197,6 +198,12 @@ export default createGlobalStyle`
         top:-8px;
       }
     }
+    .attribute-selection.fat {
+      padding:8px;
+      font-size:1.1em;
+      margin:16px;
+    }
+
 `;
 /* 
 

@@ -13,6 +13,7 @@ import {
 
 import { deJSONizeValue } from '../../utils';
 import { Filter } from '../Filters/FilterOptions';
+import FilterContext from '../Context/FilterContext';
 
 const valueIsBinary = (x) => {
     return [0, 1].includes(parseInt(x));
@@ -27,14 +28,7 @@ const TextSection = (props) => {
                   .filter((line) => line !== '')
                   .map((line) => `<p>${line}</p>`)
                   .join('');
-    props.cntxt.url ===
-        'https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/1-5-1-1-2-a-louer-apartment-for-rent-ville-saint-laurent/1505793112' &&
-        console.log(
-            `❗ Listing.js:24 '  props.cntxt.description.split("\n").filter(line=>line!=="")' <${typeof props.cntxt.description
-                .split('\n')
-                .filter((line) => line !== '')}>`,
-            props.cntxt.description.split('\n').filter((line) => line !== '')
-        );
+
     return (
         <TextWrapper>
             <DescQuoteWrapper>
@@ -51,7 +45,11 @@ const TextSection = (props) => {
 };
 
 const Attributes = (props) => {
+    const { attrHidingSettings } = React.useContext(FilterContext);
     return Object.keys(keyGroupings).map((key) => {
+        if (attrHidingSettings[key]) {
+            return null;
+        }
         const expandedProps = { ...props, group: key };
         return <AttributeGroup {...expandedProps} />;
     });
@@ -169,11 +167,10 @@ const Description = styled.div`
         margin: auto;
     }
     & p {
-        line-height:1.4em;
-        
+        line-height: 1.4em;
     }
     & p:not(:last-child) {
-      margin-bottom: 0.75em;
+        margin-bottom: 0.75em;
     }
 `;
 

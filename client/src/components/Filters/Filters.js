@@ -8,6 +8,7 @@ import {
 import possibleAttributes from '../../contextPossibleVals.json';
 import { Filter, GroupedRequireFilter } from './FilterOptions';
 import SearchContainer from '../SearchContainer';
+import FilterContext from '../Context/FilterContext';
 
 //submit click -> constructAllFilterSummary -> groups * constructGroupRequiresSummary -> constructRequiresSummary + non-require-attributes * constructNonRequireSummary
 
@@ -108,28 +109,22 @@ const constructSingleAttributeSummary = (attribute) => {
             attribute + '__reset'
         );
 
-
         const userHasNoPreference =
             noPreferenceButton.classList.contains('selected');
-        const out=  Array.from(buttonNodes).reduce(
-                (accumulator, node) => {
-                    if (node === noPreferenceButton) {
-                        accumulator.noPreference = userHasNoPreference;
-                        return accumulator;
-                    }
-                    const attributeOption = node.id.replace(
-                        attribute + '__',
-                        ''
-                    );
-                    accumulator[attributeOption] = userHasNoPreference
-                        ? null
-                        : node.classList.contains('selected');
+        const out = Array.from(buttonNodes).reduce(
+            (accumulator, node) => {
+                if (node === noPreferenceButton) {
+                    accumulator.noPreference = userHasNoPreference;
                     return accumulator;
-                },
-                { noPreference: false }
-            )
-        ;
-
+                }
+                const attributeOption = node.id.replace(attribute + '__', '');
+                accumulator[attributeOption] = userHasNoPreference
+                    ? null
+                    : node.classList.contains('selected');
+                return accumulator;
+            },
+            { noPreference: false }
+        );
         return out;
     };
 
@@ -164,10 +159,15 @@ const constructAllFilterSummary = () => {
         // console.log(`❗ Filters.js:164 'accumulator'`,accumulator);
         return accumulator;
     }, {});
-    console.log(`❗ Filters.js:167 'mergedRequireSummary'`,mergedRequireSummary);
+    console.log(
+        `❗ Filters.js:167 'mergedRequireSummary'`,
+        mergedRequireSummary
+    );
 
     return Object.keys(attributeDisplay)
-        .filter((attribute) => attributeDisplay[attribute].filterType !== 'require')
+        .filter(
+            (attribute) => attributeDisplay[attribute].filterType !== 'require'
+        )
         .reduce((accumulator, attribute) => {
             accumulator[attribute] = constructSingleAttributeSummary(attribute);
             return accumulator;
@@ -206,6 +206,7 @@ const FilterGroup = ({ group }) => {
 };
 
 const Filters = () => {
+    const { setUserFilters } = React.useContext(FilterContext);
     const groups = Object.keys(keyGroupings);
     return (
         <MetaWrapper>
@@ -216,10 +217,9 @@ const Filters = () => {
             </Wrapper>
             <SearchButton
                 onClick={() => {
-                    console.log(
-                        `❗ Filters.js:222 'constructAllFilterSummary()'`,
-                        constructAllFilterSummary()
-                    );
+                    const filterSummary = constructAllFilterSummary();
+                    console.log(`❗ Filters.js:221 'filterSummary'`,filterSummary);
+                    setUserFilters(filterSummary);
                 }}
             >
                 Search

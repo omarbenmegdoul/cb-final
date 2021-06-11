@@ -2,32 +2,26 @@ import React from 'react';
 import styled from 'styled-components';
 const Sidebar = (props) => {
     return (
-        <Wrapper
-            className={`${props.big ? 'big' : ''} ${
-                props.right ? 'right' : ''
-            }`}
-        >
-            <div>placeholder</div>
-            <div>placeholder</div>
-            <div>placeholder</div>
-            <div>placeholder</div>
-            <div>placeholder</div>
-            <div>placeholder</div>
-            <div>placeholder</div>
-        </Wrapper>
+        <PositioningParent>
+            <Wrapper
+                className={`${props.big ? 'big' : ''} ${
+                    props.right ? 'right' : ''
+                }`}
+            >
+                {props.children}
+            </Wrapper>
+        </PositioningParent>
     );
 };
-
 const Wrapper = styled.div`
-    position: fixed;
-    z-index: 1;
-    width: 15%;
+    height: 100vh;
+    position: sticky;
+    top: 0px;
+    margin-top: calc(100vh - var(--header-height));
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - var(--header-height));
-    top: var(--header-height);
     &.big {
         width: 30%;
     }
@@ -39,6 +33,14 @@ const Wrapper = styled.div`
     }
     & > * {
         margin: 15px;
+        /* position:absolute; */
     }
+`;
+const PositioningParent = styled.div`
+    position: absolute;
+    z-index: 2;
+    width: 15%;
+    height: calc(100% - var(--header-height));
+    top: var(--header-height);
 `;
 export default Sidebar;
