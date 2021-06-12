@@ -276,10 +276,21 @@ const listingDataImport = async (dbName) => {
     // connect to the database (db name is provided as an argument to the function)
     const db = client.db(dbName);
     console.log('connected!');
-    for (const x in cleanedSimpleData) {
-        console.log(`❗ importDataToMongoDB.js:37 'x'`, x);
-        await db.collection('listings').insertOne(cleanedSimpleData[x]);
-        await db.collection('just_cntxt').insertOne(cleanedSimpleData[x].cntxt);
+    for (const listing in cleanedSimpleData) {
+        console.log(`❗ importDataToMongoDB.js:37 'x'`, listing);
+        // for (const attribute in attributeDisplay) {
+          const flattenedContext = Object.keys(cleanedSimpleData[listing].cntxt)
+              .filter((attr) => !['d', 'd1', 'd2', 'd3'].includes(attr))
+              .reduce(
+                  (accum, attr) => {
+                      accum[attr] = cleanedSimpleData[listing].cntxt[attr];
+                      return accum;
+                  },
+                  { ...cleanedSimpleData[listing].cntxt.d }
+              );
+            
+          await db.collection('flattened_listings').insertOne(flattenedContext);
+      // }
     }
 
     // close the connection to the database server
@@ -298,22 +309,30 @@ const attributeDictionaryImport = async (dbName) => {
     //     console.log(`❗ importDataToMongoDB.js:20 'x.split("/")'`, x.split('/'))
     // );
     const db = client.db(dbName);
-    await db.collection('consts').insertMany([
-        { _id: 'attributeDisplay', ...attributeDisplay },
-        { _id: 'keyGroupings', ...keyGroupings },
-        { _id: 'prettyKeyGroupings', ...prettyKeyGroupings },
-    ]);
-    // for (const x in attributeDisplays) {
-    //     console.log(`❗ importDataToMongoDB.js:37 'x'`, x);
-
-    //     await db.collection('just_cntxt').insertOne(cleanedSimpleData[x].cntxt);
-    // }
+    // await db.collection('consts').insertMany([
+    //     { _id: 'attributeDisplay', ...attributeDisplay },
+    //     { _id: 'keyGroupings', ...keyGroupings },
+    //     { _id: 'prettyKeyGroupings', ...prettyKeyGroupings },
+    // ]);
+    for (const x in attributeDisplay) {
+        const flattenedContext = Object.keys(cleanedSimpleData[x].cntxt)
+            .filter((attr) => !['d', 'd1', 'd2', 'd3'].includes(x))
+            .reduce(
+                (accum, attr) => {
+                    accum[attr] = cleanedSimpleData[x].cntxt[attr];
+                    return accum;
+                },
+                { ...cleanedSimpleData[x].cntxt.d }
+            );
+          
+        await db.collection('flattened_listings').insertOne(flattenedContext);
+    }
 
     // close the connection to the database server
     client.close();
     console.log('disconnected!');
 };
 
-// listingDataImport('final_project');
-attributeDictionaryImport('final_project');
-module.exports= {attributeDisplay, keyGroupings,prettyKeyGroupings };
+listingDataImport('final_project');
+// attributeDictionaryImport('final_project');
+module.exports = { attributeDisplay, keyGroupings, prettyKeyGroupings };

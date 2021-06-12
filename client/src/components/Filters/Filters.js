@@ -12,6 +12,83 @@ import FilterContext from '../Context/FilterContext';
 
 //submit click -> constructAllFilterSummary -> groups * constructGroupRequiresSummary -> constructRequiresSummary + non-require-attributes * constructNonRequireSummary
 
+const constructRequestFromFilterSummary = (summary) => {
+    const handleRequireType = (attribute, requireSummary) => {
+        return requireSummary ? { [attribute]: '"1"' } : {};
+    };
+    const handleMultipleChoiceType = (attribute, multipleChoiceSummary) => {
+        !multipleChoiceSummary &&
+            console.log(
+                `❗ Filters.js:20 '[attribute,multipleChoiceSummary]'`,
+                [attribute, multipleChoiceSummary]
+            );
+        return multipleChoiceSummary.noPreference
+            ? {}
+            : {
+                  [attribute]: {
+                      $in: Object.keys(multipleChoiceSummary).filter(
+                          (summaryKey) => multipleChoiceSummary[summaryKey]
+                      ),
+                  },
+              };
+    };
+    const handleRangeType = (attribute, rangeSummary) => {
+        console.log(`❗ Filters.js:36 'rangeSummary'`, rangeSummary);
+        const attr_max = rangeSummary[attribute + '_max'];
+        const attr_min = rangeSummary[attribute + '_min'];
+        console.log(`❗ Filters.js:39 '[attr_max,attr_min]'`, [
+            attr_max,
+            attr_min,
+        ]);
+        const upperBoundCheck = rangeSummary[attribute + '_max']
+            ? {
+                  [attribute]: {
+                      $lte: (
+                          (attribute === 'prc' ? 100 : 1) *
+                          rangeSummary[attribute + '_max']
+                      ).toString(),
+                  },
+              }
+            : {};
+        const lowerBoundCheck = rangeSummary[attribute + '_min']
+            ? {
+                  [attribute]: {
+                      $gte: (
+                          (attribute === 'prc' ? 100 : 1) *
+                          rangeSummary[attribute + '_min']
+                      ).toString(),
+                  },
+              }
+            : {};
+        console.log(`❗ Filters.js:63 '[upperBoundCheck,lowerBoundCheck]'`,[upperBoundCheck,lowerBoundCheck]);
+        return Object.values(rangeSummary).some(
+            (intervalBound) => !!intervalBound
+        )
+            ? {
+                  $and: [{ ...lowerBoundCheck }, { ...upperBoundCheck }],
+              }
+            : //todo: try $gt naively with strings and see if it works, preferably with a log so we can see
+              //doesn't work: reupload data with ranges converted to ints
+
+              {};
+    };
+
+    const mongoFilters = Object.entries(summary).reduce((accum, itemPair) => {
+        const [key, val] = [...itemPair];
+        const filterType = attributeDisplay[key].filterType;
+        const handlerDictionary = {
+            require: handleRequireType,
+            daterange: handleRangeType,
+            range: handleRangeType,
+            multiple_choice: handleMultipleChoiceType,
+        };
+        const filterForThisAttr = handlerDictionary[filterType](key, val)
+        Object.keys(filterForThisAttr).length && accum.push(filterForThisAttr);
+        return accum;
+    }, []);
+    return {$and:mongoFilters}
+};
+
 const handleButtonClick = (ev, attribute) => {
     const resetButton = (button) => {
         if (button.id === attribute + '_reset') {
@@ -68,14 +145,6 @@ const handleButtonClick = (ev, attribute) => {
 };
 
 const handleGroupClick = (ev) => {
-    // console.log(`❗ Filters.js:67 'ev.target' <${typeof ev.target}>`,ev.target);
-    // console.log(`❗ Filters.js:68 'ev.target.nodeName' <${typeof ev.target.nodeName}>`,ev.target.nodeName);
-    //   const splitId = !ev.target.nodeName==="SPAN" ?
-    //   ev.target.id.split('_') :
-    //   // ev.target.parentElement.id.split('_');
-    //   "";
-    //   console.log(`❗ Filters.js:71 'splitId' <${typeof splitId}>`,splitId);
-
     const splitId = ev.currentTarget.id.split('_');
     const optionsId = `${splitId
         .slice(0, splitId.length - 1)
@@ -102,8 +171,6 @@ const constructGroupRequiresSummary = (group) => {
         return accumulator;
     }, {});
 };
-//1) determines data type
-//2) functions for handling data type
 
 const constructSingleAttributeSummary = (attribute) => {
     const getMultipleChoiceSummaryObject = () => {
@@ -191,7 +258,7 @@ const FilterGroup = ({ group }) => {
                 className=""
             >
                 {/* <div style={{ position: 'relative' }}> */}
-                    <span>{prettyKeyGroupings[group]}</span>
+                <span>{prettyKeyGroupings[group]}</span>
                 {/* </div> */}
             </button>
 
@@ -222,8 +289,8 @@ const Filters = () => {
                 onClick={() => {
                     const filterSummary = constructAllFilterSummary();
                     console.log(
-                        `❗ Filters.js:221 'filterSummary'`,
-                        filterSummary
+                     
+                        JSON.stringify(constructRequestFromFilterSummary(filterSummary))
                     );
                     setUserFilters(filterSummary);
                 }}
@@ -298,7 +365,7 @@ const GroupWrapper = styled.div`
         border-radius: 5px;
         margin: 5px 0 0 0;
         border: 1px var(--whiteLight) solid;
-        position:relative;
+        position: relative;
 
         & span {
             display: inline-block;

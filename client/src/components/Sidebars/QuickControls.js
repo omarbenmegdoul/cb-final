@@ -14,10 +14,10 @@ const QuickControls = ({ Props }) => {
         collapsedFilterControls,
         setCollapsedFilterControls,
     } = React.useContext(FilterContext);
-    console.log(
-        `❗ QuickControls.js:13 'attrHidingSettings'`,
-        attrHidingSettings
-    );
+    // console.log(
+    //     `❗ QuickControls.js:13 'attrHidingSettings'`,
+    //     attrHidingSettings
+    // );
     return (
         <Sidebar>
             <Heading>

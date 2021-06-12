@@ -43,7 +43,7 @@ const constructRequestFromFilterSummary = (summary) => {
               {};
     };
 
-    return Object.items(summary).reduce((accum, itemPair) => {
+    return Object.entries(summary).reduce((accum, itemPair) => {
         const [key, val] = [...itemPair];
         const filterType = attributeDisplay[key].filterType;
         const handlerDictionary = {
