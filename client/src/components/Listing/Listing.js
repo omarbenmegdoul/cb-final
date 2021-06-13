@@ -84,38 +84,181 @@ const AttributeGroup = (props) => {
         </div>
     );
 };
+const scrollThumbnails = (ev, amount, stateSetter) => {
+    const removePx = (s) => {
+        return parseInt(s.split('px')[0]);
+    };
+    const imgsToMove = ev.target.parentElement.getElementsByTagName('img');
+    Array.from(imgsToMove).forEach((imgToMove) => {
+        const newVal = `${
+            parseInt(
+                imgToMove.style.left !== ''
+                    ? removePx(imgToMove.style.left)
+                    : '0'
+            ) +
+            amount * 200
+        }px`;
+        imgToMove.style.left = newVal;
+    });
+    const clientWidth = ev.target.parentElement.clientWidth;
+    const scrollWidth = ev.target.parentElement.scrollWidth;
+    const position = removePx(imgsToMove[0].style.left);
+    console.log(`❗ Listing.js:103 '[clientWidth,scrollWidth,position]'`, [
+        clientWidth,
+        scrollWidth,
+        position,
+    ]);
+    const hitLastImg = position <= clientWidth - scrollWidth;
+    const stateToSet = position >= 0 ? -1 : hitLastImg ? 1 : 0;
 
+    stateSetter(stateToSet);
+
+    // console.log(
+    //     `❗ Listing.js:90 'ev.target.parentElement.clientWidth'`,
+    //     ev.target.parentElement.clientWidth
+    // );
+    // console.log(
+    //     `❗ Listing.js:90 'ev.target.parentElement.scrollWidth'`,
+    //     ev.target.parentElement.scrollWidth
+    // );
+};
 const Listing = (props) => {
+    const [scrollPosition, setScrollPosition] = React.useState(-1);
+    const mapMarkerElement = React.useRef(null);
+    const thumbnailTray = React.useRef(null);
+    React.useEffect(() => {
+        const mapMarkerPos = document
+            .getElementById(props.id + '_map_marker')
+            .getBoundingClientRect();
+        const thumbnailsPos = document
+            .getElementById(props.id + '_thumbnails')
+            .getBoundingClientRect();
+        if (mapMarkerPos.right < thumbnailsPos.right) {
+            setScrollPosition('noscroll');
+        }
+    }, []);
+    console.log(`❗ Listing.js:140 'props.cntxt.d'`,props.cntxt.d);
     return (
         <Wrapper>
             <a href={props.cntxt.url}>
                 <h2>{`${props.title} \u22C5 $${
                     parseInt(props.cntxt.d.prc) / 100
-                }`}</h2>
+                } \u22C5 avail. ${specialAttributePrettyize("dateavailable_tdt",props.cntxt.d["dateavailable_tdt"])}`}</h2>
             </a>
             <SubWrapper>
                 <TextSection {...props} />
                 <Attributes {...props} />
-                <ThumbnailTray>
+                <ThumbnailTray
+                    className={scrollPosition === 'noscroll' ? 'noscroll' : ''}
+                    id={props.id + '_thumbnails'}
+                >
                     {props.cntxt.imgs.map((x) => (
-                        <img src={x.href}></img>
+                        <img
+                            className={
+                                scrollPosition === 'noscroll' ? 'noscroll' : ''
+                            }
+                            src={x.href}
+                        ></img>
                     ))}
                     <img
-                        className="map-marker"
+                        id={props.id + '_map_marker'}
+                        className={`map-marker ${
+                            scrollPosition === 'noscroll' ? 'noscroll' : ''
+                        }`}
                         src="http://simpleicon.com/wp-content/uploads/map-marker-1.png"
                     />
+                    {scrollPosition != 'noscroll' && !!(scrollPosition + 1) && (
+                        <ScrollButton
+                            onClick={(ev) =>
+                                scrollThumbnails(ev, 1, setScrollPosition)
+                            }
+                        >
+                            {'<'}
+                        </ScrollButton>
+                    )}
+                    {scrollPosition != 'noscroll' && !!(scrollPosition - 1) && (
+                        <ScrollButton
+                            onClick={(ev) =>
+                                scrollThumbnails(ev, -1, setScrollPosition)
+                            }
+                            className="right"
+                        >
+                            {'>'}
+                        </ScrollButton>
+                    )}
                 </ThumbnailTray>
             </SubWrapper>
         </Wrapper>
     );
 };
+const ThumbnailTray = styled.div`
+    /* background-color: var(--whiteLight); */
+    /* padding: 8px; */
+    border-radius: 5px;
+    position: relative;
+    margin: 10px;
+    width: 100%;
+    display: flex;
+    overflow-x: hidden;
+    /* height: 130px; */
+    &.noscroll {
+        justify-content: center;
+    }
+    img {
+        position: relative;
+        max-height: 100px;
+        border-radius: 5px;
+        margin: 0 7px;
+        transition: left 0.3s cubic-bezier(0.2, 1.01, 0.6, 0.95);
+        left: 0px;
+    }
+    img.noscroll {
+        position: static;
+        max-height: 100px;
+        border-radius: 5px;
+        margin: 0 7px;
+        transition: left 0.3s cubic-bezier(0.2, 1.01, 0.6, 0.95);
+        /* left: 10px; */
+    }
+    .map-marker {
+        filter: invert(100%);
+        border: 2px rgba(0, 0, 0, 0.5) solid;
+        padding: 30px;
+    }
+`;
+const ScrollButton = styled.div`
+    cursor: pointer;
+    font-size: 1.5em;
+    position: absolute;
+    background: rgb(65, 69, 88);
+    background: linear-gradient(
+        90deg,
+        rgba(65, 69, 88, 1) 0%,
+        rgba(0, 212, 255, 0) 100%
+    );
+    width: 10%;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &.right {
+        left: 90%;
+        background: linear-gradient(
+            90deg,
+            rgba(0, 212, 255, 0) 0%,
+            rgba(65, 69, 88, 1) 100%
+        );
+    }
+`;
+
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 10px;
-    /* width:100%; */
-    
+    margin: 30px 10px;
+    max-width: 100%;
 `;
 
 const SubWrapper = styled.div`
@@ -126,6 +269,7 @@ const SubWrapper = styled.div`
     background-color: var(--blackSecondary);
     border-radius: 5px;
     padding: 0 40px;
+    width: 100%;
 `;
 
 const TextWrapper = styled.div`
@@ -136,11 +280,13 @@ const TextWrapper = styled.div`
     border-radius: 5px 5px 0px 0px;
 `;
 const DescQuoteWrapper = styled.div`
+    max-width:100%;
     position: relative;
     display: flex;
     justify-content: center;
     flex-direction: row;
     padding: 5px;
+    
 `;
 
 const CurlyQuote = styled.div`
@@ -154,6 +300,7 @@ const CurlyQuote = styled.div`
 `;
 
 const Description = styled.div`
+    overflow-wrap:anywhere;
     line-height: 1.5em;
     background-color: var(--black);
     border-radius: 5px;
@@ -176,23 +323,6 @@ const Description = styled.div`
     }
 `;
 
-const ThumbnailTray = styled.div`
-    margin: 10px;
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    img {
-        max-height: 100px;
-        border-radius: 5px;
-        margin: 0 5px;
-    }
-    .map-marker {
-        filter: invert(100%);
-        border: 2px rgba(0, 0, 0, 0.5) solid;
-        padding: 30px;
-    }
-`;
 const DataTray = styled.div`
     justify-content: center;
     display: flex;
