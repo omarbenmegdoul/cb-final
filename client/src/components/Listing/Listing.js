@@ -21,9 +21,9 @@ const valueIsBinary = (x) => {
 
 const TextSection = (props) => {
     const desc =
-        1 + props.cntxt.description.indexOf('<p>')
-            ? props.cntxt.description
-            : props.cntxt.description
+        1 + props.description.indexOf('<p>')
+            ? props.description
+            : props.description
                   .split('\n')
                   .filter((line) => line !== '')
                   .map((line) => `<p>${line}</p>`)
@@ -32,7 +32,7 @@ const TextSection = (props) => {
     return (
         <TextWrapper>
             <DescQuoteWrapper>
-                {props.cntxt.map.mapAddress} | {props.cntxt.timeposted}
+                {props.map.mapAddress} | {props.timeposted}
             </DescQuoteWrapper>
             <DescQuoteWrapper>
                 <CurlyQuote>{'Description'}</CurlyQuote>
@@ -62,7 +62,7 @@ const AttributeGroup = (props) => {
                 {prettyKeyGroupings[props.group]}
             </span>
             {keyGroupings[props.group].map((key) => {
-                const val = props.cntxt.d[key];
+                const val = props[key];
                 const className =
                     'attribute-selection ' +
                     (!valueIsBinary(deJSONizeValue(val))
@@ -122,10 +122,35 @@ const scrollThumbnails = (ev, amount, stateSetter) => {
     //     ev.target.parentElement.scrollWidth
     // );
 };
+
+const MapMarker = (props) => {
+    const [isIntersecting, setIntersecting] = React.useState(false);
+    return (
+        <img
+            id={props.id + '_map_marker'}
+            className={`map-marker ${
+                props.scrollPosition === 'noscroll' ? 'noscroll' : ''
+            }`}
+            src="http://simpleicon.com/wp-content/uploads/map-marker-1.png"
+        />
+    );
+};
+
+const toggleAsset = (id) => {
+    const shown = document.querySelector('#asset_display .show');
+    shown?.length && Array.from(shown).forEach((elem) => elem.classList.remove('show'));
+    // console.log(`❗ Listing.js:142 'id'`,id);
+    document.getElementById(id).classList.toggle("show")
+    console.log(`❗ Listing.js:144 'document.getElementById(id)'`,document.getElementById(id));
+    // console.log(`❗ Listing.js:144 'toShow' <${typeof toShow}>`,toShow);
+};
+
 const Listing = (props) => {
     const [scrollPosition, setScrollPosition] = React.useState(-1);
     const mapMarkerElement = React.useRef(null);
     const thumbnailTray = React.useRef(null);
+
+    // console.log(`❗ Listing.js:129 'props'`,props);
     React.useEffect(() => {
         const mapMarkerPos = document
             .getElementById(props.id + '_map_marker')
@@ -135,15 +160,22 @@ const Listing = (props) => {
             .getBoundingClientRect();
         if (mapMarkerPos.right < thumbnailsPos.right) {
             setScrollPosition('noscroll');
+            console.log(
+                `❗ Listing.js:139 '[props.title,mapMarkerPos.right,thumbnailsPos.right]'`,
+                [props.title, mapMarkerPos.right, thumbnailsPos.right]
+            );
         }
     }, []);
-    console.log(`❗ Listing.js:140 'props.cntxt.d'`,props.cntxt.d);
+
     return (
         <Wrapper>
-            <a href={props.cntxt.url}>
+            <a href={props.url}>
                 <h2>{`${props.title} \u22C5 $${
-                    parseInt(props.cntxt.d.prc) / 100
-                } \u22C5 avail. ${specialAttributePrettyize("dateavailable_tdt",props.cntxt.d["dateavailable_tdt"])}`}</h2>
+                    parseInt(props.prc) / 100
+                } \u22C5 avail. ${specialAttributePrettyize(
+                    'dateavailable_tdt',
+                    props.dateavailable_tdt
+                )}`}</h2>
             </a>
             <SubWrapper>
                 <TextSection {...props} />
@@ -152,21 +184,36 @@ const Listing = (props) => {
                     className={scrollPosition === 'noscroll' ? 'noscroll' : ''}
                     id={props.id + '_thumbnails'}
                 >
-                    {props.cntxt.imgs.map((x) => (
+                    {props.imgs.map((x, index) => {
+                      props.id==="1505750291" && console.log(`❗ Listing.js:185 'props.id + '_hiddenimg_' + index'`,props.id + '_hiddenimg_' + index);
+                      return (
                         <img
                             className={
                                 scrollPosition === 'noscroll' ? 'noscroll' : ''
                             }
                             src={x.href}
+                            id={props.id + '_thumb_' + index}
+                            onMouseOver={() => {
+                                toggleAsset(props.id + '_hiddenimg_' + index);
+                            }}
+                            onMouseLeave={() => {
+                                toggleAsset(props.id + '_hiddenimg_' + index);
+                            }}
                         ></img>
-                    ))}
-                    <img
+                    )})}
+                    <MapMarker
+                        title={props.title}
+                        id={props.id}
+                        scrollPosition={scrollPosition}
+                        setScrollPosition={setScrollPosition}
+                    />
+                    {/* <img
                         id={props.id + '_map_marker'}
                         className={`map-marker ${
                             scrollPosition === 'noscroll' ? 'noscroll' : ''
                         }`}
                         src="http://simpleicon.com/wp-content/uploads/map-marker-1.png"
-                    />
+                    /> */}
                     {scrollPosition != 'noscroll' && !!(scrollPosition + 1) && (
                         <ScrollButton
                             onClick={(ev) =>
@@ -280,13 +327,12 @@ const TextWrapper = styled.div`
     border-radius: 5px 5px 0px 0px;
 `;
 const DescQuoteWrapper = styled.div`
-    max-width:100%;
+    max-width: 100%;
     position: relative;
     display: flex;
     justify-content: center;
     flex-direction: row;
     padding: 5px;
-    
 `;
 
 const CurlyQuote = styled.div`
@@ -300,7 +346,11 @@ const CurlyQuote = styled.div`
 `;
 
 const Description = styled.div`
-    overflow-wrap:anywhere;
+    & a {
+        text-decoration: underline;
+    }
+    font-weight: 300;
+    overflow-wrap: anywhere;
     line-height: 1.5em;
     background-color: var(--black);
     border-radius: 5px;

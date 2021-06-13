@@ -123,11 +123,19 @@ export default createGlobalStyle`
     button:hover {
       cursor:pointer;
     }
+    input {
+      border:none;
+    }
     a {
       text-decoration:none;
+      color:inherit;
+      /* text-decoration:underline; */
+    }
+    a:visited h2 {
+      color:var(--cyan) !important;
     }
     a:visited {
-      color:inherit;
+      color:var(--cyan) !important;
     }
     /* * {border:1px pink dotted} */
     h1 {
@@ -162,6 +170,10 @@ export default createGlobalStyle`
     &.lite {
       border-width:1px 0px 0px 0px;
       margin:10px 0px 5px;
+      font-weight:300;
+    }
+    &.lite .excluded, &.lite .selected {
+      font-weight:400;
     }
     }
 
@@ -192,7 +204,7 @@ export default createGlobalStyle`
     }
 
     .attribute-selection.lite {
-      padding:5px 2px;
+      padding:6px 3px;
       font-size:0.9em;
       min-width:18px;
       margin:8px;

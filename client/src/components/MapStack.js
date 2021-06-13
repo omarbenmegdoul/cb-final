@@ -15,5 +15,6 @@ const MapStack = () => {
 const Wrapper = styled.div`
     position: relative;
     margin:0;
+    margin:0 20px;
 `;
 export default MapStack;

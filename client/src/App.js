@@ -84,9 +84,9 @@ const App = () => {
                 <QuickControls />
                 <ContentWrapper>
                     <SearchContainer />
-                    <Divider />
                     <SearchResults />
                 </ContentWrapper>
+                <AssetDisplay/>
             </FilterProvider>
         </AppWrapper>
     );

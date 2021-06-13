@@ -6,6 +6,7 @@ const FilterContext = React.createContext({});
 
 export const FilterProvider = ({ children }) => {
     const [userFilters, setUserFilters] = React.useState({});
+    const [searchResults, setSearchResults] = React.useState(null);
     const [collapsedFilterControls, setCollapsedFilterControls] =
         React.useState(false);
     const defaultFilterHiding = Object.keys(keyGroupings).reduce(
@@ -48,7 +49,9 @@ export const FilterProvider = ({ children }) => {
                 attrHidingSettings,
                 attrHidingSettingsDispatch,
                 collapsedFilterControls,
-                setCollapsedFilterControls
+                setCollapsedFilterControls,
+                searchResults,
+                setSearchResults,
             }}
         >
             {children}

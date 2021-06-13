@@ -7,8 +7,9 @@ const ContentWrapper = ({ children}) => {
     attrHidingSettingsDispatch,
     collapsedFilterControls,
     setCollapsedFilterControls,
+    searchResults
 } = React.useContext(FilterContext);
-  
+    const classes = collapsedFilterControls ? "expanded" : "" + searchResults ? "heroheight" : "";
     return <Wrapper className={collapsedFilterControls ? "expanded" : ""}>{children}</Wrapper>;
 };
 const Wrapper = styled.div`
@@ -31,6 +32,9 @@ const Wrapper = styled.div`
         width: calc(70% - 50px);
         transition:all 0.1s ease-out;
         transition-delay:0s;
+    }
+    &.heroheight {
+      max-height:calc(100vh - var(--header-height));
     }
 `;
 export default ContentWrapper;

@@ -9,15 +9,24 @@ const Sidebar = (props) => {
         setCollapsedFilterControls,
     } = React.useContext(FilterContext);
     return (
-        <PositioningParent>
-            <Wrapper
-                className={`${props.big ? 'big' : ''} ${
-                    props.right ? 'right' : ''
-                } ${collapsedFilterControls ? 'collapsed' : ''}`}
-            >
-                {props.children}
-            </Wrapper>
-        </PositioningParent>
+        <>
+          {!props.right && <PositioningParent>
+              <Wrapper
+                  className={`${props.big ? 'big' : ''} ${
+                      props.right ? 'right' : ''
+                  } `}
+              >
+                  {props.children}
+              </Wrapper>
+          </PositioningParent>}
+         { props.right && <Wrapper
+          className={`${props.big ? 'big' : ''} ${
+              props.right ? 'right' : ''
+          } `}
+      >
+          {props.children}
+      </Wrapper>}
+        </>
     );
 };
 const Wrapper = styled.div`
@@ -52,9 +61,12 @@ const Wrapper = styled.div`
     }
     &.right {
         left: calc(100vw - 15%);
+        margin-top:0;
+        position:fixed;
+        z-index:4;
     }
     &.big.right {
-        left: calc(100vw - 30%);
+        left: calc(100vw - 30% - 30px);
     }
     & > * {
         margin: 15px;

@@ -13,12 +13,13 @@ const QuickControls = ({ Props }) => {
         attrHidingSettingsDispatch,
         collapsedFilterControls,
         setCollapsedFilterControls,
+        searchResults
     } = React.useContext(FilterContext);
     // console.log(
     //     `❗ QuickControls.js:13 'attrHidingSettings'`,
     //     attrHidingSettings
     // );
-    return (
+    return searchResults && (
         <Sidebar>
             <Heading>
                 <h2>View settings</h2>

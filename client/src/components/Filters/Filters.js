@@ -285,18 +285,18 @@ const Filters = () => {
                     return <FilterGroup group={group} />;
                 })}
             </Wrapper>
-            <SearchButton
+            {/* <SearchButton
                 onClick={() => {
                     const filterSummary = constructAllFilterSummary();
                     console.log(
-                     
+                    
                         JSON.stringify(constructRequestFromFilterSummary(filterSummary))
                     );
                     setUserFilters(filterSummary);
                 }}
             >
                 Search
-            </SearchButton>
+            </SearchButton> */}
         </MetaWrapper>
     );
 };

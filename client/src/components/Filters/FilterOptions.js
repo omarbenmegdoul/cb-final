@@ -130,24 +130,28 @@ export const NumRange = ({ attribute, date }) => {
     const inputType = date ? 'date' : 'number';
     return (
         <Options>
-            <label for={attribute}>From:</label>
-            <RangeInput
-                type={inputType}
-                name={attribute}
-                id={attribute + '_min'}
-                date={date}
-                ref={minInput}
-                onBlur={handleChange}
-            />
-            <label for={attribute}>To:</label>
-            <RangeInput
-                type={inputType}
-                name={attribute}
-                id={attribute + '_max'}
-                date={date}
-                ref={maxInput}
-                onChange={handleChange}
-            />
+            <div>
+              <label for={attribute}>From:</label>
+              <RangeInput
+                  type={inputType}
+                  name={attribute}
+                  id={attribute + '_min'}
+                  date={date}
+                  ref={minInput}
+                  onBlur={handleChange}
+              />
+            </div>
+           <div>
+              <label for={attribute}>To:</label>
+              <RangeInput
+                  type={inputType}
+                  name={attribute}
+                  id={attribute + '_max'}
+                  date={date}
+                  ref={maxInput}
+                  onChange={handleChange}
+              />
+           </div>
         </Options>
     );
 };
@@ -210,7 +214,7 @@ export const Filter = ({ attribute }) => {
             id={attribute + '_single_container'}
             className="rounded-container-with-label"
         >
-            <span class="filter-name">
+            <span className="filter-name">
                 {attributeDisplay[attribute].pretty}
             </span>
             <InnerInputElement {...props}></InnerInputElement>
@@ -227,7 +231,7 @@ export const GroupedRequireFilter = ({ attributes, group }) => {
             id={group + '_requires_container'}
             className="rounded-container-with-label"
         >
-            <span class="filter-name">Require these attributes</span>
+            <span className="filter-name">Require these attributes</span>
             {attributes.map((attribute) => (
                 <RequireFilter attribute={attribute} />
             ))}
@@ -240,7 +244,7 @@ const RangeInput = styled.input`
     padding: 4px;
     height: 1em;
     border-radius: 5px;
-    margin: 0 6px 0 10px;
+    margin: 2px 10px 2px 5px;
     font-family: var(--karla);
 `;
 
@@ -249,6 +253,12 @@ const Options = styled.div`
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
+    &.center-children {
+      justify-content:center;
+    }
+    & label {
+      min-width:40px;
+    }
     /* &>input {
   appearance:none;
 } */
