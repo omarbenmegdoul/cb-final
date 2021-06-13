@@ -8,8 +8,10 @@ import Divider from '../Bits/Divider.js';
 
 const SearchResults = ({ Props }) => {
     const { searchResults } = React.useContext(FilterContext);
-    const listingKeys = Object.keys(simpleData).slice(0, 30);
+    const [timeUpdated,setTimeUpdated] = React.useState(null);
+    const listingKeys = Object.keys(simpleData).slice(0, 3);
     console.log(`❗ SearchResults.js:12 'searchResults?.length'`,searchResults?.length);
+    // React.useEffect to scroll
     return (
         searchResults && (
             <>

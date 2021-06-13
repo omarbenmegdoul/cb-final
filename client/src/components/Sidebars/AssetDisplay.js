@@ -9,15 +9,16 @@ const AssetDisplay = ({ Props }) => {
            <PositioningParent>
               {searchResults?.slice(0,10)?.map((sR, topIndex) => {
                   return sR.imgs.map((img, index) => {
-                      sR.id === '1505750291' &&
-                          console.log(
-                              `❗ AssetDisplay.js:12 'sR.id + '_hiddenimg_' + index'`,
-                              sR.id + '_hiddenimg_' + index,
-                              searchResults.length
-                          );
+                      // sR.id === '1505750291' &&
+                      //     console.log(
+                      //         `❗ AssetDisplay.js:12 'sR.id + '_hiddenimg_' + index'`,
+                      //         sR.id + '_hiddenimg_' + index,
+                      //         searchResults.length
+                      //     );
                       return (
                           <FullAssetWrapper id={sR.id + '_hiddenimg_' + index}>
                               <FullImg src={img.href} />
+                              <span>Image #{index+1}</span>
                           </FullAssetWrapper>
                       );
                   });

@@ -124,9 +124,29 @@ const scrollThumbnails = (ev, amount, stateSetter) => {
 };
 
 const MapMarker = (props) => {
-    const [isIntersecting, setIntersecting] = React.useState(false);
+    const markerElem = React.useRef();
+    const [isIntersecting, setIntersecting] = React.useState(true);
+
+    const observer = new IntersectionObserver(
+        ([img]) => setIntersecting(img.isIntersecting),
+        {root: document.getElementById(props.id + '_thumbnails')}
+    );
+    React.useEffect(() => {
+        const parentElem = markerElem.current.parentElement;
+        
+        observer.observe(markerElem.current);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
+    React.useEffect(() => {
+        console.log(`❗ Listing.js:138 'isIntersecting'`, isIntersecting);
+        props.setRightVisible(isIntersecting);
+    }, [isIntersecting]);
     return (
         <img
+            ref={markerElem}
             id={props.id + '_map_marker'}
             className={`map-marker ${
                 props.scrollPosition === 'noscroll' ? 'noscroll' : ''
@@ -136,19 +156,65 @@ const MapMarker = (props) => {
     );
 };
 
+const FirstThumb = (props) => {
+    const thumbElem = React.useRef();
+    const [isIntersecting, setIntersecting] = React.useState(true);
+
+    const observer = new IntersectionObserver(
+        ([img]) => setIntersecting(img.isIntersecting),
+        { root: document.getElementById(props.id + '_thumbnails') }
+    );
+    React.useEffect(() => {
+        // const parentElem = thumbElem.current.parentElement;
+        console.log(`❗ Listing.js:169 'thumbElem'`,thumbElem);
+        observer.observe(thumbElem.current);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
+    React.useEffect(() => {
+        console.log(`❗ Listing.js:138 'rightisIntersecting'`, isIntersecting);
+        props.setLeftVisible(isIntersecting);
+    }, [isIntersecting]);
+    const index = 0;
+    const scrollPosition = false;
+    return (
+        <img
+            ref={thumbElem}
+            className={scrollPosition === 'noscroll' ? 'noscroll' : ''}
+            src={props.imgSrc}
+            id={props.id + '_thumb_' + index}
+            onMouseOver={() => {
+                toggleAsset(props.id + '_hiddenimg_' + index);
+            }}
+            onMouseLeave={() => {
+                toggleAsset(props.id + '_hiddenimg_' + index);
+            }}
+        ></img>
+    );
+};
+
 const toggleAsset = (id) => {
     const shown = document.querySelector('#asset_display .show');
-    shown?.length && Array.from(shown).forEach((elem) => elem.classList.remove('show'));
+    shown?.length &&
+        Array.from(shown).forEach((elem) => elem.classList.remove('show'));
     // console.log(`❗ Listing.js:142 'id'`,id);
-    document.getElementById(id).classList.toggle("show")
-    console.log(`❗ Listing.js:144 'document.getElementById(id)'`,document.getElementById(id));
+    document.getElementById(id).classList.toggle('show');
+    console.log(
+        `❗ Listing.js:144 'document.getElementById(id)'`,
+        document.getElementById(id)
+    );
     // console.log(`❗ Listing.js:144 'toShow' <${typeof toShow}>`,toShow);
 };
 
 const Listing = (props) => {
     const [scrollPosition, setScrollPosition] = React.useState(-1);
+    const [allowScrolling, setAllowScrolling] = React.useState(false);
     const mapMarkerElement = React.useRef(null);
     const thumbnailTray = React.useRef(null);
+    const [leftVisible, setLeftVisible] = React.useState(false);
+    const [rightVisible, setRightVisible] = React.useState(false);
 
     // console.log(`❗ Listing.js:129 'props'`,props);
     React.useEffect(() => {
@@ -166,6 +232,9 @@ const Listing = (props) => {
             );
         }
     }, []);
+    React.useEffect(()=>{
+      setAllowScrolling(!(leftVisible && rightVisible))
+    },[leftVisible, rightVisible])
 
     return (
         <Wrapper>
@@ -181,31 +250,45 @@ const Listing = (props) => {
                 <TextSection {...props} />
                 <Attributes {...props} />
                 <ThumbnailTray
-                    className={scrollPosition === 'noscroll' ? 'noscroll' : ''}
+                    className={!allowScrolling ? 'noscroll' : ''}
                     id={props.id + '_thumbnails'}
                 >
                     {props.imgs.map((x, index) => {
-                      props.id==="1505750291" && console.log(`❗ Listing.js:185 'props.id + '_hiddenimg_' + index'`,props.id + '_hiddenimg_' + index);
-                      return (
-                        <img
-                            className={
-                                scrollPosition === 'noscroll' ? 'noscroll' : ''
-                            }
-                            src={x.href}
-                            id={props.id + '_thumb_' + index}
-                            onMouseOver={() => {
-                                toggleAsset(props.id + '_hiddenimg_' + index);
-                            }}
-                            onMouseLeave={() => {
-                                toggleAsset(props.id + '_hiddenimg_' + index);
-                            }}
-                        ></img>
-                    )})}
+                        return !index ? (
+                            <FirstThumb
+                                title={props.title}
+                                id={props.id}
+                                imgSrc={x.href}
+                                // scrollPosition={scrollPosition}
+                                setLeftVisible={setLeftVisible} 
+                            />
+                        ) : (
+                            <img
+                                className={
+                                    scrollPosition === 'noscroll'
+                                        ? 'noscroll'
+                                        : ''
+                                }
+                                src={x.href}
+                                id={props.id + '_thumb_' + index}
+                                onMouseOver={() => {
+                                    toggleAsset(
+                                        props.id + '_hiddenimg_' + index
+                                    );
+                                }}
+                                onMouseLeave={() => {
+                                    toggleAsset(
+                                        props.id + '_hiddenimg_' + index
+                                    );
+                                }}
+                            ></img>
+                        );
+                    })}
                     <MapMarker
                         title={props.title}
                         id={props.id}
-                        scrollPosition={scrollPosition}
-                        setScrollPosition={setScrollPosition}
+                        // scrollPosition={scrollPosition}
+                        setRightVisible={setRightVisible}
                     />
                     {/* <img
                         id={props.id + '_map_marker'}
@@ -214,7 +297,7 @@ const Listing = (props) => {
                         }`}
                         src="http://simpleicon.com/wp-content/uploads/map-marker-1.png"
                     /> */}
-                    {scrollPosition != 'noscroll' && !!(scrollPosition + 1) && (
+                    {allowScrolling && !!(scrollPosition + 1) && (
                         <ScrollButton
                             onClick={(ev) =>
                                 scrollThumbnails(ev, 1, setScrollPosition)
@@ -223,7 +306,7 @@ const Listing = (props) => {
                             {'<'}
                         </ScrollButton>
                     )}
-                    {scrollPosition != 'noscroll' && !!(scrollPosition - 1) && (
+                    {allowScrolling && !!(scrollPosition - 1) && (
                         <ScrollButton
                             onClick={(ev) =>
                                 scrollThumbnails(ev, -1, setScrollPosition)
