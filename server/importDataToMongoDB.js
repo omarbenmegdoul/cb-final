@@ -3,6 +3,15 @@ require('dotenv').config();
 const simpleData = require('./simpleData.json');
 // console.log(`❗ importDataToMongoDB.js:4 'simpleData'`,simpleData);
 const { MONGO_URI } = process.env;
+const GeographicLib = require('geographiclib');
+
+const distance = (lonlat1, lonlat2)=>{
+  return GeographicLib.Geodesic.WGS84.Inverse(
+    lonlat1[1],lonlat1[0],lonlat2[1],lonlat2[0]
+  ).s12
+  }
+
+
 
 const options = {
     useNewUrlParser: true,
@@ -249,6 +258,10 @@ const prettyKeyGroupings = {
     g_lease: 'Lease properties',
     g_a11y: 'Accessibility',
 };
+
+
+
+
 
 // throw new Error();
 const listingDataImport = async (dbName) => {

@@ -46,8 +46,8 @@ const markHover = (ev) => {
     if (!allowStaging) {
         return;
     }
-    ev.target.classList.add('selected');
-    console.log(`❗ MapGrid.js:24 'ev' <${typeof ev}>`, ev);
+    ev.target.classList.add('selected'); //TODO: right mouse button for erase
+    // console.log(`❗ MapGrid.js:24 'ev' <${typeof ev}>`, ev);
     logElementCoords(ev);
 };
 
