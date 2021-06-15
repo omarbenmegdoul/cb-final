@@ -14,7 +14,7 @@ const Sidebar = (props) => {
               <Wrapper
                   className={`${props.big ? 'big' : ''} ${
                       props.right ? 'right' : ''
-                  } `}
+                  } ${collapsedFilterControls ? "collapsed" : ""}`}
               >
                   {props.children}
               </Wrapper>

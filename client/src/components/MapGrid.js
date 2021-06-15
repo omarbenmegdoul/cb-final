@@ -147,7 +147,7 @@ const MapGrid = ({ Props }) => {
                                 className="grid-slots"
                                 onMouseEnter={markHover}
                             >
-                                {subdivisionData[`${xIndex}-${yIndex}`]?.length}
+                                {!!subdivisionData[`${xIndex}-${yIndex}`]?.length && subdivisionData[`${xIndex}-${yIndex}`]?.length}
                             </div>
                         );
                     });
@@ -208,12 +208,13 @@ const Wrapper = styled.div`
         flex-direction:column;
         justify-content:center;
         align-items:center;
-        color:black;
+        color:rgba(0,0,0,0);
         font-size:10px;
     }
 
     & .grid-slots:hover {
         border: 2px #f0f dotted;
+        color:rgba(0,0,0,1)
     }
 
     & .selected {

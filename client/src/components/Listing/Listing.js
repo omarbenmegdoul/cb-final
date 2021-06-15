@@ -37,7 +37,7 @@ const TextSection = (props) => {
             <DescQuoteWrapper>
                 <CurlyQuote>{'Description'}</CurlyQuote>
                 <Description>
-                    <div dangerouslySetInnerHTML={{ __html: desc }}></div>
+                    <div dangerouslySetInnerHTML={{ __html: desc.split("style=").join("=") }}></div>
                 </Description>
             </DescQuoteWrapper>
         </TextWrapper>
@@ -96,8 +96,8 @@ const scrollThumbnails = (ev, amount, stateSetter) => {
                     ? removePx(imgToMove.style.left)
                     : '0'
             ) +
-            amount * 200
-        }px`;
+            amount * 80
+        }%`;
         imgToMove.style.left = newVal;
     });
     const clientWidth = ev.target.parentElement.clientWidth;
@@ -129,7 +129,7 @@ const MapMarker = (props) => {
 
     const observer = new IntersectionObserver(
         ([img]) => setIntersecting(img.isIntersecting),
-        {root: document.getElementById(props.id + '_thumbnails')}
+        {root: document.getElementById(props.id + '_thumbnails'),threshold: 1.0}
     );
     React.useEffect(() => {
         const parentElem = markerElem.current.parentElement;
@@ -141,7 +141,7 @@ const MapMarker = (props) => {
         };
     }, []);
     React.useEffect(() => {
-        console.log(`❗ Listing.js:138 'isIntersecting'`, isIntersecting);
+        console.log(`❗ Listing.js:138 'rightisIntersecting'`, isIntersecting);
         props.setRightVisible(isIntersecting);
     }, [isIntersecting]);
     return (
@@ -150,7 +150,16 @@ const MapMarker = (props) => {
             id={props.id + '_map_marker'}
             className={`map-marker ${
                 props.scrollPosition === 'noscroll' ? 'noscroll' : ''
-            }`}
+            
+            } `}
+
+            onMouseOver={() => {
+              toggleAsset(props.id + '_map');
+          }}
+          onMouseLeave={() => {
+              toggleAsset(props.id + '_map');
+          }}
+
             src="http://simpleicon.com/wp-content/uploads/map-marker-1.png"
         />
     );
@@ -162,7 +171,7 @@ const FirstThumb = (props) => {
 
     const observer = new IntersectionObserver(
         ([img]) => setIntersecting(img.isIntersecting),
-        { root: document.getElementById(props.id + '_thumbnails') }
+        { root: document.getElementById(props.id + '_thumbnails'), threshold: 1.0 }
     );
     React.useEffect(() => {
         // const parentElem = thumbElem.current.parentElement;
@@ -174,7 +183,7 @@ const FirstThumb = (props) => {
         };
     }, []);
     React.useEffect(() => {
-        console.log(`❗ Listing.js:138 'rightisIntersecting'`, isIntersecting);
+        console.log(`❗ Listing.js:138 'leftisIntersecting'`, isIntersecting);
         props.setLeftVisible(isIntersecting);
     }, [isIntersecting]);
     const index = 0;
@@ -213,25 +222,25 @@ const Listing = (props) => {
     const [allowScrolling, setAllowScrolling] = React.useState(false);
     const mapMarkerElement = React.useRef(null);
     const thumbnailTray = React.useRef(null);
-    const [leftVisible, setLeftVisible] = React.useState(false);
+    const [leftVisible, setLeftVisible] = React.useState(true);
     const [rightVisible, setRightVisible] = React.useState(false);
 
     // console.log(`❗ Listing.js:129 'props'`,props);
-    React.useEffect(() => {
-        const mapMarkerPos = document
-            .getElementById(props.id + '_map_marker')
-            .getBoundingClientRect();
-        const thumbnailsPos = document
-            .getElementById(props.id + '_thumbnails')
-            .getBoundingClientRect();
-        if (mapMarkerPos.right < thumbnailsPos.right) {
-            setScrollPosition('noscroll');
-            console.log(
-                `❗ Listing.js:139 '[props.title,mapMarkerPos.right,thumbnailsPos.right]'`,
-                [props.title, mapMarkerPos.right, thumbnailsPos.right]
-            );
-        }
-    }, []);
+    // React.useEffect(() => {
+    //     const mapMarkerPos = document
+    //         .getElementById(props.id + '_map_marker')
+    //         .getBoundingClientRect();
+    //     const thumbnailsPos = document
+    //         .getElementById(props.id + '_thumbnails')
+    //         .getBoundingClientRect();
+    //     if (mapMarkerPos.right < thumbnailsPos.right) {
+    //         setScrollPosition('noscroll');
+    //         console.log(
+    //             `❗ Listing.js:139 '[props.title,mapMarkerPos.right,thumbnailsPos.right]'`,
+    //             [props.title, mapMarkerPos.right, thumbnailsPos.right]
+    //         );
+    //     }
+    // }, []);
     React.useEffect(()=>{
       setAllowScrolling(!(leftVisible && rightVisible))
     },[leftVisible, rightVisible])
@@ -297,7 +306,7 @@ const Listing = (props) => {
                         }`}
                         src="http://simpleicon.com/wp-content/uploads/map-marker-1.png"
                     /> */}
-                    {allowScrolling && !!(scrollPosition + 1) && (
+                    {allowScrolling && !leftVisible && (
                         <ScrollButton
                             onClick={(ev) =>
                                 scrollThumbnails(ev, 1, setScrollPosition)
@@ -306,7 +315,7 @@ const Listing = (props) => {
                             {'<'}
                         </ScrollButton>
                     )}
-                    {allowScrolling && !!(scrollPosition - 1) && (
+                    {allowScrolling && !rightVisible && (
                         <ScrollButton
                             onClick={(ev) =>
                                 scrollThumbnails(ev, -1, setScrollPosition)

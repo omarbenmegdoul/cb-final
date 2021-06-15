@@ -28,7 +28,7 @@ const QuickControls = ({ Props }) => {
                         setCollapsedFilterControls(!collapsedFilterControls)
                     }
                 >
-                    {collapsedFilterControls ? '\u9650' : '\u9668'}
+                    {collapsedFilterControls ? '\u25BC' : '\u25C4'}
                 </h2>
             </Heading>
             {Object.keys(prettyKeyGroupings).map((key) => {
@@ -59,7 +59,7 @@ const Heading = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    transition:all 0.1s  ease-out;
+    transition:all 0.1s ease-out;
     /* background-color:#f00; */
     width:15vh;
     min-width:100%;

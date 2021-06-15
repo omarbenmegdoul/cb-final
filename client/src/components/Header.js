@@ -5,7 +5,7 @@ const Header = () => {
     return <Wrapper>
       <div>
         <h1>Better Filters for Kijiji</h1>
-        <p>{"super-granular search diameters \u22C5 at-a-glance attributes & photos \u22C5 no duplicates \u22C5 no apartment swaps \u22C5 no offices"}</p>
+        <p>{"super-granular search diameters + at-a-glance attributes & photos"}</p>
       </div>
     </Wrapper>;
 };
