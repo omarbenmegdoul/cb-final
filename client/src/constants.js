@@ -27,17 +27,18 @@ export const BL_PX = [-8202924.64513574, 5699272.861729206]; //sanity checked in
 //   return d;
 // }
 // const geod = GeographicLib.Geodesic.WGS84
-// const testCenter = [45.491751958924084, -73.68812583206137]
+// const testCenter = [45.566181191633234,-73.59081237440267]
 // new Array(45).fill(0).forEach((x,index)=>{
-//   const calc = geod.Direct(...testCenter,8*index,250)
-//   console.log(calc.lat2,calc.lon2)
+//   [50,100,200,250].map(l=>{const calc = geod.Direct(...testCenter,8*index,l)
+//   console.log(calc.lat2,",",calc.lon2)})
+  
 // })
-// console.log(testCenter[0],testCenter[1]);
-// const distance2 = (lonlat1, lonlat2)=>{
-// return GeographicLib.Geodesic.WGS84.Inverse(
-//   lonlat1[1],lonlat1[0],lonlat2[1],lonlat2[0]
-// ).s12
-// }
+// console.log(testCenter[0],",",testCenter[1]);
+const distance2 = (lonlat1, lonlat2)=>{
+return GeographicLib.Geodesic.WGS84.Inverse(
+  lonlat1[1],lonlat1[0],lonlat2[1],lonlat2[0]
+).s12
+}
 const [A,B,C,D] = [TL_PX, TR_PX, BR_PX,BL_PX].map(x=>toLonLat(x));
 console.log(`❗ constants.js:30 '[A,B,C,D]'`,[A,B,C,D]);
 // console.log(`❗ constants.js:19 '[A,B]'`,[A,B]);
@@ -135,7 +136,7 @@ export const CENTER_FROM_SUBDIVISION_CORNER_HOP = hopBetweenTwoPoints(
 
 export const toPrint = [TL_PX, TR_PX, BL_PX, BR_PX, POINT_AT_CHI_0_PSI_1, POINT_AT_CHI_1_PSI_0,POINT_AT_CHI_1_PSI_1,SUBDIVISION_0_0_CENTER].map((x) => [toLonLat(x)[1], toLonLat(x)[0]])
 
-
+console.log(`❗ constants.js:138 'distance2(A,SUBDIVISION_0_0_CENTER)'`,distance2(A,toLonLat(SUBDIVISION_0_0_CENTER)));
 // console.log(`❗ constants.js:30 'distance(A,B)'`,distance(A,B));
 // console.log(`❗ constants.js:30 'distance(C,D)'`,distance(C,D));
 // console.log(`❗ constants.js:30 'distance(A,C)'`,distance(A,C));

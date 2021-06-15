@@ -5,8 +5,20 @@ import { attributeDisplay, keyGroupings } from '../Filters/FilterConfig';
 const FilterContext = React.createContext({});
 
 export const FilterProvider = ({ children }) => {
+    const [subdivisionData, setSubdivisionData] = React.useState([]);
     const [userFilters, setUserFilters] = React.useState({});
     const [searchResults, setSearchResults] = React.useState(null);
+    const [selectedSubdivisions, setSelectedSubdivisions] = React.useState([]);
+    const [allowedListings, setAllowedListings] = React.useState(null);
+
+    React.useEffect(() => {
+        const combinedListingsBySelectedSubdivisions =
+            selectedSubdivisions.reduce((accum, subd) => {
+                return [...accum, ...subdivisionData[subd]];
+            }, []);
+        setAllowedListings(combinedListingsBySelectedSubdivisions);
+    }, [selectedSubdivisions]);
+
     const [collapsedFilterControls, setCollapsedFilterControls] =
         React.useState(false);
     const defaultFilterHiding = Object.keys(keyGroupings).reduce(
@@ -52,6 +64,11 @@ export const FilterProvider = ({ children }) => {
                 setCollapsedFilterControls,
                 searchResults,
                 setSearchResults,
+                selectedSubdivisions,
+                setSelectedSubdivisions,
+                subdivisionData,
+                setSubdivisionData,
+                allowedListings
             }}
         >
             {children}

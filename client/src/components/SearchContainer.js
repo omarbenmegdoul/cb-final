@@ -15,7 +15,7 @@ const SearchContainer = ({ Props }) => {
             </Wrapper>
             <SearchButton
                 onClick={async () => {
-                  const filterSummary = constructAllFilterSummary()
+                    const filterSummary = constructAllFilterSummary();
                     const options = {
                         method: 'POST', // *GET, POST, PUT, DELETE, etc.
                         mode: 'cors', // no-cors, *cors, same-origin
@@ -24,15 +24,13 @@ const SearchContainer = ({ Props }) => {
                             // 'Content-Type': 'application/x-www-form-urlencoded',
                         },
                         body: JSON.stringify({
-                            filterSummary
+                            filterSummary,
                         }), // body data type must match "Content-Type" header
                     };
-                    const res = await fetch(
-                        '/listings',
-                        options
-                    );
-                    const listings = await res.json()
-                    setSearchResults(JSON.parse(listings).data)
+                    const res = await fetch('http://localhost:5678/listings', options);
+                    const listings = await res.json();
+                    console.log(`❗ SearchContainer.js:32 'listings'`,listings);
+                    setSearchResults(JSON.parse(listings).data);
                     setUserFilters(filterSummary);
                 }}
             >
@@ -226,7 +224,7 @@ const constructAllFilterSummary = () => {
 };
 
 const SearchButton = styled.button`
-  border:none;
+    border: none;
     font-weight: 700;
     width: 100px;
     padding: 8px;

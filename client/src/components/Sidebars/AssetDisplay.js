@@ -7,7 +7,9 @@ const AssetDisplay = ({ Props }) => {
     return (
         <Sidebar id="asset_display" big right>
            <PositioningParent>
-              {searchResults?.slice(0,10)?.map((sR, topIndex) => {
+             
+              {//TODO: use same filter as in SearchResults
+              searchResults?.slice(0,10)?.map((sR, topIndex) => {
                   return sR.imgs.map((img, index) => {
                       // sR.id === '1505750291' &&
                       //     console.log(

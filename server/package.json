@@ -1,17 +1,36 @@
 {
-    "scripts": {
-        "dev:backend": "nodemon ./server/index.js"
-    },
-
-    "dependencies": {
-        "body-parser": "^1.19.0",
-        "cors": "^2.8.5",
-        "dotenv": "^10.0.0",
-        "express": "^4.17.1",
-        "geographiclib": "^1.51.0",
-        "mongodb": "^3.6.9",
-        "morgan": "^1.10.0",
-        "nodemon": "^2.0.7",
-        "ol": "^6.5.0"
-    }
+  
+  
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+  
+  
+  "scripts": {
+    "start": "ts-node index.ts",
+    "build": "tsc",
+    "dev:backend": "nodemon ./server/index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "geographiclib": "^1.51.0",
+    "mongodb": "^3.6.9",
+    "morgan": "^1.10.0",
+    "ol": "^6.5.0",
+    "proj4": "^2.7.2"
+  },
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

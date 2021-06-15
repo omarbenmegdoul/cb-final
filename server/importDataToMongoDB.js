@@ -5,13 +5,14 @@ const simpleData = require('./simpleData.json');
 const { MONGO_URI } = process.env;
 const GeographicLib = require('geographiclib');
 
-const distance = (lonlat1, lonlat2)=>{
-  return GeographicLib.Geodesic.WGS84.Inverse(
-    lonlat1[1],lonlat1[0],lonlat2[1],lonlat2[0]
-  ).s12
-  }
-
-
+const distance = (lonlat1, lonlat2) => {
+    return GeographicLib.Geodesic.WGS84.Inverse(
+        lonlat1[1],
+        lonlat1[0],
+        lonlat2[1],
+        lonlat2[0]
+    ).s12;
+};
 
 const options = {
     useNewUrlParser: true,
@@ -259,10 +260,6 @@ const prettyKeyGroupings = {
     g_a11y: 'Accessibility',
 };
 
-
-
-
-
 // throw new Error();
 const listingDataImport = async (dbName) => {
     // creates a new client
@@ -292,18 +289,18 @@ const listingDataImport = async (dbName) => {
     for (const listing in cleanedSimpleData) {
         console.log(`❗ importDataToMongoDB.js:37 'x'`, listing);
         // for (const attribute in attributeDisplay) {
-          const flattenedContext = Object.keys(cleanedSimpleData[listing].cntxt)
-              .filter((attr) => !['d', 'd1', 'd2', 'd3'].includes(attr))
-              .reduce(
-                  (accum, attr) => {
-                      accum[attr] = cleanedSimpleData[listing].cntxt[attr];
-                      return accum;
-                  },
-                  { ...cleanedSimpleData[listing].cntxt.d }
-              );
-            
-          await db.collection('flattened_listings').insertOne(flattenedContext);
-      // }
+        const flattenedContext = Object.keys(cleanedSimpleData[listing].cntxt)
+            .filter((attr) => !['d', 'd1', 'd2', 'd3'].includes(attr))
+            .reduce(
+                (accum, attr) => {
+                    accum[attr] = cleanedSimpleData[listing].cntxt[attr];
+                    return accum;
+                },
+                { ...cleanedSimpleData[listing].cntxt.d }
+            );
+
+        await db.collection('flattened_listings').insertOne(flattenedContext);
+        // }
     }
 
     // close the connection to the database server
@@ -321,6 +318,8 @@ const attributeDictionaryImport = async (dbName) => {
     // Object.keys(simpleData).forEach((x) =>
     //     console.log(`❗ importDataToMongoDB.js:20 'x.split("/")'`, x.split('/'))
     // );
+    console.log(`❗ importDataToMongoDB.js:321 'client'`, client);
+
     const db = client.db(dbName);
     // await db.collection('consts').insertMany([
     //     { _id: 'attributeDisplay', ...attributeDisplay },
@@ -337,7 +336,7 @@ const attributeDictionaryImport = async (dbName) => {
                 },
                 { ...cleanedSimpleData[x].cntxt.d }
             );
-          
+
         await db.collection('flattened_listings').insertOne(flattenedContext);
     }
 
@@ -346,6 +345,125 @@ const attributeDictionaryImport = async (dbName) => {
     console.log('disconnected!');
 };
 
-listingDataImport('final_project');
+const listingsWithCoordInfoImport = async (dbName) => {
+    const cleanedSimpleData = Object.keys(simpleData).reduce(
+        (accumulator, k) => {
+            const kijijiAddressSplit = k.split('/');
+            const kijijiID = kijijiAddressSplit[kijijiAddressSplit.length - 1];
+            console.log(kijijiID);
+            accumulator[kijijiID] = simpleData[k];
+            return accumulator;
+        },
+        {}
+    );
+    const distanceBetweenListingAndSub = (listing, subCoordsObj) => {
+        const listingCoords = [
+            listing.cntxt.map.latitude,
+            listing.cntxt.map.longitude,
+        ];
+
+        const subCoords = Object.keys(subCoordsObj).filter(
+            (x) => x !== '_id'
+        )[0];
+
+        const cleanedSubCoords = subCoords.split('X').join('.').split('~');
+
+        return distance(listingCoords, cleanedSubCoords);
+    };
+    // const validSubdivisions = (listing, subCoordsDict) => {
+    //     const allDistances = Object.keys.reduce((accumulator, key) => {
+    //         const distance = distanceBetweenListingAndSub(listing, key);
+    //         return {...accumulator, [key]:distance};
+    //     }, {});
+    //     return Object.keys(allDistances).reduce((incumbent, challenger) => {
+    //         allDistances[incumbent]>allDistances[challenger]
+    //     });
+    // };
+    const listingsInSubD = (subDByCoord) => {
+        return Object.keys(cleanedSimpleData).filter(
+            (listing) =>
+                distanceBetweenListingAndSub(
+                    cleanedSimpleData[listing],
+                    subDByCoord
+                ) < 370
+        ); //todo: run tests in client/constants.js to figure out diagonal.
+    };
+
+    // creates a new client
+    const client = await MongoClient(MONGO_URI, options);
+    console.log(`❗ importDataToMongoDB.js:387 'client'`, client);
+    // connect to the client
+    await client.connect();
+
+    // Object.keys(simpleData).forEach((x) =>
+    //     console.log(`❗ importDataToMongoDB.js:20 'x.split("/")'`, x.split('/'))
+    // );
+
+    console.log('connected!');
+    // connect to the database (db name is provided as an argument to the function)
+    const db = client.db(dbName);
+
+    const coords_to_subdivisions = await db
+        .collection('subdivisions_to_coordinates')
+        .find({})
+        .toArray();
+
+    const subdDlistings = coords_to_subdivisions.map((obj, index) => {
+        // console.log(`❗ importDataToMongoDB.js:412 'x'`,x);
+
+        const subCoords = Object.keys(obj).filter((k) => k !== '_id')[0];
+
+        const listingsWithin = listingsInSubD(obj);
+        const out = {
+            _id: obj[subCoords],
+            listings: listingsWithin,
+        };
+        // obj[subCoords] === "15-8" && console.log(obj[subCoords]);
+        (obj[subCoords].indexOf('29-') + 1 ||
+            obj[subCoords].indexOf('15-') + 1 ||
+            (obj[subCoords].indexOf('0-') + 1 &&
+                obj[subCoords].indexOf('10-') === -1 &&
+                obj[subCoords].indexOf('20-') === -1)) &&
+            out.listings.forEach((id) => {
+                const [lon, lat] = [
+                    cleanedSimpleData[id].cntxt.map.longitude,
+                    cleanedSimpleData[id].cntxt.map.latitude,
+                ];
+                console.log(lat, ',', lon);
+            });
+        return out;
+    });
+    //TODO: write [
+    // {"0-1":[bunchoflistings]}
+    // ...
+    // ]
+    await db.collection('listings_by_subdivision').insertMany(subdDlistings);
+    client.close();
+    return;
+
+    for (const listing in cleanedSimpleData) {
+        console.log(`❗ importDataToMongoDB.js:37 'x'`, listing);
+        // for (const attribute in attributeDisplay) {
+        const flattenedContext = Object.keys(cleanedSimpleData[listing].cntxt)
+            .filter((attr) => !['d', 'd1', 'd2', 'd3'].includes(attr))
+            .reduce(
+                (accum, attr) => {
+                    accum[attr] = cleanedSimpleData[listing].cntxt[attr];
+                    return accum;
+                },
+                { ...cleanedSimpleData[listing].cntxt.d }
+            );
+
+        await db.collection('flattened_listings').insertOne(flattenedContext);
+        // }
+    }
+
+    // close the connection to the database server
+
+    console.log('disconnected!');
+};
+
+listingsWithCoordInfoImport('final_project');
+
 // attributeDictionaryImport('final_project');
 module.exports = { attributeDisplay, keyGroupings, prettyKeyGroupings };
