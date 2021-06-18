@@ -14,5 +14,5 @@
   - vector transit map
   - walkscore, bikescore?
 - endpoint to accept new listing data for admin use
-
+- star/hide listings; to-do list functionality?
 - is it more performant to fetch all results and filter them on client-side for immediate feedback after filters have been changed, or is it better to do a new fetch everytime and let mongoDB match to listings that pass the criteria?
