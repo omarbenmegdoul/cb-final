@@ -3,6 +3,8 @@ A web app to display apartment listings on Kijiji.
 - single-page app: no click-through required to view apartment data, location on map, or photos
 - more powerful filters: search by move-in date, draw areas of interest on map
 
+The data is provided by a scraper I wrote in Python last year with the [requests](https://pypi.org/project/requests/) and [html](https://docs.python.org/3/library/html.html) libraries.
+
 This README is under construction! This MVP was completed in less than two weeks as my final project for the Concordia Web Dev Bootcamp, so bear with me while I clean up the repo :)
 
 # GIFs and pictures
