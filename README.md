@@ -9,8 +9,8 @@
 - right-click the erase selection on map
 - persist user searches
 - togglable map overlays
--- listing density heatmap
--- price heatmap
--- vector transit map
--- walkscore, bikescore?
+  - listing density heatmap
+  - price heatmap
+  - vector transit map
+  - walkscore, bikescore?
 - endpoint to accept new listing data for admin use
