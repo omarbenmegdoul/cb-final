@@ -7,7 +7,7 @@
 - pin assets in the full display sidebar
 - get public transit data
 - right-click the erase selection on map
-- persist user searches
+- persist user searches across visits
 - togglable map overlays
   - listing density heatmap
   - price heatmap
