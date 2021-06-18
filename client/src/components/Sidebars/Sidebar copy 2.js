@@ -7,6 +7,7 @@ const Sidebar = (props) => {
         attrHidingSettingsDispatch,
         collapsedFilterControls,
         setCollapsedFilterControls,
+        searchResults, allowedListings 
     } = React.useContext(FilterContext);
     return (
         <>
@@ -18,11 +19,11 @@ const Sidebar = (props) => {
                             ?.filter(
                                 (listing) =>
                                     !allowedListings ||
-                                    allowedListings.includes(sR.id)
+                                    allowedListings.includes(listing.id)
                             )
                             .map((listing, topIndex) => {
                                 return <ListingFullAssets listing={listing}   />
-                                // <FullAssetWrapper id={sR.id+"_hiddenassets_"+}
+                               
                             })
                     }
                 </PositioningParent>
@@ -37,7 +38,7 @@ const ListingFullAssets = ({listing})=>{
         return (
             <FullAssetWrapper
                 id={
-                    sR.id +
+                    listing.id +
                     '_hiddenimg_' +
                     index
                 }
@@ -47,7 +48,7 @@ const ListingFullAssets = ({listing})=>{
             </FullAssetWrapper>
         );
     }),
-    <FullAssetWrapper id={sR.id + '_map'}>
+    <FullAssetWrapper id={listing.id + '_map'}>
         {
             <iframe
                 // class="kjAppear"
