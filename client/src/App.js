@@ -27,7 +27,7 @@ import {
 import Header from './components/Header';
 import Divider from './components/Bits/Divider';
 import Listing from './components/Listing/Listing.js';
-import QuickControls from './components/Sidebars/QuickControls.js';
+import QuickControls from './components/Sidebars/AttrDisplay.js';
 import AssetDisplay from './components/Sidebars/AssetDisplay';
 import { Filter } from './components/Filters/FilterOptions';
 import { attributeDisplay } from './components/Filters/FilterConfig';

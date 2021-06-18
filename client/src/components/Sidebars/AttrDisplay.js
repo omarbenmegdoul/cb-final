@@ -1,38 +1,60 @@
 import React from 'react';
 import styled from 'styled-components';
+
+import AttrDisplayCtrlButton from './AttrDisplayCtrlButton';
+import {
+  attributeDisplay,
+  keyGroupings,
+  prettyKeyGroupings,
+} from '../Filters/FilterConfig';
 import FilterContext from '../Context/FilterContext';
-const Sidebar = (props) => {
+const AttrDisplay = (props) => {
     const {
-        attrHidingSettings,
-        attrHidingSettingsDispatch,
         collapsedFilterControls,
         setCollapsedFilterControls,
     } = React.useContext(FilterContext);
     return (
         <>
-            {!props.right && (
-                <PositioningParent>
-                    <Wrapper
-                        className={`${props.big ? 'big' : ''} ${
-                            props.right ? 'right' : ''
-                        } ${collapsedFilterControls ? 'collapsed' : ''}`}
-                    >
-                        {props.children}
-                    </Wrapper>
-                </PositioningParent>
-            )}
-            {props.right && (
+            <PositioningParent>
                 <Wrapper
-                    className={`${props.big ? 'big' : ''} ${
-                        props.right ? 'right' : ''
-                    } `}
+                    className={`${collapsedFilterControls ? 'collapsed' : ''}`}
                 >
-                    {props.children}
+                    <Heading>
+                        <h2>View settings</h2>
+                        <h2
+                            onClick={() =>
+                                setCollapsedFilterControls(
+                                    !collapsedFilterControls
+                                )
+                            }
+                        >
+                            {collapsedFilterControls ? '\u25BC' : '\u25C4'}
+                        </h2>
+                    </Heading>
+                    {Object.keys(prettyKeyGroupings).map((group) => {
+                        
+                        return <AttrDisplayCtrlButton group={group} />;
+                    })}
                 </Wrapper>
-            )}
+            </PositioningParent>
         </>
     );
 };
+const Heading = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.1s ease-out;
+    /* background-color:#f00; */
+    width: 15vh;
+    min-width: 100%;
+    white-space: no-wrap;
+    & h2 {
+        white-space: no-wrap;
+        margin: 0 5px;
+    }
+`;
+
 const Wrapper = styled.div`
     /* background-color: #00f; */
     height: 100vh;
@@ -60,18 +82,7 @@ const Wrapper = styled.div`
         transition: all 0.1s ease-out;
         transform: rotate(-90deg);
     }
-    &.big {
-        width: 30%;
-    }
-    &.right {
-        left: calc(100vw - 15%);
-        margin-top: 0;
-        position: fixed;
-        z-index: 4;
-    }
-    &.big.right {
-        left: calc(100vw - 30% - 30px);
-    }
+
     & > * {
         margin: 15px;
         /* position:absolute; */
@@ -97,4 +108,4 @@ const PositioningParent = styled.div`
     top: var(--header-height);
     /* background-color: #0f0; */
 `;
-export default Sidebar;
+export default AttrDisplay;
