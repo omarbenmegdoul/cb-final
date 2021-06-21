@@ -2,8 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import './Map.css';
 import MapContext from './MapContext';
 import * as ol from 'ol';
-import { fromLonLat, toLonLat, get } from 'ol/proj';
-import Extent from 'ol/extent'
+import { toLonLat } from 'ol/proj';
 
 const Map = ({ children, zoom, center, rotation }) => {
     const mapRef = useRef();
@@ -16,15 +15,11 @@ const Map = ({ children, zoom, center, rotation }) => {
             view: new ol.View({
                 zoom,
                 center,
-                // TL[-8190390.92229111, 5718720.025639196],
-                // TR[-8180022.1271212865, 5712037.323447103]
-                // BR[-8192564.639805884, 5692605.003275052],
-                // BL-8202924.64513574, 5699272.861729206
                 rotation,
                 padding: [0, 0, 0, 0],
                 zoomFactor: 1.01,
                 minZoom:835,
-                maxZoom:835,
+                maxZoom:835, //TODO-low: unkludge this -- just disallow changes
                 
             }),
             layers: [],
@@ -44,17 +39,17 @@ const Map = ({ children, zoom, center, rotation }) => {
         setMap(mapObject); //store mapobject which is passed as value to MapContext.Provider and causes rerenders
 
         return () => mapObject.setTarget(undefined); //cleanup
-    }, []);
+    }, [center,rotation,zoom]);
     // zoom change handler
     useEffect(() => {
         if (!map) return;
         map.getView().setZoom(zoom);
-    }, [zoom]);
+    }, [zoom, map]);
     // // center change handler
     useEffect(() => {
         if (!map) return;
         map.getView().setCenter(center);
-    }, [center]);
+    }, [center,map]);
     return (
         <MapContext.Provider value={{ map }}>
             <div ref={mapRef} className="ol-map">

@@ -3,8 +3,6 @@ import styled from 'styled-components';
 
 import AttrDisplayCtrlButton from './AttrDisplayCtrlButton';
 import {
-  attributeDisplay,
-  keyGroupings,
   prettyKeyGroupings,
 } from '../Filters/FilterConfig';
 import FilterContext from '../Context/FilterContext';

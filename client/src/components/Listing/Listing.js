@@ -1,19 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import Divider from '../Bits/Divider';
-import * as mapmarker from '../../map-marker-1.png';
-
-import {
-    attributeDisplay,
-    keyGroupings,
-    niceKeyGroupings,
-    prettyKeyGroupings,
-    specialAttributePrettyize,
-} from '../Filters/FilterConfig';
-
 import { deJSONizeValue } from '../../utils';
-import { Filter } from '../Filters/FilterOptions';
 import FilterContext from '../Context/FilterContext';
+import {
+  attributeDisplay,
+  keyGroupings, prettyKeyGroupings,
+  specialAttributePrettyize
+} from '../Filters/FilterConfig';
 
 const valueIsBinary = (x) => {
     return [0, 1].includes(parseInt(x));
@@ -37,6 +30,7 @@ const TextSection = (props) => {
             <DescQuoteWrapper>
                 <CurlyQuote>{'Description'}</CurlyQuote>
                 <Description>
+                  {/* TODO-high research alternative to dangerouslySetInnerHTML */}
                     <div dangerouslySetInnerHTML={{ __html: desc.split("style=").join("=") }}></div>
                 </Description>
             </DescQuoteWrapper>
@@ -112,15 +106,6 @@ const scrollThumbnails = (ev, amount, stateSetter) => {
     const stateToSet = position >= 0 ? -1 : hitLastImg ? 1 : 0;
 
     stateSetter(stateToSet);
-
-    // console.log(
-    //     `❗ Listing.js:90 'ev.target.parentElement.clientWidth'`,
-    //     ev.target.parentElement.clientWidth
-    // );
-    // console.log(
-    //     `❗ Listing.js:90 'ev.target.parentElement.scrollWidth'`,
-    //     ev.target.parentElement.scrollWidth
-    // );
 };
 
 const MapMarker = (props) => {
@@ -132,7 +117,6 @@ const MapMarker = (props) => {
         {root: document.getElementById(props.id + '_thumbnails'),threshold: 1.0}
     );
     React.useEffect(() => {
-        const parentElem = markerElem.current.parentElement;
         
         observer.observe(markerElem.current);
 
@@ -174,7 +158,6 @@ const FirstThumb = (props) => {
         { root: document.getElementById(props.id + '_thumbnails'), threshold: 1.0 }
     );
     React.useEffect(() => {
-        // const parentElem = thumbElem.current.parentElement;
         console.log(`❗ Listing.js:169 'thumbElem'`,thumbElem);
         observer.observe(thumbElem.current);
 
@@ -208,39 +191,19 @@ const toggleAsset = (id) => {
     const shown = document.querySelector('#asset_display .show');
     shown?.length &&
         Array.from(shown).forEach((elem) => elem.classList.remove('show'));
-    // console.log(`❗ Listing.js:142 'id'`,id);
     document.getElementById(id).classList.toggle('show');
     console.log(
         `❗ Listing.js:144 'document.getElementById(id)'`,
         document.getElementById(id)
     );
-    // console.log(`❗ Listing.js:144 'toShow' <${typeof toShow}>`,toShow);
 };
 
 const Listing = (props) => {
     const [scrollPosition, setScrollPosition] = React.useState(-1);
     const [allowScrolling, setAllowScrolling] = React.useState(false);
-    const mapMarkerElement = React.useRef(null);
-    const thumbnailTray = React.useRef(null);
     const [leftVisible, setLeftVisible] = React.useState(true);
     const [rightVisible, setRightVisible] = React.useState(false);
 
-    // console.log(`❗ Listing.js:129 'props'`,props);
-    // React.useEffect(() => {
-    //     const mapMarkerPos = document
-    //         .getElementById(props.id + '_map_marker')
-    //         .getBoundingClientRect();
-    //     const thumbnailsPos = document
-    //         .getElementById(props.id + '_thumbnails')
-    //         .getBoundingClientRect();
-    //     if (mapMarkerPos.right < thumbnailsPos.right) {
-    //         setScrollPosition('noscroll');
-    //         console.log(
-    //             `❗ Listing.js:139 '[props.title,mapMarkerPos.right,thumbnailsPos.right]'`,
-    //             [props.title, mapMarkerPos.right, thumbnailsPos.right]
-    //         );
-    //     }
-    // }, []);
     React.useEffect(()=>{
       setAllowScrolling(!(leftVisible && rightVisible))
     },[leftVisible, rightVisible])
@@ -268,7 +231,6 @@ const Listing = (props) => {
                                 title={props.title}
                                 id={props.id}
                                 imgSrc={x.href}
-                                // scrollPosition={scrollPosition}
                                 setLeftVisible={setLeftVisible} 
                             />
                         ) : (
@@ -296,16 +258,9 @@ const Listing = (props) => {
                     <MapMarker
                         title={props.title}
                         id={props.id}
-                        // scrollPosition={scrollPosition}
                         setRightVisible={setRightVisible}
                     />
-                    {/* <img
-                        id={props.id + '_map_marker'}
-                        className={`map-marker ${
-                            scrollPosition === 'noscroll' ? 'noscroll' : ''
-                        }`}
-                        src="http://simpleicon.com/wp-content/uploads/map-marker-1.png"
-                    /> */}
+
                     {allowScrolling && !leftVisible && (
                         <ScrollButton
                             onClick={(ev) =>
@@ -331,15 +286,12 @@ const Listing = (props) => {
     );
 };
 const ThumbnailTray = styled.div`
-    /* background-color: var(--whiteLight); */
-    /* padding: 8px; */
     border-radius: 5px;
     position: relative;
     margin: 10px;
     width: 100%;
     display: flex;
     overflow-x: hidden;
-    /* height: 130px; */
     &.noscroll {
         justify-content: center;
     }
@@ -357,7 +309,6 @@ const ThumbnailTray = styled.div`
         border-radius: 5px;
         margin: 0 7px;
         transition: left 0.3s cubic-bezier(0.2, 1.01, 0.6, 0.95);
-        /* left: 10px; */
     }
     .map-marker {
         filter: invert(100%);
@@ -453,7 +404,6 @@ const Description = styled.div`
     padding: 10px;
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     & > div {
         margin: auto;
     }
@@ -462,31 +412,6 @@ const Description = styled.div`
     }
     & p:not(:last-child) {
         margin-bottom: 0.75em;
-    }
-`;
-
-const DataTray = styled.div`
-    justify-content: center;
-    display: flex;
-    flex-wrap: wrap;
-`;
-const RentalAttribute = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75em;
-
-    margin: 3px;
-    padding: 8px;
-    border-radius: 1000px;
-    background-color: var(--whiteLight);
-    border: 2px var(--white-500) solid;
-
-    &.true-binary-attribute {
-        border: 2px var(--green-500) solid;
-    }
-    &.false-binary-attribute {
-        border: 2px var(--red-500) solid;
     }
 `;
 

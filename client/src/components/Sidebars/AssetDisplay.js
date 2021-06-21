@@ -14,7 +14,7 @@ const AssetDisplay = ({ Props }) => {
           <Wrapper className={`big right`}>
               <PositioningParent>
                   {
-                      //TODO: use same filter as in SearchResults
+                      //TODO-low: put searchResults in a context?
                       searchResults
                           ?.filter(
                               (listing) =>
@@ -50,7 +50,6 @@ const ListingFullAssets = ({listing})=>{
     <FullAssetWrapper id={listing.id + '_map'}>
         {
             <iframe
-                // class="kjAppear"
                 width="500"
                 height="450"
                 frameborder="0"

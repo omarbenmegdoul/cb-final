@@ -1,7 +1,6 @@
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 const simpleData = require('./simpleData.json');
-// console.log(`❗ importDataToMongoDB.js:4 'simpleData'`,simpleData);
 const { MONGO_URI } = process.env;
 const GeographicLib = require('geographiclib');
 
@@ -260,7 +259,7 @@ const prettyKeyGroupings = {
     g_a11y: 'Accessibility',
 };
 
-// throw new Error();
+
 const listingDataImport = async (dbName) => {
     // creates a new client
     const client = await MongoClient(MONGO_URI, options);

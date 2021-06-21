@@ -19,6 +19,6 @@ function initMongoClient() {
     db = client.db(DB_NAME);
   });
 }
-// const greetings = JSON.parse(fs.readFileSync("data/greetings.json"));
+
 
 module.exports= {initMongoClient, db:()=>db};
