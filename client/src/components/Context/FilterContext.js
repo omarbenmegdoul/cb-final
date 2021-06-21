@@ -1,6 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-import { attributeDisplay, keyGroupings } from '../Filters/FilterConfig';
+import { keyGroupings } from '../Filters/FilterConfig';
 
 const FilterContext = React.createContext({});
 
@@ -75,5 +74,4 @@ export const FilterProvider = ({ children }) => {
         </FilterContext.Provider>
     );
 };
-const Wrapper = styled.div``;
 export default FilterContext;

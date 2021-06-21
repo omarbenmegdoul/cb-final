@@ -58,10 +58,7 @@ const constructRequestFromFilterSummary = (summary) => {
             ? {
                   $and: [{ ...lowerBoundCheck }, { ...upperBoundCheck }],
               }
-            : //todo: try $gt naively with strings and see if it works, preferably with a log so we can see
-              //doesn't work: reupload data with ranges converted to ints
-
-              {};
+            : {};
     };
 
     const mongoFilters = Object.entries(summary).reduce((accum, itemPair) => {

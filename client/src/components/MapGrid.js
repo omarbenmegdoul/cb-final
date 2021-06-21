@@ -1,19 +1,11 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import { subdivisionCenterFromChiPsiCoords } from '../utils';
 import {
-    CHI_SUBDIVISIONS,
-    PSI_HOP_TL_BL,
-    PSI_SUBDIVISIONS,
-    toPrint,
+  CHI_SUBDIVISIONS,
+  PSI_SUBDIVISIONS
 } from '../constants';
-import { toLonLat } from 'ol/proj';
+import { subdivisionCenterFromChiPsiCoords } from '../utils';
 import FilterContext from './Context/FilterContext';
-
-const idToChiPsiCoords = (id) => {
-    const coords = id.split('-');
-    return subdivisionCenterFromChiPsiCoords(coords[0], coords[1]);
-};
 
 let allowStaging = false;
 const beginStaging = (ev) => {
@@ -23,32 +15,13 @@ const beginStaging = (ev) => {
     ev.target.classList.add('selected');
     allowStaging = true;
 };
-// const stopStaging = (ev) => {
-//     ev.preventDefault();
-//     if (!allowStaging) {
-//         return;
-//     }
-//     console.log('commit');
-//     allowStaging = false;
-//     const SubDs = document.getElementById('map-grid-wrapper').childNodes;
-//     const toggledSubDs = [...SubDs]
-//         .filter((node) => {
-//             return node.classList.contains('selected');
-//         })
-//         .map((node) => {
-//            const [longitude,latitude] = toLonLat(idToChiPsiCoords(node.id))
-//             return [latitude,longitude];
-//         });
-//     setSelectedSubdivisions(toggledSubDs)
-// };
 
 const markHover = (ev) => {
     ev.preventDefault();
     if (!allowStaging) {
         return;
     }
-    ev.target.classList.add('selected'); //TODO: right mouse button for erase
-    // console.log(`❗ MapGrid.js:24 'ev' <${typeof ev}>`, ev);
+    ev.target.classList.add('selected'); //TODO-mid: right mouse button for erase
     logElementCoords(ev);
 };
 
@@ -58,14 +31,13 @@ const logElementCoords = (ev) => {
 };
 
 const MapGrid = ({ Props }) => {
-    // const [subdivisionData, setSubdivisionData] = React.useState([]);
-    // const []= React.useContext(FilterContext)
-    const {selectedSubdivisions, setSelectedSubdivisions,
+    
+    const {setSelectedSubdivisions,
     subdivisionData, setSubdivisionData
      } = React.useContext(FilterContext)
-    const wrapperRef = React.useRef(null);
     const rows = new Array(PSI_SUBDIVISIONS).fill(0);
     const columns = new Array(CHI_SUBDIVISIONS).fill(0);
+    // code to populate DB
 
     // React.useEffect(() => {
     //     const coordsToChiPsiDict = rows.reduce((accumx, x, xIndex) => {
@@ -129,7 +101,7 @@ const MapGrid = ({ Props }) => {
             });
         setSelectedSubdivisions(toggledSubDs);
     };
-    // console.log(`❗ MapGrid.js:14 'myArr' <${typeof myArr}>`,myArr);
+    
     return (
         <TestFlex>
             <Wrapper
@@ -153,20 +125,6 @@ const MapGrid = ({ Props }) => {
                     });
                 })}
             </Wrapper>
-            {/* <div>
-                {selectedSubdivisions.map((x) => (
-                    <p>
-                        {x[0]},{x[1]}
-                    </p>
-                ))}
-            </div>
-            <div>
-                {toPrint.map((x) => (
-                    <p>
-                        {x[0]},{x[1]}
-                    </p>
-                ))}
-            </div> */}
         </TestFlex>
     );
 };
@@ -197,12 +155,11 @@ const Wrapper = styled.div`
     justify-content: center;
     align-items: center;
     z-index: 3;
-    /* background-color:#d3a; */
+    
 
     & .grid-slots {
         width: calc(100% / ${CHI_SUBDIVISIONS});
         height: calc(100% / ${PSI_SUBDIVISIONS});
-        /* border: 1px orange dotted; */
         border-radius: 2px;
         display:flex;
         flex-direction:column;
@@ -232,12 +189,5 @@ const TestFlex = styled.div`
     display: flex;
     justify-content: row;
 `;
-
-// selectionAnimation = styled.keyframes`
-// 0% {
-//   opacity:0;
-//   transform:scale(1);
-// }
-// `
 
 export default MapGrid;

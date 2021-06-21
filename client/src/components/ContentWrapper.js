@@ -3,13 +3,7 @@ import styled from 'styled-components';
 import FilterContext from './Context/FilterContext';
 const ContentWrapper = ({ children}) => {
   const {
-    attrHidingSettings,
-    attrHidingSettingsDispatch,
-    collapsedFilterControls,
-    setCollapsedFilterControls,
-    searchResults
-} = React.useContext(FilterContext);
-    const classes = collapsedFilterControls ? "expanded" : "" + searchResults ? "heroheight" : "";
+    collapsedFilterControls} = React.useContext(FilterContext);
     return <Wrapper className={collapsedFilterControls ? "expanded" : ""}>{children}</Wrapper>;
 };
 const Wrapper = styled.div`

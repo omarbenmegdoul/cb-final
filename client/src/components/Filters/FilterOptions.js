@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-    attributeDisplay,
-    keyGroupings,
-    prettyKeyGroupings,
-} from './FilterConfig';
 import possibleAttributes from '../../contextPossibleVals.json';
 import { deJSONizeValue } from '../../utils';
+import {
+  attributeDisplay
+} from './FilterConfig';
 
 const handleMultipleChoiceButtonClick = (ev, attribute) => {
     const resetButton = (button) => {
@@ -75,17 +73,6 @@ export const RequireFilter = ({ attribute }) => {
         </button>
     );
 };
-
-// export const Radio = ({ attribute }) => {
-//     <Options>
-//         <label for={attribute}>Any {attributeDisplay[attribute].pretty}</label>
-//         <input type="radio" name={attribute} id={attribute + '-ignore'}></input>
-//         <label for={attribute}>Require """"</label>
-//         <input type="radio" name={attribute} id={attribute + ''}></input>
-//         <label for={attribute}>Require """"</label>
-//         <input type="radio" name={attribute} id={attribute + ''}></input>
-//     </Options>;
-// };
 
 export const NumRange = ({ attribute, date }) => {
     const minInput = React.useRef(null);

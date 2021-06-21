@@ -13,6 +13,8 @@ export const specialAttributePrettyize = (attribute, value) => {
         case 'dateavailable_tdt':
             const dateArr = arrayFromYYYYMMDDint(dJSONd,{padStart:1})
             return dateArr.join("-");
+        default:
+          return;
     }
 };
 
