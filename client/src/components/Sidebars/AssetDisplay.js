@@ -7,10 +7,6 @@ const APIKEY = "AIzaSyDApdGaOb7CAeXTsRro7oj2POrSV8VZ1fk";
 const AssetDisplay = ({ Props }) => {
 
     const {
-      attrHidingSettings,
-      attrHidingSettingsDispatch,
-      collapsedFilterControls,
-      setCollapsedFilterControls,
       searchResults, allowedListings 
   } = React.useContext(FilterContext);
   return (
@@ -27,7 +23,6 @@ const AssetDisplay = ({ Props }) => {
                           )
                           .map((listing, topIndex) => {
                               return <ListingFullAssets listing={listing}   />
-                             
                           })
                   }
               </PositioningParent>

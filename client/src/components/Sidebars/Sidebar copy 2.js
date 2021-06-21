@@ -3,11 +3,8 @@ import styled from 'styled-components';
 import FilterContext from '../Context/FilterContext';
 const Sidebar = (props) => {
     const {
-        attrHidingSettings,
-        attrHidingSettingsDispatch,
-        collapsedFilterControls,
-        setCollapsedFilterControls,
-        searchResults, allowedListings 
+        searchResults,
+        allowedListings,
     } = React.useContext(FilterContext);
     return (
         <>
@@ -22,8 +19,7 @@ const Sidebar = (props) => {
                                     allowedListings.includes(listing.id)
                             )
                             .map((listing, topIndex) => {
-                                return <ListingFullAssets listing={listing}   />
-                               
+                                return <ListingFullAssets listing={listing} />;
                             })
                     }
                 </PositioningParent>
@@ -32,44 +28,37 @@ const Sidebar = (props) => {
     );
 };
 
-const ListingFullAssets = ({listing})=>{
-  return [
-    listing.imgs.map((img, index) => {
-        return (
-            <FullAssetWrapper
-                id={
-                    listing.id +
-                    '_hiddenimg_' +
-                    index
-                }
-            >
-                <FullImg src={img.href} />
-                <span>Image #{index + 1}</span>
-            </FullAssetWrapper>
-        );
-    }),
-    <FullAssetWrapper id={listing.id + '_map'}>
-        {
-            <iframe
-                // class="kjAppear"
-                width="500"
-                height="450"
-                frameborder="0"
-                style={{
-                    border: 0,
-                    width: '90%',
-                    borderRadius: '5px',
-                    margin: '10px',
-                }}
-                src={`https://www.google.com/maps/embed/v1/search?q=${listing.map.mapAddress}&key=${APIKEY}`}
-                allowfullscreen
-            ></iframe>
-        }
-        <span>Map</span>
-    </FullAssetWrapper>,
-];
-}
-
+const ListingFullAssets = ({ listing }) => {
+    return [
+        listing.imgs.map((img, index) => {
+            return (
+                <FullAssetWrapper id={listing.id + '_hiddenimg_' + index}>
+                    <FullImg src={img.href} />
+                    <span>Image #{index + 1}</span>
+                </FullAssetWrapper>
+            );
+        }),
+        <FullAssetWrapper id={listing.id + '_map'}>
+            {
+                <iframe
+                    // class="kjAppear"
+                    width="500"
+                    height="450"
+                    frameborder="0"
+                    style={{
+                        border: 0,
+                        width: '90%',
+                        borderRadius: '5px',
+                        margin: '10px',
+                    }}
+                    src={`https://www.google.com/maps/embed/v1/search?q=${listing.map.mapAddress}&key=${APIKEY}`}
+                    allowfullscreen
+                ></iframe>
+            }
+            <span>Map</span>
+        </FullAssetWrapper>,
+    ];
+};
 
 const Wrapper = styled.div`
     /* background-color: #00f; */
@@ -103,7 +92,7 @@ const Wrapper = styled.div`
     margin-top: 0;
     position: fixed;
     z-index: 4;
-    
+
     & > * {
         margin: 15px;
         /* position:absolute; */
