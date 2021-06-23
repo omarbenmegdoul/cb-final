@@ -37,7 +37,7 @@ const handleMultipleChoiceButtonClick = (ev, attribute) => {
         document.getElementById(attribute + '_options').childNodes
     );
 
-    if (ev.target.id === attribute + '_reset') {
+    if (ev.target.id === attribute + '__reset') {
         childButtons.forEach((button) => resetButton(button));
     } else {
         childButtons.forEach((button) => keepOrExclude(button));
@@ -47,7 +47,7 @@ const handleMultipleChoiceButtonClick = (ev, attribute) => {
     });
     const allSelected = childButtons.every((button) => {
         return (
-            button.id === attribute + '_reset' ||
+            button.id === attribute + '__reset' ||
             button.classList.contains('selected')
         );
     });
