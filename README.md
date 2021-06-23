@@ -22,8 +22,11 @@ This screenshot shows the map interface overlaid with the listings it returns. T
 
 
 # To do in order
-- clean kludgy/spaghetti code, break big components into subcomponents
-- fix client-side non-geo filter validation bugs
+- clean kludgy/spaghetti code, break big components into subcomponents [MOSTLY DONE]
+-- Break Sidebar into 2 different sidebars [DONE]
+-- Break each sidebar into spacer (100vh tall) and content
+
+- fix client-side non-geo filter validation bugs [DONE]
 - jump to results after fetch
 - UI should handle 0 results better
 - implement lazy-loading for biggest assets
