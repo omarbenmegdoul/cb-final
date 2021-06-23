@@ -2,9 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import possibleAttributes from '../../contextPossibleVals.json';
 import { deJSONizeValue } from '../../utils';
-import {
-  attributeDisplay
-} from './FilterConfig';
+import { attributeDisplay } from './FilterConfig';
 
 const handleMultipleChoiceButtonClick = (ev, attribute) => {
     const resetButton = (button) => {
@@ -78,10 +76,7 @@ export const NumRange = ({ attribute, date }) => {
     const minInput = React.useRef(null);
     const maxInput = React.useRef(null);
     const handleChange = (ev) => {
-        const [minChanged, maxChanged] = [
-            ev.target === minInput.current,
-            ev.target === maxInput.current,
-        ];
+        const minChanged = ev.target === minInput.current;
         const parser = !date
             ? parseInt
             : (someDate) => {
@@ -98,14 +93,16 @@ export const NumRange = ({ attribute, date }) => {
         ]);
 
         const isIncoherent = date
-            ? ![minVal, maxVal].includes(NaN) && minVal > maxVal
-            : ![minVal, maxVal].includes('Invalid Date') &&
-              minVal.valueOf() > maxVal.valueOf;
-        console.log(`❗ FilterOptions.js:117 '[attribute,minVal,maxVal]'`,[attribute,minVal,maxVal,isIncoherent]);
+            ? ![minVal, maxVal].includes('Invalid Date') &&
+              minVal.valueOf() > maxVal.valueOf()
+            : ![minVal, maxVal].includes(NaN) && minVal > maxVal;
+        console.log(
+            `❗ FilterOptions.js:117 '[attribute,minVal,maxVal,isIncoherent]'`,
+            [attribute, minVal, maxVal, isIncoherent]
+        );
         if (!isIncoherent) {
             return;
         }
-
 
         if (minChanged) {
             maxInput.current.value = ev.target.value;
@@ -118,27 +115,27 @@ export const NumRange = ({ attribute, date }) => {
     return (
         <Options>
             <div>
-              <label for={attribute}>From:</label>
-              <RangeInput
-                  type={inputType}
-                  name={attribute}
-                  id={attribute + '_min'}
-                  date={date}
-                  ref={minInput}
-                  onBlur={handleChange}
-              />
+                <label for={attribute}>From:</label>
+                <RangeInput
+                    type={inputType}
+                    name={attribute}
+                    id={attribute + '_min'}
+                    date={date}
+                    ref={minInput}
+                    onBlur={handleChange}
+                />
             </div>
-           <div>
-              <label for={attribute}>To:</label>
-              <RangeInput
-                  type={inputType}
-                  name={attribute}
-                  id={attribute + '_max'}
-                  date={date}
-                  ref={maxInput}
-                  onChange={handleChange}
-              />
-           </div>
+            <div>
+                <label for={attribute}>To:</label>
+                <RangeInput
+                    type={inputType}
+                    name={attribute}
+                    id={attribute + '_max'}
+                    date={date}
+                    ref={maxInput}
+                    onChange={handleChange}
+                />
+            </div>
         </Options>
     );
 };
@@ -241,10 +238,10 @@ const Options = styled.div`
     flex-wrap: wrap;
     align-items: center;
     &.center-children {
-      justify-content:center;
+        justify-content: center;
     }
     & label {
-      min-width:40px;
+        min-width: 40px;
     }
     /* &>input {
   appearance:none;
