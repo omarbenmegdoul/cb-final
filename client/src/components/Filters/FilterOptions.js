@@ -161,19 +161,21 @@ export const MultipleChoice = ({ attribute }) => {
             >
                 No Preference
             </button>
-            {cleanPossibleValues.map((value) => {
-                return (
-                    <button
-                        id={attribute + '__' + value.raw}
-                        className="button-behaviour attribute-selection"
-                        onClick={(ev) =>
-                            handleMultipleChoiceButtonClick(ev, attribute)
-                        }
-                    >
-                        {value.pretty}
-                    </button>
-                );
-            })}
+            {cleanPossibleValues
+                .sort((attr1, attr2) => attr1.pretty > attr2.pretty ? 1 : -1 )
+                .map((value) => {
+                    return (
+                        <button
+                            id={attribute + '__' + value.raw}
+                            className="button-behaviour attribute-selection"
+                            onClick={(ev) =>
+                                handleMultipleChoiceButtonClick(ev, attribute)
+                            }
+                        >
+                            {value.pretty}
+                        </button>
+                    );
+                })}
         </Options>
     );
 };
