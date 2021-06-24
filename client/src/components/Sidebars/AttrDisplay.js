@@ -13,7 +13,7 @@ const AttrDisplay = (props) => {
     } = React.useContext(FilterContext);
     return (
         <>
-            <PositioningParent>
+            <PositioningParent className={`${collapsedFilterControls ? 'collapsed' : ''}`}>
                 <Wrapper
                     className={`${collapsedFilterControls ? 'collapsed' : ''}`}
                 >
@@ -54,11 +54,11 @@ const Heading = styled.div`
 `;
 
 const Wrapper = styled.div`
-    /* background-color: #00f; */
+    background-color: rgba(255,0,0,0.5);
     height: 100vh;
-    position: sticky;
+    /* position: sticky; */
     top: 0px;
-    margin-top: calc(100vh - var(--header-height));
+    /* margin-top: calc(100vh - var(--header-height)); */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -99,11 +99,14 @@ const Wrapper = styled.div`
     }
 `;
 const PositioningParent = styled.div`
-    position: absolute;
+    position: sticky;
     z-index: 0;
     width: 15%;
-    height: calc(100% - var(--header-height));
-    top: var(--header-height);
-    /* background-color: #0f0; */
+    height:100vh;
+    top: 0; 
+    background-color: rgba(0,255,0,0.5);
+    &.collapsed {
+      width:50px;
+    }
 `;
 export default AttrDisplay;

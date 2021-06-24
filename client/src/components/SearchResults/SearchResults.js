@@ -5,12 +5,12 @@ import FilterContext from '../Context/FilterContext.js';
 import Divider from '../Bits/Divider.js';
 
 const SearchResults = ({ Props }) => {
-    const { searchResults, allowedListings } = React.useContext(FilterContext);
+    const { searchResults, allowedListings, collapsedFilterControls} = React.useContext(FilterContext);
 
     //TODO-high React.useEffect to scroll
     return (
         searchResults && (
-            <>
+            <MetaWrapper className={collapsedFilterControls?"expanded":""}>
                 <Divider />
                 <h1>{`${searchResults.filter(sR=>!allowedListings||allowedListings.includes(sR.id)).length} found`}</h1>
                 <Wrapper>
@@ -20,12 +20,22 @@ const SearchResults = ({ Props }) => {
                     ))}
                     {/* <Listing {...searchResults[0]}/> */}
                 </Wrapper>
-            </>
+            </MetaWrapper>
         )
     );
 };
 
 const Wrapper = styled.div`
-    width: 100%;
+    width:100%;
+    
 `;
+const MetaWrapper = styled.div`
+width: 55%;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+&.expanded {
+      width: calc(70% - 50px);
+    }`
 export default SearchResults;

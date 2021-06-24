@@ -324,7 +324,8 @@ const ScrollButton = styled.div`
     background: linear-gradient(
         90deg,
         rgba(65, 69, 88, 1) 0%,
-        rgba(0, 212, 255, 0) 100%
+        rgba(0, 212, 255, 0) 90%,
+        rgba(0, 212, 255, 0) 100%,
     );
     width: 10%;
     height: 100%;
@@ -338,6 +339,7 @@ const ScrollButton = styled.div`
         background: linear-gradient(
             90deg,
             rgba(0, 212, 255, 0) 0%,
+            rgba(0, 212, 255, 0) 10%,
             rgba(65, 69, 88, 1) 100%
         );
     }
@@ -347,7 +349,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 30px 10px;
+    margin: 30px 0;
     max-width: 100%;
 `;
 
@@ -414,5 +416,8 @@ const Description = styled.div`
         margin-bottom: 0.75em;
     }
 `;
+
+const AttributeGroupWrapper = styled.div`
+width:100%;`
 
 export default Listing;
