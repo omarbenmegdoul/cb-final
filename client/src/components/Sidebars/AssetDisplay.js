@@ -56,7 +56,7 @@ const ListingFullAssets = ({ listing }) => {
 };
 const Wrapper = styled.div`
     /* align-self: flex-end; */
-    background-color: rgba(0,0,255,0.5);
+    /* background-color: rgba(0,0,255,0.5); */
     height: 100vh;
     position: sticky;
     top: 0px;
@@ -101,7 +101,7 @@ const FullImg = styled.img`
 //     /* background-color: #0f0; */
 // `;
 const FullAssetWrapper = styled.div`
-  background-color:rgba(0,255,0,0.5);
+  /* background-color:rgba(0,255,0,0.5); */
     position: absolute;
     display: flex;
     flex-direction: column;

@@ -54,7 +54,7 @@ const Heading = styled.div`
 `;
 
 const Wrapper = styled.div`
-    background-color: rgba(255,0,0,0.5);
+    /* background-color: rgba(255,0,0,0.5); */
     height: 100vh;
     /* position: sticky; */
     top: 0px;
@@ -104,7 +104,7 @@ const PositioningParent = styled.div`
     width: 15%;
     height:100vh;
     top: 0; 
-    background-color: rgba(0,255,0,0.5);
+    /* background-color: rgba(0,255,0,0.5); */
     &.collapsed {
       width:50px;
     }

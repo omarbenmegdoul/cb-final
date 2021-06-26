@@ -133,7 +133,7 @@ export const NumRange = ({ attribute, date }) => {
                     id={attribute + '_max'}
                     date={date}
                     ref={maxInput}
-                    onChange={handleChange}
+                    onBlur={handleChange}
                 />
             </div>
         </Options>

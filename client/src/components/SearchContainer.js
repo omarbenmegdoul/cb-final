@@ -7,6 +7,7 @@ import MapStack from './MapStack';
 const SearchContainer = ({ Props }) => {
     const { setUserFilters, setSearchResults } =
         React.useContext(FilterContext);
+    const [searchPending, setSearchPending] = React.useState(false);
     return (
         <MetaWrapper>
             <Wrapper>
@@ -27,14 +28,16 @@ const SearchContainer = ({ Props }) => {
                             filterSummary,
                         }), // body data type must match "Content-Type" header
                     };
+                    setSearchPending(true);
                     const res = await fetch('http://localhost:5678/listings', options);
                     const listings = await res.json();
                     console.log(`❗ SearchContainer.js:32 'listings'`,listings);
                     setSearchResults(JSON.parse(listings).data);
                     setUserFilters(filterSummary);
+                    setSearchPending(false);
                 }}
             >
-                Search
+                {!searchPending ? "Search" : "Searching..."}
             </SearchButton>
         </MetaWrapper>
     );
@@ -45,6 +48,7 @@ const MetaWrapper = styled.div`
     justify-content: center;
     align-items: center;
     width: 100%;
+    max-height: 100%;
     
 `;
 const Wrapper = styled.div`
@@ -52,8 +56,7 @@ const Wrapper = styled.div`
     /* flex-direction:column; */
     justify-content: center;
     align-items: center;
-
-    max-height: calc(100vh - var(--header-height) -20px);
+    max-height: 100%;
     min-height: 620px;
     margin: 10px;
     width: 100%;
@@ -144,7 +147,7 @@ const constructAllFilterSummary = () => {
 const SearchButton = styled.button`
     border: none;
     font-weight: 700;
-    width: 100px;
+    min-width: 100px;
     padding: 8px;
     border-radius: 1000px;
     background-color: var(--blackTernary);
