@@ -45,8 +45,7 @@ const MetaWrapper = styled.div`
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: calc(100vh - var(--header-height) - 20px);
-    max-height: calc(100vh - var(--header-height) -20px);
+    
 `;
 const Wrapper = styled.div`
     display: flex;

@@ -30,6 +30,7 @@ const Wrapper = styled.div`
     
 `;
 const MetaWrapper = styled.div`
+background-color:var(--blackPurple);
 width: 55%;
 display:flex;
 flex-direction:column;

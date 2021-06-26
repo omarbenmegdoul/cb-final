@@ -5,10 +5,8 @@ import { FilterProvider } from './components/Context/FilterContext.js';
 import GlobalStyles from './components/GlobalStyles';
 import Header from './components/Header';
 import SearchContainer from './components/SearchContainer.js';
-import SearchResults from './components/SearchResults/SearchResults.js';
-import AssetDisplay from './components/Sidebars/AssetDisplay';
-import AttrDisplay from './components/Sidebars/AttrDisplay.js';
 import ContentWrapper from './components/ContentWrapper.js';
+import ResultsInterface from './components/ResultsInterface.js';
 
 const App = () => {
     return (
@@ -19,10 +17,8 @@ const App = () => {
                 <HeroWrapper>
                     <SearchContainer />
                 </HeroWrapper>
-                <ContentWrapper >
-                    <AttrDisplay />
-                    <SearchResults />
-                    <AssetDisplay />
+                <ContentWrapper>
+                    <ResultsInterface />
                 </ContentWrapper>
             </FilterProvider>
         </AppWrapper>

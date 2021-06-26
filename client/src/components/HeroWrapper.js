@@ -7,6 +7,7 @@ const HeroWrapper = ({ children}) => {
     return <Wrapper className={collapsedFilterControls ? "expanded" : ""}>{children}</Wrapper>;
 };
 const Wrapper = styled.div`
+    height: calc(100vh - var(--header-height));
     padding: 15px;
     background-color: var(--blackPurple);
     min-width: 600px;
@@ -15,7 +16,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     position: relative;
     z-index: 0;
     transition:all 0s ease-out;
