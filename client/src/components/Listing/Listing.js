@@ -5,13 +5,12 @@ import Attributes from './Attributes';
 import TextSection from './TextSection';
 import Thumbnails from './Thumbnails';
 
-
 const Listing = (props) => {
-
+  
     return (
-        <Wrapper>
+        <Wrapper id={`listing_${props.id}`} className="listing-observe">
             <a href={props.url}>
-                <h2>{`${props.title} \u22C5 $${
+                <h2>{`${props.listingIndex} | ${props.title} \u22C5 $${
                     parseInt(props.prc) / 100
                 } \u22C5 avail. ${specialAttributePrettyize(
                     'dateavailable_tdt',

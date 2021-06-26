@@ -17,24 +17,38 @@ const AssetDisplay = ({ Props }) => {
                             allowedListings.includes(listing.id)
                     )
                     .map((listing, topIndex) => {
-                        return <ListingFullAssets listing={listing} />;
+                        return (
+                            <ListingFullAssets
+                                preload={topIndex < 5}
+                                listing={listing}
+                            />
+                        );
                     })
             }
         </Wrapper>
     );
 };
 
-const ListingFullAssets = ({ listing }) => {
+const ListingFullAssets = ({ listing, preload }) => {
     return [
         listing.imgs.map((img, index) => {
             return (
-                <FullAssetWrapper id={listing.id + '_hiddenimg_' + index}>
-                    <FullImg src={img.href} />
+                <FullAssetWrapper
+                    className="full-img-wrapper"
+                    id={listing.id + '_hiddenimg_' + index}
+                >
+                    <FullImg
+                        src={preload ? img.href : ''}
+                        data-src={img.href}
+                    />
                     <span>Image #{index + 1}</span>
                 </FullAssetWrapper>
             );
         }),
-        <FullAssetWrapper id={listing.id + '_map'}>
+        <FullAssetWrapper
+            className="hidden-map-wrapper"
+            id={listing.id + '_map'}
+        >
             {
                 <iframe
                     width="500"
@@ -46,7 +60,7 @@ const ListingFullAssets = ({ listing }) => {
                         borderRadius: '5px',
                         margin: '10px',
                     }}
-                    src={`https://www.google.com/maps/embed/v1/search?q=${listing.map.mapAddress}&key=${APIKEY}`}
+                    data-src={`https://www.google.com/maps/embed/v1/search?q=${listing.map.mapAddress}&key=${APIKEY}`}
                     allowfullscreen
                 ></iframe>
             }
@@ -56,7 +70,7 @@ const ListingFullAssets = ({ listing }) => {
 };
 const Wrapper = styled.div`
     /* align-self: flex-end; */
-    /* background-color: rgba(0,0,255,0.5); */
+    background-color: rgba(0,0,255,0.5);
     height: 100vh;
     position: sticky;
     top: 0px;
@@ -101,7 +115,7 @@ const FullImg = styled.img`
 //     /* background-color: #0f0; */
 // `;
 const FullAssetWrapper = styled.div`
-  /* background-color:rgba(0,255,0,0.5); */
+    background-color:rgba(0,255,0,0.5);
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -109,9 +123,15 @@ const FullAssetWrapper = styled.div`
     align-items: center;
     height: 100vh;
     width: 100%;
-    top:-300vh;
+    top: -300vh;
     &.show {
-        top:0;
+        top: 0;
+    }
+    &.hidden-map-wrapper {
+        /* display: none; */
+    }
+    &.full-img-wrapper {
+        /* display: none; */
     }
 `;
 export default AssetDisplay;

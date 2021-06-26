@@ -11,11 +11,12 @@ const Thumbnails = (props) => {
         setAllowScrolling(!(leftVisible && rightVisible));
     }, [leftVisible, rightVisible]);
 
+    const trayClass =
+        (!allowScrolling ? 'noscroll' : '') +
+        (props.listingIndex >= 5 ? 'defer-img-display' : '');
+
     return (
-        <ThumbnailTray
-            className={!allowScrolling ? 'noscroll' : ''}
-            id={props.id + '_thumbnails'}
-        >
+        <ThumbnailTray className={trayClass} id={props.id + '_thumbnails'}>
             {props.imgs.map((img, index) => {
                 return (
                     <Thumbnail
@@ -23,6 +24,7 @@ const Thumbnails = (props) => {
                         title={props.title}
                         id={props.id}
                         imgSrc={img.href}
+                        preload={props.listingIndex < 5}
                         setLeftVisible={setLeftVisible}
                     />
                 );
@@ -71,7 +73,7 @@ const Thumbnail = (props) => {
                 threshold: 1.0,
             }
         );
-        console.log(`❗ Listing.js:169 'thumbElem'`, thumbElem);
+        // console.log(`❗ Listing.js:169 'thumbElem'`, thumbElem);
         observer.observe(thumbElem.current);
 
         return () => {
@@ -82,7 +84,7 @@ const Thumbnail = (props) => {
         };
     }, []);
     React.useEffect(() => {
-        console.log(`❗ Listing.js:138 'leftisIntersecting'`, isIntersecting);
+        // console.log(`❗ Listing.js:138 'leftisIntersecting'`, isIntersecting);
         props.setLeftVisible(isIntersecting);
     }, [isIntersecting]);
     const scrollPosition = false;
@@ -90,7 +92,8 @@ const Thumbnail = (props) => {
         <img
             ref={thumbElem}
             className={scrollPosition === 'noscroll' ? 'noscroll' : ''}
-            src={props.imgSrc}
+            src={props.preload ? props.imgSrc : ''}
+            data-src={props.imgSrc}
             id={props.id + '_thumb_' + props.index}
             onMouseOver={() => {
                 toggleAsset(props.id + '_hiddenimg_' + props.index);
@@ -107,10 +110,10 @@ const toggleAsset = (id) => {
     shown?.length &&
         Array.from(shown).forEach((elem) => elem.classList.remove('show'));
     document.getElementById(id).classList.toggle('show');
-    console.log(
-        `❗ Listing.js:144 'document.getElementById(id)'`,
-        document.getElementById(id)
-    );
+    // console.log(
+    //     `❗ Listing.js:144 'document.getElementById(id)'`,
+    //     document.getElementById(id)
+    // );
 };
 const scrollThumbnails = (ev, amount, stateSetter) => {
     const removePx = (s) => {
@@ -131,11 +134,11 @@ const scrollThumbnails = (ev, amount, stateSetter) => {
     const clientWidth = ev.target.parentElement.clientWidth;
     const scrollWidth = ev.target.parentElement.scrollWidth;
     const position = removePx(imgsToMove[0].style.left);
-    console.log(`❗ Listing.js:103 '[clientWidth,scrollWidth,position]'`, [
-        clientWidth,
-        scrollWidth,
-        position,
-    ]);
+    // console.log(`❗ Listing.js:103 '[clientWidth,scrollWidth,position]'`, [
+    //     clientWidth,
+    //     scrollWidth,
+    //     position,
+    // ]);
     const hitLastImg = position <= clientWidth - scrollWidth;
     const stateToSet = position >= 0 ? -1 : hitLastImg ? 1 : 0;
 
@@ -161,7 +164,7 @@ const MapMarker = (props) => {
         };
     }, []);
     React.useEffect(() => {
-        console.log(`❗ Listing.js:138 'rightisIntersecting'`, isIntersecting);
+        // console.log(`❗ Listing.js:138 'rightisIntersecting'`, isIntersecting);
         props.setRightVisible(isIntersecting);
     }, [isIntersecting]);
     return (
@@ -211,6 +214,9 @@ const ThumbnailTray = styled.div`
         filter: invert(100%);
         border: 2px rgba(0, 0, 0, 0.5) solid;
         padding: 30px;
+    }
+    &.defer-img-display > img {
+        display: none;
     }
 `;
 const ScrollButton = styled.div`
