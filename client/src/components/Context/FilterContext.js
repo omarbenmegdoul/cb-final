@@ -27,12 +27,7 @@ export const FilterProvider = ({ children }) => {
         },
         {}
     );
-    console.log(
-        `❗ FilterContext.js:16 'defaultFilterHiding'`,
-        defaultFilterHiding
-    );
     const reducer = (state, action) => {
-        console.log(`❗ FilterContext.js:21 '[state,action]'`, [state, action]);
         const output = { ...state };
         switch (action.type) {
             case 'selectedAll':

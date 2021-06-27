@@ -4,8 +4,10 @@ import AttrDisplay from './Sidebars/AttrDisplay';
 import SearchResults from './SearchResults/SearchResults';
 import AssetDisplay from './Sidebars/AssetDisplay';
 import FilterContext from './Context/FilterContext';
+import SubdivisionContext from './Context/SubdivisionsContext';
 const ResultsInterface = ({ myProps }) => {
-    const { searchResults, allowedListings } = React.useContext(FilterContext);
+    const { searchResults } = React.useContext(FilterContext);
+    const { allowedListings } = React.useContext(SubdivisionContext);
     const showResultsInterface =
         (allowedListings?.length || allowedListings === null) && searchResults?.length;
 

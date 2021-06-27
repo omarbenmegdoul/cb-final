@@ -5,7 +5,8 @@ import {
   PSI_SUBDIVISIONS
 } from '../constants';
 import { subdivisionCenterFromChiPsiCoords } from '../utils';
-import FilterContext from './Context/FilterContext';
+import SubdivisionContext from './Context/SubdivisionsContext';
+
 
 let allowStaging = false;
 const beginStaging = (ev) => {
@@ -31,10 +32,9 @@ const logElementCoords = (ev) => {
 };
 
 const MapGrid = ({ Props }) => {
-    
     const {setSelectedSubdivisions,
     subdivisionData, setSubdivisionData
-     } = React.useContext(FilterContext)
+     } = React.useContext(SubdivisionContext)
     const rows = new Array(PSI_SUBDIVISIONS).fill(0);
     const columns = new Array(CHI_SUBDIVISIONS).fill(0);
     // code to populate DB
@@ -74,7 +74,6 @@ const MapGrid = ({ Props }) => {
             const res = await fetch('http://localhost:5678/subdivisions');
             const json = await res.json();
             const data = await JSON.parse(json).data;
-            console.log(`❗ MapGrid.js:101 'data'`, data);
             setSubdivisionData(data.reduce((accum,x)=>{
               const addition= {[x._id]:x.listings}
               return {...accum,...addition}

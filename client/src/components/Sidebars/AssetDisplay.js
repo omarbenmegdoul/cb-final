@@ -2,10 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import FilterContext from '../Context/FilterContext';
 import Sidebar from './Sidebar';
+import SubdivisionContext from '../Context/SubdivisionsContext';
+
 const APIKEY = "";
 
 const AssetDisplay = ({ Props }) => {
-    const { searchResults, allowedListings } = React.useContext(FilterContext);
+    const { searchResults } = React.useContext(FilterContext);
+    const { allowedListings } = React.useContext(SubdivisionContext);
     return (
         <Wrapper className={`big right`}>
             {

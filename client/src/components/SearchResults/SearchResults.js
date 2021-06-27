@@ -2,10 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import Listing from '../Listing/Listing.js';
 import FilterContext from '../Context/FilterContext.js';
+import SubdivisionContext from '../Context/SubdivisionsContext.js';
 
 const SearchResults = () => {
-    const { searchResults, allowedListings, collapsedFilterControls } =
+    const { searchResults, collapsedFilterControls } =
         React.useContext(FilterContext);
+      const { allowedListings} =
+        React.useContext(SubdivisionContext);
     const scrollAnchor = React.useRef(null);
     React.useEffect(() => {
         scrollAnchor.current.scrollIntoView({ behavior: 'smooth' });

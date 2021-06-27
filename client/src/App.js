@@ -7,19 +7,22 @@ import Header from './components/Header';
 import SearchContainer from './components/SearchContainer.js';
 import ContentWrapper from './components/ContentWrapper.js';
 import ResultsInterface from './components/ResultsInterface.js';
+import { SubdivisionProvider } from './components/Context/SubdivisionsContext.js';
 
 const App = () => {
     return (
         <AppWrapper>
             <FilterProvider>
-                <GlobalStyles />
-                <Header></Header>
-                <HeroWrapper>
-                    <SearchContainer />
-                </HeroWrapper>
-                <ContentWrapper>
-                    <ResultsInterface />
-                </ContentWrapper>
+                <SubdivisionProvider>
+                    <GlobalStyles />
+                    <Header></Header>
+                    <HeroWrapper>
+                        <SearchContainer />
+                    </HeroWrapper>
+                    <ContentWrapper>
+                        <ResultsInterface />
+                    </ContentWrapper>
+                </SubdivisionProvider>
             </FilterProvider>
         </AppWrapper>
     );
