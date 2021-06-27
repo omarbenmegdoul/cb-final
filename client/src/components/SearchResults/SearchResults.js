@@ -21,10 +21,7 @@ const SearchResults = () => {
                     if (entryForWhichToLoadMap.intersectionRatio <= 0) {
                         return;
                     }
-                    console.log(
-                        `❗ SearchResults.js:20 'entry.target.id'`,
-                        entryForWhichToLoadMap.target.id
-                    );
+                    
                     const listingId =
                         entryForWhichToLoadMap.target.id.split('listing_')[1];
                     const map = document

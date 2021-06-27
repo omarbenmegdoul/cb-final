@@ -119,32 +119,41 @@ const scrollThumbnails = (ev, amount, stateSetter) => {
     const removePx = (s) => {
         return parseInt(s.split('px')[0]);
     };
-    const imgsToMove = ev.target.parentElement.getElementsByTagName('img');
-    Array.from(imgsToMove).forEach((imgToMove) => {
-        const newVal = `${
-            parseInt(
-                imgToMove.style.left !== ''
-                    ? removePx(imgToMove.style.left)
-                    : '0'
-            ) +
-            amount * 80
-        }%`;
-        imgToMove.style.left = newVal;
-    });
+    const extractTranslatePixelValue = (s) => {
+        return s.split('translate(')[1].split(')')[0];
+    };
+    const translateToInt = (s) => {
+        return removePx(extractTranslatePixelValue(s));
+    };
+
     const clientWidth = ev.target.parentElement.clientWidth;
     const scrollWidth = ev.target.parentElement.scrollWidth;
-    const position = removePx(imgsToMove[0].style.left);
-    // console.log(`❗ Listing.js:103 '[clientWidth,scrollWidth,position]'`, [
-    //     clientWidth,
-    //     scrollWidth,
-    //     position,
-    // ]);
-    const hitLastImg = position <= clientWidth - scrollWidth;
-    const stateToSet = position >= 0 ? -1 : hitLastImg ? 1 : 0;
+    const imgsToMove = ev.target.parentElement.getElementsByTagName('img');
+    const newTranslationParameter =
+        (imgsToMove[0].style.transform !== ''
+            ? translateToInt(imgsToMove[0].style.transform)
+            : 0) +
+        amount * clientWidth * 0.8;
+    Array.from(imgsToMove).forEach((imgToMove) => {
+        imgToMove.style.transform = `translate(${newTranslationParameter}px)`;
+    });
+
+    console.log(
+        `❗ Listing.js:103 '[imgsToMove[0].style.left,clientWidth,scrollWidth,newTranslationParameter]'`,
+        [
+            imgsToMove[0].style.transform,
+            clientWidth,
+            scrollWidth,
+            newTranslationParameter,
+        ]
+    );
+    const hitLastImg = newTranslationParameter <= clientWidth - scrollWidth;
+    const stateToSet = newTranslationParameter >= 0 ? -1 : hitLastImg ? 1 : 0;
 
     stateSetter(stateToSet);
 };
-
+//TODO: slog scrollThumbnails to understand why it's currently able to work with %
+// then attempt to switch to translate
 const MapMarker = (props) => {
     const markerElem = React.useRef();
     const [isIntersecting, setIntersecting] = React.useState(true);
@@ -200,7 +209,7 @@ const ThumbnailTray = styled.div`
         max-height: 100px;
         border-radius: 5px;
         margin: 0 7px;
-        transition: left 0.3s cubic-bezier(0.2, 1.01, 0.6, 0.95);
+        transition: transform 0.3s cubic-bezier(0.2, 1.01, 0.6, 0.95);
         left: 0px;
     }
     img.noscroll {
@@ -208,7 +217,6 @@ const ThumbnailTray = styled.div`
         max-height: 100px;
         border-radius: 5px;
         margin: 0 7px;
-        transition: left 0.3s cubic-bezier(0.2, 1.01, 0.6, 0.95);
     }
     .map-marker {
         filter: invert(100%);
@@ -216,7 +224,7 @@ const ThumbnailTray = styled.div`
         padding: 30px;
     }
     &.defer-img-display > img {
-        display: none;
+        /* display: none; */
     }
 `;
 const ScrollButton = styled.div`

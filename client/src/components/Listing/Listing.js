@@ -27,6 +27,8 @@ const Listing = (props) => {
 };
 
 const Wrapper = styled.div`
+    content-visibility:auto;
+    contain-intrinsic-size:800px;
     display: flex;
     flex-direction: column;
     align-items: center;
