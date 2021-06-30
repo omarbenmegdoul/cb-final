@@ -6,9 +6,12 @@ import TextSection from './TextSection';
 import Thumbnails from './Thumbnails';
 
 const Listing = (props) => {
-  
+  const listingWrapper = React.useRef(null)
+  React.useEffect(()=>{
+    props.observer && listingWrapper && props.observer.observe(listingWrapper.current)
+  },[props.observer,listingWrapper])
     return (
-        <Wrapper id={`listing_${props.id}`} className="listing-observe">
+        <Wrapper ref={listingWrapper} id={`listing_${props.id}`} className="listing-observe" data-index={props.listingIndex}>
             <a href={props.url}>
                 <h2>{`${props.listingIndex} | ${props.title} \u22C5 $${
                     parseInt(props.prc) / 100
@@ -28,7 +31,6 @@ const Listing = (props) => {
 
 const Wrapper = styled.div`
     content-visibility:auto;
-    contain-intrinsic-size:800px;
     display: flex;
     flex-direction: column;
     align-items: center;

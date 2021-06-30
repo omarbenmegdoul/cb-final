@@ -13,18 +13,19 @@ const Thumbnails = (props) => {
 
     const trayClass =
         (!allowScrolling ? 'noscroll' : '') +
-        (props.listingIndex >= 5 ? 'defer-img-display' : '');
+        (props.listingIndex >= 3 ? ' defer-img-display' : '');
 
     return (
         <ThumbnailTray className={trayClass} id={props.id + '_thumbnails'}>
             {props.imgs.map((img, index) => {
                 return (
                     <Thumbnail
+
                         index={index}
                         title={props.title}
                         id={props.id}
                         imgSrc={img.href}
-                        preload={props.listingIndex < 5}
+                        preload={props.listingIndex < 3}
                         setLeftVisible={setLeftVisible}
                     />
                 );
@@ -92,7 +93,7 @@ const Thumbnail = (props) => {
         <img
             ref={thumbElem}
             className={scrollPosition === 'noscroll' ? 'noscroll' : ''}
-            src={props.preload ? props.imgSrc : ''}
+            src={props.preload?props.imgSrc:""}
             data-src={props.imgSrc}
             id={props.id + '_thumb_' + props.index}
             onMouseOver={() => {
@@ -159,7 +160,7 @@ const MapMarker = (props) => {
     const [isIntersecting, setIntersecting] = React.useState(true);
 
     const observer = new IntersectionObserver(
-        ([img]) => setIntersecting(img.isIntersecting),
+        ([img]) => {setIntersecting(img.isIntersecting)},
         {
             root: document.getElementById(props.id + '_thumbnails'),
             threshold: 1.0,

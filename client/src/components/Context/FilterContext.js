@@ -7,6 +7,7 @@ export const FilterProvider = ({ children }) => {
     const [subdivisionData, setSubdivisionData] = React.useState([]);
     const [userFilters, setUserFilters] = React.useState({});
     const [searchResults, setSearchResults] = React.useState(null);
+    const [searchPending, setSearchPending] = React.useState(false);
     const [selectedSubdivisions, setSelectedSubdivisions] = React.useState([]);
     const [allowedListings, setAllowedListings] = React.useState(null);
 
@@ -62,7 +63,8 @@ export const FilterProvider = ({ children }) => {
                 setSelectedSubdivisions,
                 subdivisionData,
                 setSubdivisionData,
-                allowedListings
+                allowedListings,
+                searchPending,setSearchPending,
             }}
         >
             {children}

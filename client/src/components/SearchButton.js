@@ -4,9 +4,9 @@ import { attributeDisplay, keyGroupings } from './Filters/FilterConfig';
 import FilterContext from './Context/FilterContext';
 const SearchButton = ({myProps}) => {
   const {
-     setSearchResults } =
+     setSearchResults,searchPending, setSearchPending} =
       React.useContext(FilterContext);
-  const [searchPending, setSearchPending] = React.useState(false);
+  
   return (
   <StySearchButton
                 onClick={async () => {

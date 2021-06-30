@@ -19,10 +19,10 @@ const AssetDisplay = ({ Props }) => {
                             !allowedListings ||
                             allowedListings.includes(listing.id)
                     )
-                    .map((listing, topIndex) => {
+                    .map((listing, listingIndex) => {
                         return (
                             <ListingFullAssets
-                                preload={topIndex < 5}
+                                preload={listingIndex < 3}
                                 listing={listing}
                             />
                         );
@@ -63,8 +63,9 @@ const ListingFullAssets = ({ listing, preload }) => {
                         borderRadius: '5px',
                         margin: '10px',
                     }}
+                    src
                     data-src={`https://www.google.com/maps/embed/v1/search?q=${listing.map.mapAddress}&key=${APIKEY}`}
-                    allowfullscreen
+                    
                 ></iframe>
             }
             <span>Map</span>
@@ -73,7 +74,7 @@ const ListingFullAssets = ({ listing, preload }) => {
 };
 const Wrapper = styled.div`
     /* align-self: flex-end; */
-    background-color: rgba(0,0,255,0.5);
+    
     height: 100vh;
     position: sticky;
     top: 0px;
@@ -81,8 +82,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    transition: all 0.1s ease-out;
-    /* transition-delay:0.1s; */
+
     width: 30%;
     & button {
         transition: all 0.1s ease-out;
@@ -118,7 +118,6 @@ const FullImg = styled.img`
 //     /* background-color: #0f0; */
 // `;
 const FullAssetWrapper = styled.div`
-    background-color:rgba(0,255,0,0.5);
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -131,10 +130,13 @@ const FullAssetWrapper = styled.div`
         top: 0;
     }
     &.hidden-map-wrapper {
-        /* display: none; */
+        
     }
     &.full-img-wrapper {
         /* display: none; */
     }
+    /* & iframe {
+      content-visibility:;
+    } */
 `;
 export default AssetDisplay;

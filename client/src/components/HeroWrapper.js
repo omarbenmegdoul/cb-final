@@ -19,14 +19,12 @@ const Wrapper = styled.div`
     justify-content: center;
     position: relative;
     z-index: 0;
-    transition:all 0s ease-out;
-    transition-delay:0.1s; 
+
     &.expanded {
         margin: 0 30% 0 50px;
         /* background-color: #000; */
         width: calc(70% - 50px);
-        transition:all 0.1s ease-out;
-        transition-delay:0s;
+
     }
     &.heroheight {
       max-height:calc(100vh - var(--header-height));

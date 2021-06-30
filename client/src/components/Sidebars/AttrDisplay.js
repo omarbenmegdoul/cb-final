@@ -31,7 +31,7 @@ const AttrDisplay = (props) => {
                     </Heading>
                     {Object.keys(prettyKeyGroupings).map((group) => {
                         
-                        return <AttrDisplayCtrlButton group={group} />;
+                        return <AttrDisplayCtrlButton key={group+"ctrl_button"} group={group} />;
                     })}
                 </Wrapper>
             </PositioningParent>
@@ -42,7 +42,7 @@ const Heading = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.1s ease-out;
+
     /* background-color:#f00; */
     width: 15vh;
     min-width: 100%;
@@ -63,21 +63,21 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    transition: all 0.1s ease-out;
+
     /* transition-delay:0.1s; */
     width: 100%;
     & button {
-        transition: all 0.1s ease-out;
+        /* transition: all 0.1s ease-out; */
         position: relative;
         left: 0;
         width: 75%;
         opacity: 1;
     }
     & h2 {
-        transition: all 0.1s ease-out;
+        /* transition: all 0.1s ease-out; */
     }
     &.collapsed > div {
-        transition: all 0.1s ease-out;
+        /* transition: all 0.1s ease-out; */
         transform: rotate(-90deg);
     }
 
