@@ -2,7 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import possibleAttributes from '../../contextPossibleVals.json';
 import { deJSONizeValue } from '../../utils';
+<<<<<<< HEAD
 import { attributeDisplay } from './FilterConfig';
+=======
+import {
+  attributeDisplay
+} from './FilterConfig';
+>>>>>>> b440a6fd343ec478b9ded7a30aa3355ffbece781
 
 const handleMultipleChoiceButtonClick = (ev, attribute) => {
     const resetButton = (button) => {

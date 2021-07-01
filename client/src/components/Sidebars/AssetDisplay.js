@@ -85,8 +85,14 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+<<<<<<< HEAD
 
     width: 30%;
+=======
+    transition: all 0.1s ease-out;
+    /* transition-delay:0.1s; */
+    width: 100%;
+>>>>>>> b440a6fd343ec478b9ded7a30aa3355ffbece781
     & button {
         transition: all 0.1s ease-out;
         position: relative;
@@ -97,6 +103,7 @@ const Wrapper = styled.div`
     & h2 {
         transition: all 0.1s ease-out;
     }
+<<<<<<< HEAD
     margin-top: 0;
     /* z-index: 4; */
 
@@ -104,6 +111,34 @@ const Wrapper = styled.div`
         /* margin: 15px; */
         /* position:absolute; */
     }
+=======
+    &.collapsed > div {
+        transition: all 0.1s ease-out;
+        transform: rotate(-90deg);
+    }
+    width: 30%;
+    left: calc(100vw - 30% - 30px);
+    margin-top: 0;
+    position: fixed;
+    z-index: 4;
+    
+    & > * {
+        margin: 15px;
+        /* position:absolute; */
+    }
+    &.collapsed > * {
+        margin: 0px;
+        /* position:absolute; */
+    }
+    &.collapsed {
+        width: 50px;
+        & button {
+            left: -30vh;
+            width: 30vh;
+            opacity: 0;
+        }
+    }
+>>>>>>> b440a6fd343ec478b9ded7a30aa3355ffbece781
 `;
 const FullImg = styled.img`
     width: 90%;

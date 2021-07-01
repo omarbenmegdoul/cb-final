@@ -5,9 +5,14 @@ import {
   PSI_SUBDIVISIONS
 } from '../constants';
 import { subdivisionCenterFromChiPsiCoords } from '../utils';
+<<<<<<< HEAD
 import SubdivisionContext from './Context/SubdivisionsContext';
 
 
+=======
+import FilterContext from './Context/FilterContext';
+
+>>>>>>> b440a6fd343ec478b9ded7a30aa3355ffbece781
 let allowStaging = false;
 const beginStaging = (ev) => {
     ev.preventDefault();
@@ -32,9 +37,16 @@ const logElementCoords = (ev) => {
 };
 
 const MapGrid = ({ Props }) => {
+<<<<<<< HEAD
     const {setSelectedSubdivisions,
     subdivisionData, setSubdivisionData
      } = React.useContext(SubdivisionContext)
+=======
+    
+    const {setSelectedSubdivisions,
+    subdivisionData, setSubdivisionData
+     } = React.useContext(FilterContext)
+>>>>>>> b440a6fd343ec478b9ded7a30aa3355ffbece781
     const rows = new Array(PSI_SUBDIVISIONS).fill(0);
     const columns = new Array(CHI_SUBDIVISIONS).fill(0);
     // code to populate DB
