@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Listing from '../Listing/Listing.js';
 import FilterContext from '../Context/FilterContext.js';
-<<<<<<< HEAD
 import SubdivisionContext from '../Context/SubdivisionsContext.js';
 import ScrollContext from '../Context/ScrollProgressContext.js';
 
@@ -110,14 +109,6 @@ const SearchResults = () => {
             observer.disconnect();
         };
     }, []);
-=======
-import Divider from '../Bits/Divider.js';
-
-const SearchResults = ({ Props }) => {
-    const { searchResults, allowedListings } = React.useContext(FilterContext);
-
-    //TODO-high React.useEffect to scroll
->>>>>>> b440a6fd343ec478b9ded7a30aa3355ffbece781
     return (
         (searchPending || searchResults) && (
             <MetaWrapper
