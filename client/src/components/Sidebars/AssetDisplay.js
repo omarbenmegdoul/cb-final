@@ -87,6 +87,8 @@ const Wrapper = styled.div`
     align-items: center;
 
     width: 30%;
+
+
     & button {
         transition: all 0.1s ease-out;
         position: relative;
@@ -97,6 +99,7 @@ const Wrapper = styled.div`
     & h2 {
         transition: all 0.1s ease-out;
     }
+
     margin-top: 0;
     /* z-index: 4; */
 
@@ -104,6 +107,7 @@ const Wrapper = styled.div`
         /* margin: 15px; */
         /* position:absolute; */
     }
+
 `;
 const FullImg = styled.img`
     width: 90%;

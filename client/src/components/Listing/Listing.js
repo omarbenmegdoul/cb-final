@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import { specialAttributePrettyize } from '../Filters/FilterConfig';
 import Attributes from './Attributes';
 import TextSection from './TextSection';
@@ -10,6 +11,7 @@ const Listing = (props) => {
   React.useEffect(()=>{
     props.observer && listingWrapper && props.observer.observe(listingWrapper.current)
   },[props.observer,listingWrapper])
+
     return (
         <Wrapper ref={listingWrapper} id={`listing_${props.id}`} className="listing-observe" data-index={props.listingIndex}>
             <a href={props.url}>
@@ -49,8 +51,9 @@ const SubWrapper = styled.div`
     width: 100%;
 `;
 
+
 const AttributeGroupWrapper = styled.div`
     width: 100%;
-`;
+`
 
 export default Listing;
