@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import FilterContext from '../Context/FilterContext';
 import ScrollContext from '../Context/ScrollProgressContext';
 import SubdivisionContext from '../Context/SubdivisionsContext';
+import APIKEY from '../../APIKEY';
 
-const APIKEY = "";
 
 const AssetDisplay = ({ Props }) => {
     const { searchResults } = React.useContext(FilterContext);
