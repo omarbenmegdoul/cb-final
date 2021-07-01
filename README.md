@@ -27,9 +27,9 @@ This screenshot shows the map interface overlaid with the listings it returns. T
 -- Break each sidebar into spacer (100vh tall) and content
 
 - fix client-side non-geo filter validation bugs [DONE]
-- jump to results after fetch
-- UI should handle 0 results better
-- implement lazy-loading for biggest assets
+- jump to results after fetch [DONE]
+- UI should handle 0 results better [DONE]
+- implement lazy-loading for biggest assets [DONE]
 - deploy!
 - duplicate listing detection and removal
 - add ability to pin assets in the full display sidebar
