@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Listing from '../Listing/Listing.js';
 import FilterContext from '../Context/FilterContext.js';
 import SubdivisionContext from '../Context/SubdivisionsContext.js';
+import ScrollContext from '../Context/ScrollProgressContext.js';
 
 const SearchResults = () => {
     const { searchResults, collapsedFilterControls, searchPending } =
@@ -10,8 +11,8 @@ const SearchResults = () => {
     const { allowedListings } = React.useContext(SubdivisionContext);
     const scrollAnchor = React.useRef(null);
     const [listingObserver, setListingObserver] = React.useState(null);
-    const [highestSeenListingIndex, setHighestSeenListingIndex] =
-        React.useState(0);
+    const {scrollProgress, setScrollProgress} =
+        React.useContext(ScrollContext)
     React.useEffect(() => {
         console.log(
             `❗ SearchResults.js:13 'searchPending,searchResults'`,
@@ -54,7 +55,7 @@ const SearchResults = () => {
 
                     const entriesForWhichToLoadImages = entries.filter(
                         (entry, index) => {
-                            return index < currentEntryIndex + 3;
+                            return index < currentEntryIndex + 10;
                         }
                     );
                     console.log(
@@ -91,7 +92,7 @@ const SearchResults = () => {
                         `❗ SearchResults.js:89 'seenListingIndex'`,
                         seenListingIndex
                     );
-                    setHighestSeenListingIndex((previousState) => {
+                    setScrollProgress((previousState) => {
                         return previousState >= seenListingIndex
                             ? previousState
                             : seenListingIndex;
@@ -130,7 +131,7 @@ const SearchResults = () => {
                                     allowedListings.includes(sR.id)
                             )
                             .filter((sR,index)=>{
-                              return index<highestSeenListingIndex+8
+                              return index<scrollProgress+15
                             })
                             .map((sR, index) => {
                                 const props = {

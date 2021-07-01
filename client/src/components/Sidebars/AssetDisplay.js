@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import FilterContext from '../Context/FilterContext';
-import Sidebar from './Sidebar';
+import ScrollContext from '../Context/ScrollProgressContext';
 import SubdivisionContext from '../Context/SubdivisionsContext';
 
 const APIKEY = "";
@@ -9,6 +9,7 @@ const APIKEY = "";
 const AssetDisplay = ({ Props }) => {
     const { searchResults } = React.useContext(FilterContext);
     const { allowedListings } = React.useContext(SubdivisionContext);
+    const { scrollProgress} = React.useContext(ScrollContext)
     return (
         <Wrapper className={`big right`}>
             {
@@ -18,11 +19,13 @@ const AssetDisplay = ({ Props }) => {
                         (listing) =>
                             !allowedListings ||
                             allowedListings.includes(listing.id)
-                    )
+                    ).filter((sR,index)=>{
+                      return index<scrollProgress+15
+                    })
                     .map((listing, listingIndex) => {
                         return (
                             <ListingFullAssets
-                                preload={listingIndex < 3}
+                                preload={listingIndex < 10}
                                 listing={listing}
                             />
                         );

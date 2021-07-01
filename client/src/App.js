@@ -8,12 +8,14 @@ import SearchContainer from './components/SearchContainer.js';
 import ContentWrapper from './components/ContentWrapper.js';
 import ResultsInterface from './components/ResultsInterface.js';
 import { SubdivisionProvider } from './components/Context/SubdivisionsContext.js';
+import {ScrollProvider} from './components/Context/ScrollProgressContext'
 
 const App = () => {
     return (
         <AppWrapper>
             <FilterProvider>
                 <SubdivisionProvider>
+                  <ScrollProvider>
                     <GlobalStyles />
                     <Header></Header>
                     <HeroWrapper>
@@ -22,6 +24,7 @@ const App = () => {
                     <ContentWrapper>
                         <ResultsInterface />
                     </ContentWrapper>
+                    </ScrollProvider>
                 </SubdivisionProvider>
             </FilterProvider>
         </AppWrapper>
