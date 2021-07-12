@@ -1,5 +1,5 @@
 # cb-final
-A web app to display apartment listings on Kijiji. Watch the [demo](https://www.youtube.com/watch?v=VZeXLChQIII) on Youtube.
+A web app to display apartment listings on Kijiji. **Watch the [demo](https://www.youtube.com/watch?v=VZeXLChQIII) on Youtube.**
 - single-page app: no click-through required to view apartment data, location on map, or photos
 - more powerful filters: search by move-in date, draw areas of interest on map
 
