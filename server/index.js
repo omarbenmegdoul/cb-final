@@ -3,13 +3,11 @@ const morgan = require('morgan');
 const { initMongoClient, db } = require('./db');
 initMongoClient();
 const { constructRequestFromFilterSummary } = require('./handlers');
-const cors = require('cors')
+const cors = require('cors');
 const PORT = 5678;
 
-
- 
 const app = express();
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 // app.use(require("./routes"));
@@ -20,7 +18,7 @@ app.post('/listings', async (req, res) => {
     const mongoDBFilter = constructRequestFromFilterSummary(body.filterSummary);
     console.log(`❗ index.js:18 'mongoDBFilter'`, mongoDBFilter);
     const listings = await db()
-        .collection('flattened_listings')
+        .collection('listings_rolling_update')
         .find({ ...mongoDBFilter })
         .toArray();
     // listings.slice(0, 5).forEach((l) => {
@@ -42,11 +40,71 @@ app.post('/dict', async (req, res) => {
     res.status(200).end();
 });
 app.get('/subdivisions', async (req, res) => {
-  const subdivisionData = await db()
-  .collection('listings_by_subdivision')
-  .find({}).toArray()
-  res.status(200).json(JSON.stringify({data:subdivisionData}))
+    const subdivisionData = await db()
+        .collection('listings_by_subdivision')
+        .find({})
+        .toArray();
+    res.status(200).json(JSON.stringify({ data: subdivisionData }));
 });
+app.post('/data', async (req, res) => {
+    //this request will be sent from the Python script that scrapes
+    const body = req.body;
+    //this step should eventually be done scraper-side
+    const cleanedData = Object.keys(body).reduce((accumulator, k) => {
+        const kijijiAddressSplit = k.split('/');
+        const kijijiID = kijijiAddressSplit[kijijiAddressSplit.length - 1];
+        accumulator[kijijiID] = body[k];
+        return accumulator;
+    }, {});
+    console.log(Object.keys(cleanedData))
+
+    // for (const listing in cleanedData) {
+    //     console.log(`❗ importDataToMongoDB.js:37 'x'`, listing);
+    //     const flattenedContext = Object.keys(cleanedData[listing].cntxt)
+    //         .filter((attr) => !['d', 'd1', 'd2', 'd3'].includes(attr))
+    //         .reduce(
+    //             (accum, attr) => {
+    //                 accum[attr] = cleanedData[listing].cntxt[attr];
+    //                 return accum;
+    //             },
+    //             { ...cleanedData[listing].cntxt.d }
+    //         );
+
+    //     await db.collection('listings_rolling_update').insertOne(flattenedContext);
+    //     // }
+    // }
+
+    const dataToInsert = Object.entries(cleanedData).map(([key, value]) =>
+        Object.keys(value.cntxt)
+            .filter((attr) => !['d', 'd1', 'd2', 'd3'].includes(attr))
+            .reduce(
+                (accum, attr) => {
+                    accum[attr] = value.cntxt[attr];
+                    return accum;
+                },
+                { ...value.cntxt.d, _id:key }
+            )
+    );
+    await db()
+        .collection('listings_rolling_update')
+        .insertMany(dataToInsert, { ordered: false })
+        .catch((err) => {
+            console.error(err);
+        });
+    // close the connection to the database server
+    res.end();
+});
+app.post("/keptAndTrimmedListings", async (req,res)=>{
+  const ids = req.body.ids;
+  await db()
+        .collection('kept_and_discarded_listing_ids')
+        .insertMany(ids, { ordered: false })
+        .catch((err) => {
+            console.error(err);
+        });
+    // close the connection to the database server
+    res.end();
+})
 
 app.get('*', (req, res) => {
     res.status(404).json({

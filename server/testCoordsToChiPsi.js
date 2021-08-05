@@ -27,7 +27,7 @@ const getListingData = async (dbName) => {
     console.log('connected!');
 
     const listings = await db
-        .collection('flattened_listings')
+        .collection('listings_rolling_update')
         .find({})
         .toArray();
 
@@ -66,7 +66,7 @@ const attributeDictionaryImport = async (dbName) => {
                 { ...cleanedSimpleData[x].cntxt.d }
             );
 
-        await db.collection('flattened_listings').insertOne(flattenedContext);
+        await db.collection('listings_rolling_update').insertOne(flattenedContext);
     }
 
     // close the connection to the database server

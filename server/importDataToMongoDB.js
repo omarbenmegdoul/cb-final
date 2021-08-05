@@ -298,7 +298,7 @@ const listingDataImport = async (dbName) => {
                 { ...cleanedSimpleData[listing].cntxt.d }
             );
 
-        await db.collection('flattened_listings').insertOne(flattenedContext);
+        await db.collection('listings_rolling_update').insertOne(flattenedContext);
         // }
     }
 
@@ -336,7 +336,7 @@ const attributeDictionaryImport = async (dbName) => {
                 { ...cleanedSimpleData[x].cntxt.d }
             );
 
-        await db.collection('flattened_listings').insertOne(flattenedContext);
+        await db.collection('listings_rolling_update').insertOne(flattenedContext);
     }
 
     // close the connection to the database server
@@ -453,7 +453,7 @@ const listingsWithCoordInfoImport = async (dbName) => {
                 { ...cleanedSimpleData[listing].cntxt.d }
             );
 
-        await db.collection('flattened_listings').insertOne(flattenedContext);
+        await db.collection('listings_rolling_update').insertOne(flattenedContext);
         // }
     }
 
