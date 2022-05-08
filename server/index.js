@@ -56,7 +56,7 @@ app.post('/data', async (req, res) => {
         accumulator[kijijiID] = body[k];
         return accumulator;
     }, {});
-    console.log(Object.keys(cleanedData))
+    console.log(Object.keys(cleanedData));
 
     // for (const listing in cleanedData) {
     //     console.log(`❗ importDataToMongoDB.js:37 'x'`, listing);
@@ -82,7 +82,7 @@ app.post('/data', async (req, res) => {
                     accum[attr] = value.cntxt[attr];
                     return accum;
                 },
-                { ...value.cntxt.d, _id:key }
+                { ...value.cntxt.d, _id: key }
             )
     );
     await db()
@@ -94,17 +94,25 @@ app.post('/data', async (req, res) => {
     // close the connection to the database server
     res.end();
 });
-app.post("/keptAndTrimmedListings", async (req,res)=>{
-  const ids = req.body.ids;
-  await db()
+app.post('/keptAndTrimmedListings', async (req, res) => {
+    const ids = req.body.ids;
+    console.log(`❗ index.js:99 'ids.slice(0,30)'`, ids.slice(0, 30));
+
+    await db()
         .collection('kept_and_discarded_listing_ids')
-        .insertMany(ids, { ordered: false })
+        .insertMany(
+            ids.map((url) => {
+                const urlSplit = url.split('/');
+                return { _id: urlSplit[urlSplit.length - 1] };
+            }),
+            { ordered: false }
+        )
         .catch((err) => {
             console.error(err);
         });
     // close the connection to the database server
     res.end();
-})
+});
 
 app.get('*', (req, res) => {
     res.status(404).json({

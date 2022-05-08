@@ -259,7 +259,6 @@ const prettyKeyGroupings = {
     g_a11y: 'Accessibility',
 };
 
-
 const listingDataImport = async (dbName) => {
     // creates a new client
     const client = await MongoClient(MONGO_URI, options);
@@ -298,7 +297,9 @@ const listingDataImport = async (dbName) => {
                 { ...cleanedSimpleData[listing].cntxt.d }
             );
 
-        await db.collection('listings_rolling_update').insertOne(flattenedContext);
+        await db
+            .collection('listings_rolling_update')
+            .insertOne(flattenedContext);
         // }
     }
 
@@ -336,7 +337,9 @@ const attributeDictionaryImport = async (dbName) => {
                 { ...cleanedSimpleData[x].cntxt.d }
             );
 
-        await db.collection('listings_rolling_update').insertOne(flattenedContext);
+        await db
+            .collection('listings_rolling_update')
+            .insertOne(flattenedContext);
     }
 
     // close the connection to the database server
@@ -428,7 +431,7 @@ const listingsWithCoordInfoImport = async (dbName) => {
                     cleanedSimpleData[id].cntxt.map.longitude,
                     cleanedSimpleData[id].cntxt.map.latitude,
                 ];
-                console.log(lat, ',', lon);
+                console.log('❗ importDataToMongoDB.js:434 "lat, lon"', lat, lon);
             });
         return out;
     });
@@ -436,9 +439,15 @@ const listingsWithCoordInfoImport = async (dbName) => {
     // {"0-1":[bunchoflistings]}
     // ...
     // ]
-    await db.collection('listings_by_subdivision').insertMany(subdDlistings);
-    client.close();
-    return;
+    console.log('❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>server>importDataToMongoDB.js:442 "subdDlistings[0]"', subdDlistings[0]);
+    await db
+        .collection('listings_by_subdivision')
+        .remove({});
+    await db
+        .collection('listings_by_subdivision')
+        .insertMany(subdDlistings);
+    
+    // return;
 
     for (const listing in cleanedSimpleData) {
         console.log(`❗ importDataToMongoDB.js:37 'x'`, listing);
@@ -453,16 +462,19 @@ const listingsWithCoordInfoImport = async (dbName) => {
                 { ...cleanedSimpleData[listing].cntxt.d }
             );
 
-        await db.collection('listings_rolling_update').insertOne(flattenedContext);
+        await db
+            .collection('listings_rolling_update')
+            .insertOne(flattenedContext);
         // }
     }
-
+    client.close();
     // close the connection to the database server
 
     console.log('disconnected!');
 };
 
 listingsWithCoordInfoImport('final_project');
+// console.log(Object.keys(simpleData).length);
 
 // attributeDictionaryImport('final_project');
 module.exports = { attributeDisplay, keyGroupings, prettyKeyGroupings };
