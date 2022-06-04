@@ -42,10 +42,11 @@ const SearchResults = () => {
 
                     const listingId =
                         entryForWhichToLoadMap.target.id.split('listing_')[1];
-                    const map = document
-                        .getElementById(`${listingId}_map`)
-                        .querySelector('iframe');
-                    map.src = map.dataset.src;
+                    // TODO REIMPLEMENT MAPS
+                    // const map = document
+                    //     .getElementById(`${listingId}_map`)
+                    //     .querySelector('iframe');
+                    // map.src = map.dataset.src;
 
                     //for logging
                     const iframes = Array.from(

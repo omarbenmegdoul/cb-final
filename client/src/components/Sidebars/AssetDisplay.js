@@ -3,13 +3,12 @@ import styled from 'styled-components';
 import FilterContext from '../Context/FilterContext';
 import ScrollContext from '../Context/ScrollProgressContext';
 import SubdivisionContext from '../Context/SubdivisionsContext';
-import APIKEY from '../../APIKEY';
-
+// import APIKEY from '../../APIKEY';
 
 const AssetDisplay = ({ Props }) => {
     const { searchResults } = React.useContext(FilterContext);
     const { allowedListings } = React.useContext(SubdivisionContext);
-    const { scrollProgress} = React.useContext(ScrollContext)
+    const { scrollProgress } = React.useContext(ScrollContext);
     return (
         <Wrapper className={`big right`}>
             {
@@ -19,8 +18,9 @@ const AssetDisplay = ({ Props }) => {
                         (listing) =>
                             !allowedListings ||
                             allowedListings.includes(listing.id)
-                    ).filter((sR,index)=>{
-                      return index<scrollProgress+15
+                    )
+                    .filter((sR, index) => {
+                        return index < scrollProgress + 15;
                     })
                     .map((listing, listingIndex) => {
                         return (
@@ -55,7 +55,7 @@ const ListingFullAssets = ({ listing, preload }) => {
             className="hidden-map-wrapper"
             id={listing.id + '_map'}
         >
-            {
+            {/* {
                 <iframe
                     width="500"
                     height="450"
@@ -70,14 +70,14 @@ const ListingFullAssets = ({ listing, preload }) => {
                     data-src={`https://www.google.com/maps/embed/v1/search?q=${listing.map.mapAddress}&key=${APIKEY}`}
                     
                 ></iframe>
-            }
+            } */}
             <span>Map</span>
         </FullAssetWrapper>,
     ];
 };
 const Wrapper = styled.div`
     /* align-self: flex-end; */
-    
+
     height: 100vh;
     position: sticky;
     top: 0px;
@@ -87,7 +87,6 @@ const Wrapper = styled.div`
     align-items: center;
 
     width: 30%;
-
 
     & button {
         transition: all 0.1s ease-out;
@@ -107,7 +106,6 @@ const Wrapper = styled.div`
         /* margin: 15px; */
         /* position:absolute; */
     }
-
 `;
 const FullImg = styled.img`
     width: 90%;
@@ -137,7 +135,6 @@ const FullAssetWrapper = styled.div`
         top: 0;
     }
     &.hidden-map-wrapper {
-        
     }
     &.full-img-wrapper {
         /* display: none; */

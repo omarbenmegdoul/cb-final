@@ -26,6 +26,11 @@ app.post('/listings', async (req, res) => {
     // });
     // console.log(`❗ index.js:15 'out'`,out);
     // res.status(200).json(listings)
+    console.log(
+        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>server>index.js:29 "listings.length"',
+        listings.length
+    );
+    console.log(listings.map((l) => l.prc));
     res.status(200).json(JSON.stringify({ data: listings }));
 });
 

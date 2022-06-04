@@ -431,7 +431,11 @@ const listingsWithCoordInfoImport = async (dbName) => {
                     cleanedSimpleData[id].cntxt.map.longitude,
                     cleanedSimpleData[id].cntxt.map.latitude,
                 ];
-                console.log('❗ importDataToMongoDB.js:434 "lat, lon"', lat, lon);
+                console.log(
+                    '❗ importDataToMongoDB.js:434 "lat, lon"',
+                    lat,
+                    lon
+                );
             });
         return out;
     });
@@ -439,15 +443,16 @@ const listingsWithCoordInfoImport = async (dbName) => {
     // {"0-1":[bunchoflistings]}
     // ...
     // ]
-    console.log('❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>server>importDataToMongoDB.js:442 "subdDlistings[0]"', subdDlistings[0]);
-    await db
-        .collection('listings_by_subdivision')
-        .remove({});
-    await db
-        .collection('listings_by_subdivision')
-        .insertMany(subdDlistings);
-    
+    console.log(
+        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>server>importDataToMongoDB.js:442 "subdDlistings[0]"',
+        subdDlistings[0]
+    );
+    await db.collection('listings_by_subdivision').remove({});
+    await db.collection('listings_by_subdivision').insertMany(subdDlistings);
+
     // return;
+
+    await db.collection('listings_rolling_update').remove({});
 
     for (const listing in cleanedSimpleData) {
         console.log(`❗ importDataToMongoDB.js:37 'x'`, listing);
@@ -456,7 +461,24 @@ const listingsWithCoordInfoImport = async (dbName) => {
             .filter((attr) => !['d', 'd1', 'd2', 'd3'].includes(attr))
             .reduce(
                 (accum, attr) => {
-                    accum[attr] = cleanedSimpleData[listing].cntxt[attr];
+                    // console.log(
+                    //     '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>server>importDataToMongoDB.js:459 "attr"',
+                    //     attr
+                    // );
+                    accum[attr] = ![
+                        'dateavailable_tdt',
+                        'prc',
+                        'areainfeet_i',
+                    ].includes(attr)
+                        ? cleanedSimpleData[listing].cntxt[attr]
+                        : parseInt(
+                              cleanedSimpleData[listing].cntxt[attr].replace(
+                                  '"',
+                                  ''
+                              ),
+                              10
+                          );
+
                     return accum;
                 },
                 { ...cleanedSimpleData[listing].cntxt.d }
