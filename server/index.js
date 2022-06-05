@@ -26,11 +26,6 @@ app.post('/listings', async (req, res) => {
     // });
     // console.log(`❗ index.js:15 'out'`,out);
     // res.status(200).json(listings)
-    console.log(
-        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>server>index.js:29 "listings.length"',
-        listings.length
-    );
-    console.log(listings.map((l) => l.prc));
     res.status(200).json(JSON.stringify({ data: listings }));
 });
 
@@ -115,6 +110,33 @@ app.post('/keptAndTrimmedListings', async (req, res) => {
         .catch((err) => {
             console.error(err);
         });
+    // close the connection to the database server
+    res.end();
+});
+app.patch('/data/:id/whitelist', async (req, res) => {
+    // await db()
+    //     .collection('listings_rolling_update')
+    //     .updateOne({ id: req.params.id }, { starred: true })
+    //     .catch((err) => {
+    //         console.error(err);
+    //     });
+    // close the connection to the database server
+    // close the connection to the database server
+    res.end();
+});
+
+app.patch('/data/:id', async (req, res) => {
+    const result = await db()
+        .collection('listings_rolling_update')
+        .updateOne({ id: req.params.id }, { $set: { hidden: true } })
+        .catch((err) => {
+            console.error(err);
+        });
+    console.log(
+        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
+    );
+
+    // close the connection to the database server
     // close the connection to the database server
     res.end();
 });

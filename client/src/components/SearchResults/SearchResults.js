@@ -6,24 +6,44 @@ import SubdivisionContext from '../Context/SubdivisionsContext.js';
 import ScrollContext from '../Context/ScrollProgressContext.js';
 
 const SearchResults = () => {
-    const { searchResults, collapsedFilterControls, searchPending } =
-        React.useContext(FilterContext);
+    const {
+        searchResults,
+        collapsedFilterControls,
+        searchPending,
+        starAndBlacklistSettings,
+    } = React.useContext(FilterContext);
     const { allowedListings } = React.useContext(SubdivisionContext);
     const scrollAnchor = React.useRef(null);
     const [listingObserver, setListingObserver] = React.useState(null);
-    const {scrollProgress, setScrollProgress} =
-        React.useContext(ScrollContext)
+    const { scrollProgress, setScrollProgress } =
+        React.useContext(ScrollContext);
+
     React.useEffect(() => {
-        console.log(
-            `❗ SearchResults.js:13 'searchPending,searchResults'`,
-            searchPending,
-            searchResults
-        );
         scrollAnchor.current.scrollIntoView({ behavior: 'smooth' });
     }, [searchPending]);
+
     const validResultsCount = searchResults?.filter(
         (sR) => !allowedListings || allowedListings.includes(sR.id)
     )?.length;
+
+    const filterStarredAndHidden = (listing) => {
+        const conditions = {};
+        if (starAndBlacklistSettings.excludeUnstarred) {
+            conditions.excludeUnstarred = listing.starred;
+        }
+        if (starAndBlacklistSettings.excludeStarred) {
+            conditions.excludeStarred = !listing.starred;
+        }
+        if (starAndBlacklistSettings.excludeUnhidden) {
+            conditions.excludeUnhidden = listing.hidden;
+        }
+        if (starAndBlacklistSettings.excludeHidden) {
+            conditions.excludeUnhidden = !listing.hidden;
+        }
+        return Object.values(conditions).length
+            ? Object.values(conditions).every((x) => !!x)
+            : true;
+    };
 
     React.useEffect(() => {
         const observer = new IntersectionObserver(
@@ -52,17 +72,17 @@ const SearchResults = () => {
                     const iframes = Array.from(
                         document.querySelectorAll('iframe')
                     ).map((iframe) => iframe.src);
-                    console.log(`❗ SearchResults.js:30 'iframes'`, iframes);
+                    // console.log(`❗ SearchResults.js:30 'iframes'`, iframes);
 
                     const entriesForWhichToLoadImages = entries.filter(
                         (entry, index) => {
                             return index < currentEntryIndex + 10;
                         }
                     );
-                    console.log(
-                        `❗ SearchResults.js:31 'entriesForWhichToLoadImages'`,
-                        entriesForWhichToLoadImages
-                    );
+                    // console.log(
+                    //     `❗ SearchResults.js:31 'entriesForWhichToLoadImages'`,
+                    //     entriesForWhichToLoadImages
+                    // );
 
                     entriesForWhichToLoadImages.forEach((entry) => {
                         Array.from(
@@ -110,6 +130,7 @@ const SearchResults = () => {
             observer.disconnect();
         };
     }, []);
+
     return (
         (searchPending || searchResults) && (
             <MetaWrapper
@@ -131,8 +152,11 @@ const SearchResults = () => {
                                     !allowedListings ||
                                     allowedListings.includes(sR.id)
                             )
-                            .filter((sR,index)=>{
-                              return index<scrollProgress+15
+                            .filter((sR, index) => {
+                                return (
+                                    index < scrollProgress + 15 &&
+                                    filterStarredAndHidden(sR)
+                                );
                             })
                             .map((sR, index) => {
                                 const props = {

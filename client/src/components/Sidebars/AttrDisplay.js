@@ -1,19 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import AttrDisplayCtrlButton from './AttrDisplayCtrlButton';
 import {
-  prettyKeyGroupings,
+    AttrDisplayCtrlButton,
+    StarBlacklistControlButton,
+} from './AttrDisplayCtrlButton';
+import {
+    prettyKeyGroupings,
+    prettyStarWhitelistGroupings,
 } from '../Filters/FilterConfig';
 import FilterContext from '../Context/FilterContext';
 const AttrDisplay = (props) => {
-    const {
-        collapsedFilterControls,
-        setCollapsedFilterControls,
-    } = React.useContext(FilterContext);
+    const { collapsedFilterControls, setCollapsedFilterControls } =
+        React.useContext(FilterContext);
     return (
         <>
-            <PositioningParent className={`${collapsedFilterControls ? 'collapsed' : ''}`}>
+            <PositioningParent
+                className={`${collapsedFilterControls ? 'collapsed' : ''}`}
+            >
                 <Wrapper
                     className={`${collapsedFilterControls ? 'collapsed' : ''}`}
                 >
@@ -30,8 +34,21 @@ const AttrDisplay = (props) => {
                         </h2>
                     </Heading>
                     {Object.keys(prettyKeyGroupings).map((group) => {
-                        
-                        return <AttrDisplayCtrlButton key={group+"ctrl_button"} group={group} />;
+                        return (
+                            <AttrDisplayCtrlButton
+                                key={group + 'ctrl_button'}
+                                group={group}
+                            />
+                        );
+                    })}
+                    <Divider />
+                    {Object.keys(prettyStarWhitelistGroupings).map((group) => {
+                        return (
+                            <StarBlacklistControlButton
+                                key={group + 'ctrl_button'}
+                                group={group}
+                            />
+                        );
                     })}
                 </Wrapper>
             </PositioningParent>
@@ -102,11 +119,20 @@ const PositioningParent = styled.div`
     position: sticky;
     z-index: 0;
     width: 15%;
-    height:100vh;
-    top: 0; 
+    height: 100vh;
+    top: 0;
     /* background-color: rgba(0,255,0,0.5); */
     &.collapsed {
-      width:50px;
+        width: 50px;
     }
+`;
+
+const Divider = styled.div`
+    height: 0px;
+    width: 65%;
+    border-top: 1px;
+    border-color: white;
+    border-style: solid;
+    margin: 15px;
 `;
 export default AttrDisplay;

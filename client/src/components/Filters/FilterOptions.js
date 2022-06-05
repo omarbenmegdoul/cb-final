@@ -87,19 +87,11 @@ export const NumRange = ({ attribute, date }) => {
             parser(minInput.current.value),
             parser(maxInput.current.value),
         ];
-        console.log(`❗ FilterOptions.js:101 '[minVal,maxVal]'`, [
-            minVal,
-            maxVal,
-        ]);
 
         const isIncoherent = date
             ? ![minVal, maxVal].includes('Invalid Date') &&
               minVal.valueOf() > maxVal.valueOf()
             : ![minVal, maxVal].includes(NaN) && minVal > maxVal;
-        console.log(
-            `❗ FilterOptions.js:117 '[attribute,minVal,maxVal,isIncoherent]'`,
-            [attribute, minVal, maxVal, isIncoherent]
-        );
         if (!isIncoherent) {
             return;
         }
@@ -162,7 +154,7 @@ export const MultipleChoice = ({ attribute }) => {
                 No Preference
             </button>
             {cleanPossibleValues
-                .sort((attr1, attr2) => attr1.pretty > attr2.pretty ? 1 : -1 )
+                .sort((attr1, attr2) => (attr1.pretty > attr2.pretty ? 1 : -1))
                 .map((value) => {
                     return (
                         <button

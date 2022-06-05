@@ -1,14 +1,12 @@
 import React from 'react';
 import FilterContext from '../Context/FilterContext';
 import {
-  prettyKeyGroupings,
+    prettyKeyGroupings,
+    prettyStarWhitelistGroupings,
 } from '../Filters/FilterConfig';
 const AttrDisplayCtrlButton = ({ group }) => {
-  
-    const {
-        attrHidingSettings,
-        attrHidingSettingsDispatch,
-    } = React.useContext(FilterContext);
+    const { attrHidingSettings, attrHidingSettingsDispatch } =
+        React.useContext(FilterContext);
     const selected = !attrHidingSettings[group];
     return (
         <button
@@ -29,4 +27,25 @@ const AttrDisplayCtrlButton = ({ group }) => {
     );
 };
 
-export default AttrDisplayCtrlButton;
+const StarBlacklistControlButton = ({ group }) => {
+    const { starAndBlacklistSettings, starAndBlacklistSettingsDispatch } =
+        React.useContext(FilterContext);
+
+    return (
+        <button
+            onClick={() => {
+                const action = {
+                    type: prettyStarWhitelistGroupings[group].type,
+                };
+                starAndBlacklistSettingsDispatch(action);
+            }}
+            className={`attribute-selection fat ${
+                starAndBlacklistSettings[group] ? 'selected' : 'excluded'
+            }`}
+        >
+            {prettyStarWhitelistGroupings[group].nice}
+        </button>
+    );
+};
+
+export { AttrDisplayCtrlButton, StarBlacklistControlButton };

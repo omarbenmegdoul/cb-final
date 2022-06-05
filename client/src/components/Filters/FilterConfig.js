@@ -7,14 +7,14 @@ export const specialAttributePrettyize = (attribute, value) => {
     const dJSONd = parseInt(deJSONizeValue(value)) || deJSONizeValue(value);
     switch (attribute) {
         case 'prc':
-            return "$"+parseInt(value) / 100;
+            return '$' + parseInt(value) / 100;
         case 'areainfeet_i':
             return dJSONd + 'ft\u00B2';
         case 'dateavailable_tdt':
-            const dateArr = arrayFromYYYYMMDDint(dJSONd,{padStart:1})
-            return dateArr.join("-");
+            const dateArr = arrayFromYYYYMMDDint(dJSONd, { padStart: 1 });
+            return dateArr.join('-');
         default:
-          return;
+            return;
     }
 };
 
@@ -257,6 +257,25 @@ export const prettyKeyGroupings = {
     g_building_features: 'Building features',
     g_lease: 'Lease properties',
     g_a11y: 'Accessibility',
+};
+
+export const prettyStarWhitelistGroupings = {
+    excludeUnstarred: {
+        nice: 'Exclude 🤍',
+        type: 'EXCLUDE-NON-STARRED',
+    },
+    excludeUnhidden: {
+        nice: 'Exclude ✖️',
+        type: 'EXCLUDE-NON-HIDDEN',
+    },
+    excludeStarred: {
+        nice: 'Exclude 💖',
+        type: 'EXCLUDE-STARRED',
+    },
+    excludeHidden: {
+        nice: 'Exclude ❌',
+        type: 'EXCLUDE-HIDDEN',
+    },
 };
 
 export const prettyVals = {};

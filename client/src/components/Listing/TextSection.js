@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import StarHideControls from './StarHideControls';
 const TextSection = (props) => {
     const desc =
         1 + props.description.indexOf('<p>')
@@ -13,7 +14,10 @@ const TextSection = (props) => {
     return (
         <TextWrapper>
             <DescQuoteWrapper>
-                {props.map.mapAddress} | {props.timeposted}
+                <div>
+                    {props.map.mapAddress} | {props.timeposted}
+                </div>
+                <StarHideControls {...props} />
             </DescQuoteWrapper>
             <DescQuoteWrapper>
                 <CurlyQuote>{'Description'}</CurlyQuote>

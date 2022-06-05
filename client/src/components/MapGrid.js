@@ -74,8 +74,6 @@ const MapGrid = ({ Props }) => {
     };
     const beginStaging = (ev) => {
         ev.preventDefault();
-        console.log(ev);
-        console.log('Begin staging');
         setPaintingState({ allowStaging: true, paintMode: ev.button });
         handlePaintingClassChange(ev.target, ev.button);
     };
@@ -92,7 +90,7 @@ const MapGrid = ({ Props }) => {
         if (!paintingState.allowStaging) {
             return;
         }
-        console.log('commit');
+
         setPaintingState({ allowStaging: false, paintMode: null });
         const SubDs = document.getElementById('map-grid-wrapper').childNodes;
         const toggledSubDs = [...SubDs]
@@ -106,7 +104,8 @@ const MapGrid = ({ Props }) => {
     };
     const logElementCoords = (ev) => {
         ev.preventDefault();
-        console.log(ev.target.id);
+        // console.log for debug
+        // console.log(ev.target.id);
     };
 
     return (
@@ -124,7 +123,10 @@ const MapGrid = ({ Props }) => {
                                 id={`${xIndex}-${yIndex}`}
                                 className="grid-slots"
                                 onMouseEnter={markHover}
-                                onContextMenu={(ev)=>{ev.preventDefault();return false}}
+                                onContextMenu={(ev) => {
+                                    ev.preventDefault();
+                                    return false;
+                                }}
                             >
                                 {!!subdivisionData[`${xIndex}-${yIndex}`]
                                     ?.length &&
