@@ -114,21 +114,25 @@ app.post('/keptAndTrimmedListings', async (req, res) => {
     res.end();
 });
 app.patch('/data/:id/whitelist', async (req, res) => {
-    // await db()
-    //     .collection('listings_rolling_update')
-    //     .updateOne({ id: req.params.id }, { starred: true })
-    //     .catch((err) => {
-    //         console.error(err);
-    //     });
+    const result = await db()
+        .collection('listings_rolling_update')
+        .updateOne({ id: req.params.id }, { $set: { hidden: req.body.value } })
+        .catch((err) => {
+            console.error(err);
+        });
+    console.log(
+        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
+    );
+
     // close the connection to the database server
     // close the connection to the database server
     res.end();
 });
 
-app.patch('/data/:id', async (req, res) => {
+app.patch('/data/:id/blacklist', async (req, res) => {
     const result = await db()
         .collection('listings_rolling_update')
-        .updateOne({ id: req.params.id }, { $set: { hidden: true } })
+        .updateOne({ id: req.params.id }, { $set: { hidden: req.body.value } })
         .catch((err) => {
             console.error(err);
         });
