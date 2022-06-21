@@ -23,7 +23,7 @@ const SearchResults = () => {
     }, [searchPending]);
 
     const validResultsCount = searchResults?.filter(
-        (sR) => !allowedListings || allowedListings.includes(sR.id)
+        (sR) => !allowedListings.length || allowedListings.includes(sR.id)
     )?.length;
 
     const filterStarredAndHidden = (listing) => {
@@ -130,12 +130,50 @@ const SearchResults = () => {
             observer.disconnect();
         };
     }, []);
-
+    // console.log(
+    //     '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>SearchResults>SearchResults.js:148 "filtered search results"',
+    //     searchResults
+    //         .filter((sR) => !allowedListings || allowedListings.includes(sR.id))
+    //         .filter((sR, index) => {
+    //             return (
+    //                 index < scrollProgress + 15 && filterStarredAndHidden(sR)
+    //             );
+    //         })
+    // );
+    // console.log(
+    //     '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>SearchResults>SearchResults.js:143 "allowedListings"',
+    //     allowedListings
+    // );
+    console.log(
+        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>SearchResults>SearchResults.js:147 "searchResults"',
+        searchResults
+    );
+    const results = searchResults
+        ?.filter((sR) => {
+            return !allowedListings.length || allowedListings.includes(sR.id);
+        })
+        ?.filter((sR, index) => {
+            return index < scrollProgress + 15;
+            //  && filterStarredAndHidden(sR);
+        });
+    console.log(
+        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>SearchResults>SearchResults.js:159 "results"',
+        results
+    );
+    console.log(
+        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>SearchResults>SearchResults.js:163 "searchPending || searchResults"',
+        searchPending || searchResults
+    );
+    console.log(
+        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>SearchResults>SearchResults.js:167 "validResultsCount"',
+        validResultsCount
+    );
     return (
         (searchPending || searchResults) && (
             <MetaWrapper
                 ref={scrollAnchor}
                 className={collapsedFilterControls ? 'expanded' : ''}
+                testId="abcde"
             >
                 <h1>
                     {searchPending
@@ -146,27 +184,15 @@ const SearchResults = () => {
                 </h1>
                 <Wrapper>
                     {!searchPending &&
-                        searchResults
-                            .filter(
-                                (sR) =>
-                                    !allowedListings ||
-                                    allowedListings.includes(sR.id)
-                            )
-                            .filter((sR, index) => {
-                                return (
-                                    index < scrollProgress + 15 &&
-                                    filterStarredAndHidden(sR)
-                                );
-                            })
-                            .map((sR, index) => {
-                                const props = {
-                                    ...sR,
-                                    listingIndex: index,
-                                    key: index,
-                                    observer: listingObserver,
-                                };
-                                return <Listing {...props}></Listing>;
-                            })}
+                        results.map((sR, index) => {
+                            const props = {
+                                ...sR,
+                                listingIndex: index,
+                                key: index,
+                                observer: listingObserver,
+                            };
+                            return <Listing {...props}></Listing>;
+                        })}
                     {/* <Listing {...searchResults[0]}/> */}
                 </Wrapper>
             </MetaWrapper>

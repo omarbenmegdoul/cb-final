@@ -16,7 +16,7 @@ const AssetDisplay = ({ Props }) => {
                 searchResults
                     ?.filter(
                         (listing) =>
-                            !allowedListings ||
+                            !allowedListings.length ||
                             allowedListings.includes(listing.id)
                     )
                     .filter((sR, index) => {

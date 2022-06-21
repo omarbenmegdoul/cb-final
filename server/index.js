@@ -4,6 +4,7 @@ const { initMongoClient, db } = require('./db');
 initMongoClient();
 const { constructRequestFromFilterSummary } = require('./handlers');
 const cors = require('cors');
+const util = require('util');
 const PORT = 5678;
 
 const app = express();
@@ -16,7 +17,10 @@ app.post('/listings', async (req, res) => {
     const body = req.body;
     console.log(`❗ index.js:16 'body'`, body);
     const mongoDBFilter = constructRequestFromFilterSummary(body.filterSummary);
-    console.log(`❗ index.js:18 'mongoDBFilter'`, mongoDBFilter);
+    console.log(
+        `❗ index.js:18 'mongoDBFilter'`,
+        util.inspect(mongoDBFilter, false, null, true /* enable colors */)
+    );
     const listings = await db()
         .collection('listings_rolling_update')
         .find({ ...mongoDBFilter })
@@ -143,6 +147,19 @@ app.patch('/data/:id/blacklist', async (req, res) => {
     // close the connection to the database server
     // close the connection to the database server
     res.end();
+});
+app.get('/user/:username', async (req, res) => {
+    const query = { username: req.params.username };
+    const result = await db()
+        .collection('users')
+        .findOneAndUpdate(
+            query,
+            {
+                $setOnInsert: { ...query, blacklist: [], whitelist: [] },
+            },
+            { upsert: true } // insert the document if it does not exist
+        );
+    res.json(JSON.stringify({ result }));
 });
 
 app.get('*', (req, res) => {

@@ -1,20 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
+import SubdivisionContext from './Context/SubdivisionsContext';
 import MapBgBlock from './Map';
 import MapGrid from './MapGrid';
 const MapStack = () => {
+    const { selectedSubdivisions } = React.useContext(SubdivisionContext);
+    // const handleFilterSave = () => {
+    //     fetch;
+    // };
     return (
-      <>
-          <Wrapper>
-              <MapGrid />
-              <MapBgBlock />
-          </Wrapper>
-      </>
+        <>
+            <MetaWrapper>
+                <button>Save this area</button> &middot;{' '}
+                <button>Save these filters</button>
+                <Wrapper>
+                    <MapGrid />
+                    <MapBgBlock />
+                </Wrapper>
+            </MetaWrapper>
+        </>
     );
 };
 const Wrapper = styled.div`
     position: relative;
-    margin:0;
-    margin:0 20px;
+    margin: 0;
+    margin: 0 20px;
+`;
+const MetaWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    /* justify-content:center; */
+    align-items: center;
 `;
 export default MapStack;

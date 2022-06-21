@@ -1,5 +1,12 @@
 const { attributeDisplay } = require('./filterConfig');
 
+const intAttributes = ['prc', 'dateavailable_tdt'];
+const filterForInt = (attr, value) => {
+    return !intAttributes.includes(attr)
+        ? value
+        : parseInt(value, 10) * (attr === 'prc' ? 100 : 1);
+};
+
 const constructRequestFromFilterSummary = (summary) => {
     const handleRequireType = (attribute, requireSummary) => {
         return requireSummary ? { [attribute]: '"1"' } : {};
@@ -31,20 +38,20 @@ const constructRequestFromFilterSummary = (summary) => {
         const upperBoundCheck = rangeSummary[attribute + '_max']
             ? {
                   [attribute]: {
-                      $lte: (
-                          (attribute === 'prc' ? 100 : 1) *
-                          rangeSummary[attribute + '_max']
-                      ).toString(),
+                      $lte: filterForInt(
+                          attribute,
+                          rangeSummary[attribute + '_max'].toString()
+                      ),
                   },
               }
             : {};
         const lowerBoundCheck = rangeSummary[attribute + '_min']
             ? {
                   [attribute]: {
-                      $gte: (
-                          (attribute === 'prc' ? 100 : 1) *
-                          rangeSummary[attribute + '_min']
-                      ).toString(),
+                      $gte: filterForInt(
+                          attribute,
+                          rangeSummary[attribute + '_min'].toString()
+                      ),
                   },
               }
             : {};
