@@ -15,22 +15,38 @@ app.use(morgan('dev'));
 
 app.post('/listings', async (req, res) => {
     const body = req.body;
-    console.log(`❗ index.js:16 'body'`, body);
+    // console.log(`❗ index.js:16 'body'`, body);
     const mongoDBFilter = constructRequestFromFilterSummary(body.filterSummary);
     console.log(
         `❗ index.js:18 'mongoDBFilter'`,
         util.inspect(mongoDBFilter, false, null, true /* enable colors */)
     );
-    const listings = await db()
+
+    const listingsPromise = db()
         .collection('listings_rolling_update')
         .find({ ...mongoDBFilter })
         .toArray();
+    const subDPromise = db()
+        .collection('listings_by_subdivision')
+        .find({})
+        .toArray();
+    const [listings, subD] = await Promise.all([listingsPromise, subDPromise]);
+    const allowedListings = subD.reduce((accum, x) => {
+        return [...accum, ...x.listings];
+    }, []);
+
+    const results = listings.filter((x) => allowedListings.includes(x.id));
+    console.log(
+        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>server>index.js:39 "results.length"',
+        results.length
+    );
+
     // listings.slice(0, 5).forEach((l) => {
     //     console.log(`❗ index.js:20 'l'`, l);
     // });
     // console.log(`❗ index.js:15 'out'`,out);
     // res.status(200).json(listings)
-    res.status(200).json(JSON.stringify({ data: listings }));
+    res.status(200).json(JSON.stringify({ data: results }));
 });
 
 app.post('/dict', async (req, res) => {
@@ -117,49 +133,55 @@ app.post('/keptAndTrimmedListings', async (req, res) => {
     // close the connection to the database server
     res.end();
 });
-app.patch('/data/:id/whitelist', async (req, res) => {
-    const result = await db()
-        .collection('listings_rolling_update')
-        .updateOne({ id: req.params.id }, { $set: { hidden: req.body.value } })
-        .catch((err) => {
-            console.error(err);
-        });
-    console.log(
-        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
-    );
 
-    // close the connection to the database server
-    // close the connection to the database server
-    res.end();
-});
-
-app.patch('/data/:id/blacklist', async (req, res) => {
-    const result = await db()
-        .collection('listings_rolling_update')
-        .updateOne({ id: req.params.id }, { $set: { hidden: req.body.value } })
-        .catch((err) => {
-            console.error(err);
-        });
-    console.log(
-        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
-    );
-
-    // close the connection to the database server
-    // close the connection to the database server
-    res.end();
-});
-app.get('/user/:username', async (req, res) => {
-    const query = { username: req.params.username };
-    const result = await db()
-        .collection('users')
-        .findOneAndUpdate(
-            query,
-            {
-                $setOnInsert: { ...query, blacklist: [], whitelist: [] },
-            },
-            { upsert: true } // insert the document if it does not exist
+const filterListHandlerFactory = (list, verb) => {
+    return async (req, res) => {
+        const result = await db()
+            .collection(list)
+            .findOneAndUpdate(
+                { id: req.params.username },
+                { ['$' + verb]: { items: req.params.id } },
+                { upsert: true, returnDocument: 'after' }
+            )
+            .catch((err) => {
+                console.error(err);
+                res.status(500).end();
+            });
+        console.log(
+            '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>server>index.js:134 " result"',
+            result
         );
-    res.json(JSON.stringify({ result }));
+        res.status(200).json({ ...result.value.items });
+    };
+};
+
+['whitelists', 'blacklists'].forEach((list) => {
+    ['push', 'pull'].forEach((verb) =>
+        app.patch(
+            `/data/:username/${list}/:id/${verb}`,
+            filterListHandlerFactory(list, verb)
+        )
+    );
+});
+
+app.get('/user/:username', async (req, res) => {
+    const promises = ['whitelists', 'blacklists'].map((list) =>
+        db()
+            .collection(list)
+            .findOneAndUpdate(
+                { id: req.params.username },
+                { $setOnInsert: { items: [] } },
+                { upsert: true, returnDocument: 'after' }
+            )
+    );
+
+    const [whitelist, blacklist] = await Promise.all(promises);
+    res.json(
+        JSON.stringify({
+            whitelists: whitelist.value.items,
+            blacklists: blacklist.value.items,
+        })
+    );
 });
 
 app.get('*', (req, res) => {

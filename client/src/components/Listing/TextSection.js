@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import UserContext from '../Context/UserContext';
 import StarHideControls from './StarHideControls';
 const TextSection = (props) => {
+    const { userData } = useContext(UserContext);
     const desc =
         1 + props.description.indexOf('<p>')
             ? props.description
@@ -17,7 +19,7 @@ const TextSection = (props) => {
                 <div>
                     {props.map.mapAddress} | {props.timeposted}
                 </div>
-                <StarHideControls {...props} />
+                {userData && <StarHideControls {...props} />}
             </DescQuoteWrapper>
             <DescQuoteWrapper>
                 <CurlyQuote>{'Description'}</CurlyQuote>

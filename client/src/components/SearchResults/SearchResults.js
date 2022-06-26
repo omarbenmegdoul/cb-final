@@ -4,14 +4,16 @@ import Listing from '../Listing/Listing.js';
 import FilterContext from '../Context/FilterContext.js';
 import SubdivisionContext from '../Context/SubdivisionsContext.js';
 import ScrollContext from '../Context/ScrollProgressContext.js';
+import UserContext from '../Context/UserContext.js';
 
 const SearchResults = () => {
     const {
-        searchResults,
+        filteredSearchResults,
         collapsedFilterControls,
         searchPending,
         starAndBlacklistSettings,
     } = React.useContext(FilterContext);
+    const { userData } = React.useContext(UserContext);
     const { allowedListings } = React.useContext(SubdivisionContext);
     const scrollAnchor = React.useRef(null);
     const [listingObserver, setListingObserver] = React.useState(null);
@@ -22,43 +24,22 @@ const SearchResults = () => {
         scrollAnchor.current.scrollIntoView({ behavior: 'smooth' });
     }, [searchPending]);
 
-    const validResultsCount = searchResults?.filter(
-        (sR) => !allowedListings.length || allowedListings.includes(sR.id)
-    )?.length;
-
-    const filterStarredAndHidden = (listing) => {
-        const conditions = {};
-        if (starAndBlacklistSettings.excludeUnstarred) {
-            conditions.excludeUnstarred = listing.starred;
-        }
-        if (starAndBlacklistSettings.excludeStarred) {
-            conditions.excludeStarred = !listing.starred;
-        }
-        if (starAndBlacklistSettings.excludeUnhidden) {
-            conditions.excludeUnhidden = listing.hidden;
-        }
-        if (starAndBlacklistSettings.excludeHidden) {
-            conditions.excludeUnhidden = !listing.hidden;
-        }
-        return Object.values(conditions).length
-            ? Object.values(conditions).every((x) => !!x)
-            : true;
-    };
+    const validResultsCount = filteredSearchResults?.length;
 
     React.useEffect(() => {
         const observer = new IntersectionObserver(
             (entries, observer) => {
-                console.log(observer);
-                console.log(entries);
+                // console.log(observer);
+                // console.log(entries);
                 entries.forEach((entryForWhichToLoadMap, currentEntryIndex) => {
-                    if (!entryForWhichToLoadMap.intersectionRatio) {
-                        return;
-                    } else {
-                        console.log(
-                            `❗ SearchResults.js:27 'entryForWhichToLoadMap.target'`,
-                            entryForWhichToLoadMap.target
-                        );
-                    }
+                    //     if (!entryForWhichToLoadMap.intersectionRatio) {
+                    //         return;
+                    //     } else {
+                    //         console.log(
+                    //             `❗ SearchResults.js:27 'entryForWhichToLoadMap.target'`,
+                    //             entryForWhichToLoadMap.target
+                    //         );
+                    //     }
 
                     const listingId =
                         entryForWhichToLoadMap.target.id.split('listing_')[1];
@@ -109,10 +90,10 @@ const SearchResults = () => {
                     const seenListingIndex = parseInt(
                         entryForWhichToLoadMap.target.dataset.index
                     );
-                    console.log(
-                        `❗ SearchResults.js:89 'seenListingIndex'`,
-                        seenListingIndex
-                    );
+                    // console.log(
+                    //     `❗ SearchResults.js:89 'seenListingIndex'`,
+                    //     seenListingIndex
+                    // );
                     setScrollProgress((previousState) => {
                         return previousState >= seenListingIndex
                             ? previousState
@@ -144,32 +125,14 @@ const SearchResults = () => {
     //     '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>SearchResults>SearchResults.js:143 "allowedListings"',
     //     allowedListings
     // );
-    console.log(
-        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>SearchResults>SearchResults.js:147 "searchResults"',
-        searchResults
-    );
-    const results = searchResults
-        ?.filter((sR) => {
-            return !allowedListings.length || allowedListings.includes(sR.id);
-        })
-        ?.filter((sR, index) => {
-            return index < scrollProgress + 15;
-            //  && filterStarredAndHidden(sR);
-        });
-    console.log(
-        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>SearchResults>SearchResults.js:159 "results"',
-        results
-    );
-    console.log(
-        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>SearchResults>SearchResults.js:163 "searchPending || searchResults"',
-        searchPending || searchResults
-    );
-    console.log(
-        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>SearchResults>SearchResults.js:167 "validResultsCount"',
-        validResultsCount
-    );
+
+    const results = filteredSearchResults?.filter((sR, index) => {
+        return index < scrollProgress + 15;
+        //  && filterStarredAndHidden(sR);
+    });
+
     return (
-        (searchPending || searchResults) && (
+        (searchPending || filteredSearchResults) && (
             <MetaWrapper
                 ref={scrollAnchor}
                 className={collapsedFilterControls ? 'expanded' : ''}

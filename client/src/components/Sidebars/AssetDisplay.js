@@ -3,34 +3,33 @@ import styled from 'styled-components';
 import FilterContext from '../Context/FilterContext';
 import ScrollContext from '../Context/ScrollProgressContext';
 import SubdivisionContext from '../Context/SubdivisionsContext';
+import UserContext from '../Context/UserContext';
+import { filterStarredAndHidden } from '../SearchResults/SearchResults';
 // import APIKEY from '../../APIKEY';
 
 const AssetDisplay = ({ Props }) => {
-    const { searchResults } = React.useContext(FilterContext);
     const { allowedListings } = React.useContext(SubdivisionContext);
     const { scrollProgress } = React.useContext(ScrollContext);
+    const {
+        filteredSearchResults,
+
+        starAndBlacklistSettings,
+    } = React.useContext(FilterContext);
+    const { userData } = React.useContext(UserContext);
     return (
         <Wrapper className={`big right`}>
-            {
-                //TODO-low: put searchResults in a context?
-                searchResults
-                    ?.filter(
-                        (listing) =>
-                            !allowedListings.length ||
-                            allowedListings.includes(listing.id)
-                    )
-                    .filter((sR, index) => {
-                        return index < scrollProgress + 15;
-                    })
-                    .map((listing, listingIndex) => {
-                        return (
-                            <ListingFullAssets
-                                preload={listingIndex < 10}
-                                listing={listing}
-                            />
-                        );
-                    })
-            }
+            {filteredSearchResults
+                ?.filter((sR, index) => {
+                    return index < scrollProgress + 15;
+                })
+                .map((listing, listingIndex) => {
+                    return (
+                        <ListingFullAssets
+                            preload={listingIndex < 10}
+                            listing={listing}
+                        />
+                    );
+                })}
         </Wrapper>
     );
 };

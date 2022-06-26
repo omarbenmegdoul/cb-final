@@ -1,38 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
 import FilterContext from '../Context/FilterContext.js';
+import UserContext from '../Context/UserContext.js';
 const StarHideControls = (props) => {
-    const hideControl = !props.hidden ? '✖️' : '❌';
-    const starControl = !props.starred ? '🤍' : '💖';
     const { setSearchResults } = React.useContext(FilterContext);
+    const { username, userData, setUserData } = React.useContext(UserContext);
+    const hideControl = !userData.blacklists.includes(props.id) ? '✖️' : '❌';
+    const starControl = !userData.whitelists.includes(props.id) ? '🤍' : '💖';
 
     const handleClick = async (buttonName) => {
-        const updatedListing = { ...props, [buttonName]: !props[buttonName] };
-        setSearchResults((searchResults) => {
-            const thisListingIndex = searchResults.findIndex(
-                (x) => x.id === props.id
-            );
+        const list = buttonName === 'starred' ? 'whitelists' : 'blacklists';
+        const wasInactive = !userData[list].includes(props.id);
 
-            return [
-                ...searchResults.slice(0, thisListingIndex),
-                updatedListing,
-                ...searchResults.slice(thisListingIndex + 1),
-            ];
-        });
-        const res = await fetch(
-            `http://localhost:5678/data/${props.id}/${
-                buttonName === 'starred' ? 'whitelist' : 'blacklist'
+        setUserData((data) => ({
+            ...data,
+            [list]: wasInactive
+                ? [...data[list], props.id]
+                : data[list].filter((x) => x !== props.id),
+        }));
+
+        await fetch(
+            `http://localhost:5678/data/${username}/${list}/${props.id}/${
+                wasInactive ? 'push' : 'pull'
             }`,
             {
                 method: 'PATCH',
-                body: JSON.stringify({
-                    value: updatedListing[buttonName] ? Date.now() : false,
-                }),
+                // body: JSON.stringify({}),
+                //TODO: onlogin add username to localstorage
                 headers: { 'Content-Type': 'application/json' },
             }
         );
-        // const json = await res.json();
-        // const data = await JSON.parse(json).data;
     };
 
     return (

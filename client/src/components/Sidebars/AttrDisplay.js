@@ -10,6 +10,7 @@ import {
     prettyStarWhitelistGroupings,
 } from '../Filters/FilterConfig';
 import FilterContext from '../Context/FilterContext';
+import Username from './Username';
 const AttrDisplay = (props) => {
     const { collapsedFilterControls, setCollapsedFilterControls } =
         React.useContext(FilterContext);
@@ -42,6 +43,7 @@ const AttrDisplay = (props) => {
                         );
                     })}
                     <Divider />
+                    <Username />
                     {Object.keys(prettyStarWhitelistGroupings).map((group) => {
                         return (
                             <StarBlacklistControlButton

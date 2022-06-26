@@ -1,23 +1,50 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { keyGroupings } from '../Filters/FilterConfig';
+import SubdivisionContext from './SubdivisionsContext';
+import UserContext from './UserContext';
 
 const FilterContext = React.createContext({});
+export const filterStarredAndHidden = ({ listing, userData, settings }) => {
+    if (!userData || !settings) return true;
+    const conditions = {};
 
+    if (settings.excludeUnstarred) {
+        conditions.excludeUnstarred = userData.whitelists.includes(listing.id);
+    }
+    if (settings.excludeStarred) {
+        conditions.excludeStarred = !userData.whitelists.includes(listing.id);
+    }
+    if (settings.excludeUnhidden) {
+        conditions.excludeUnhidden = userData.blacklists.includes(listing.id);
+    }
+    if (settings.excludeHidden) {
+        conditions.excludeUnhidden = !userData.blacklists.includes(listing.id);
+    }
+    if (listing.id === '1605114861') {
+        console.log(
+            '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>Context>FilterContext.js:24 "settings"',
+            settings
+        );
+        console.log(
+            '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>Context>FilterContext.js:24 "conditions"',
+            conditions
+        );
+    }
+    return (
+        !Object.values(conditions).length ||
+        Object.values(conditions).every(Boolean)
+    );
+};
 export const FilterProvider = ({ children }) => {
-    const [subdivisionData, setSubdivisionData] = React.useState([]);
+    const { userData } = useContext(UserContext);
+    const { allowedListings } = useContext(SubdivisionContext);
+    console.log(
+        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>Context>FilterContext.js:30 "allowedListings"',
+        allowedListings
+    );
     const [userFilters, setUserFilters] = React.useState({});
     const [searchResults, setSearchResults] = React.useState(null);
     const [searchPending, setSearchPending] = React.useState(false);
-    const [selectedSubdivisions, setSelectedSubdivisions] = React.useState([]);
-    const [allowedListings, setAllowedListings] = React.useState(null);
-
-    React.useEffect(() => {
-        const combinedListingsBySelectedSubdivisions =
-            selectedSubdivisions.reduce((accum, subd) => {
-                return [...accum, ...subdivisionData[subd]];
-            }, []);
-        setAllowedListings(combinedListingsBySelectedSubdivisions);
-    }, [selectedSubdivisions]);
 
     const [collapsedFilterControls, setCollapsedFilterControls] =
         React.useState(false);
@@ -87,6 +114,25 @@ export const FilterProvider = ({ children }) => {
             excludeHidden: true,
         });
 
+    const filteredSearchResults = searchResults
+        ?.filter((sR) => {
+            return !allowedListings.length || allowedListings.includes(sR.id);
+        })
+        ?.filter((sR) => {
+            const allowed = filterStarredAndHidden({
+                listing: sR,
+                settings: starAndBlacklistSettings,
+                userData,
+            });
+            if (sR.id === '1605114861') {
+                console.log(
+                    '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>Context>FilterContext.js:128 "allowed"',
+                    allowed
+                );
+            }
+            return allowed;
+        });
+
     return (
         <FilterContext.Provider
             value={{
@@ -98,15 +144,11 @@ export const FilterProvider = ({ children }) => {
                 setCollapsedFilterControls,
                 searchResults,
                 setSearchResults,
-                selectedSubdivisions,
-                setSelectedSubdivisions,
-                subdivisionData,
-                setSubdivisionData,
-                allowedListings,
                 searchPending,
                 setSearchPending,
                 starAndBlacklistSettings,
                 starAndBlacklistSettingsDispatch,
+                filteredSearchResults,
             }}
         >
             {children}
