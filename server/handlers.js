@@ -1,6 +1,6 @@
 const { attributeDisplay } = require('./filterConfig');
 
-const intAttributes = ['prc', 'dateavailable_tdt'];
+const intAttributes = ['prc', 'dateavailable_tdt', 'timeposted_int'];
 const filterForInt = (attr, value) => {
     return !intAttributes.includes(attr)
         ? value

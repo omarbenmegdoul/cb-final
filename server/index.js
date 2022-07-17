@@ -34,18 +34,8 @@ app.post('/listings', async (req, res) => {
     const allowedListings = subD.reduce((accum, x) => {
         return [...accum, ...x.listings];
     }, []);
-
     const results = listings.filter((x) => allowedListings.includes(x.id));
-    console.log(
-        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>server>index.js:39 "results.length"',
-        results.length
-    );
 
-    // listings.slice(0, 5).forEach((l) => {
-    //     console.log(`❗ index.js:20 'l'`, l);
-    // });
-    // console.log(`❗ index.js:15 'out'`,out);
-    // res.status(200).json(listings)
     res.status(200).json(JSON.stringify({ data: results }));
 });
 

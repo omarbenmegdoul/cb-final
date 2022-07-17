@@ -453,7 +453,7 @@ const listingsWithCoordInfoImport = async (dbName) => {
     // return;
 
     await db.collection('listings_rolling_update').remove({});
-
+    const newData = [];
     for (const listing in cleanedSimpleData) {
         console.log(`❗ importDataToMongoDB.js:37 'x'`, listing);
         // for (const attribute in attributeDisplay) {
@@ -478,17 +478,23 @@ const listingsWithCoordInfoImport = async (dbName) => {
                               ),
                               10
                           );
+                    const timeposted =
+                        cleanedSimpleData[listing].cntxt.timeposted;
+                    const timeposted_str = timeposted
+                        .split(' ')[0]
+                        .replaceAll('-', '');
+
+                    accum.timeposted_int = parseInt(timeposted_str, 10);
 
                     return accum;
                 },
                 { ...cleanedSimpleData[listing].cntxt.d }
             );
+        newData.push(flattenedContext);
 
-        await db
-            .collection('listings_rolling_update')
-            .insertOne(flattenedContext);
         // }
     }
+    await db.collection('listings_rolling_update').insertMany(newData);
     client.close();
     // close the connection to the database server
 
