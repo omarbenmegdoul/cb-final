@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-  attributeDisplay,
-  keyGroupings,
-  prettyKeyGroupings
+    attributeDisplay,
+    keyGroupings,
+    prettyKeyGroupings,
 } from './FilterConfig';
 import { Filter, GroupedRequireFilter } from './FilterOptions';
-
+import Username from './Username';
 
 const handleGroupClick = (ev) => {
     const splitId = ev.currentTarget.id.split('_');
@@ -21,7 +21,6 @@ const handleGroupClick = (ev) => {
         : 'none';
     ev.currentTarget.classList.toggle('sibling-is-expanded');
 };
-
 
 const FilterGroup = ({ group }) => {
     const requireKeys = keyGroupings[group].filter(
@@ -38,7 +37,6 @@ const FilterGroup = ({ group }) => {
                 className=""
             >
                 <span>{prettyKeyGroupings[group]}</span>
-              
             </button>
 
             <FilterContainer id={group + '_options'}>
@@ -58,12 +56,12 @@ const Filters = () => {
     const groups = Object.keys(keyGroupings);
     return (
         <MetaWrapper>
+            <Username />
             <Wrapper>
                 {groups.map((group) => {
                     return <FilterGroup group={group} />;
                 })}
             </Wrapper>
-
         </MetaWrapper>
     );
 };
@@ -84,7 +82,6 @@ const MetaWrapper = styled.div`
     justify-content: center;
     align-items: center;
 `;
-
 
 const GroupWrapper = styled.div`
     margin: 5px 5px 0 5px;

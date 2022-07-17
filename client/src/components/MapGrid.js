@@ -2,13 +2,40 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { CHI_SUBDIVISIONS, PSI_SUBDIVISIONS } from '../constants';
 import { subdivisionCenterFromChiPsiCoords } from '../utils';
+import FilterContext from './Context/FilterContext';
 import SubdivisionContext from './Context/SubdivisionsContext';
 
-const MapGrid = ({ Props }) => {
-    const { setSelectedSubdivisions, subdivisionData, setSubdivisionData } =
-        React.useContext(SubdivisionContext);
+const MapGrid = ({ showHeatMap }) => {
+    const {
+        allowedListings,
+        setSelectedSubdivisions,
+        subdivisionData,
+        setSubdivisionData,
+    } = React.useContext(SubdivisionContext);
+    const { searchResults } = React.useContext(FilterContext);
+
     const rows = new Array(PSI_SUBDIVISIONS).fill(0);
     const columns = new Array(CHI_SUBDIVISIONS).fill(0);
+    console.log(
+        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>MapGrid.js:22 "subdivisionData[0-0]"',
+        subdivisionData['0-0']
+    );
+    const heatMapGrid = rows.map((x, xIndex) =>
+        columns.map((y, yIndex) => {
+            return searchResults?.filter((listing) =>
+                subdivisionData[`${xIndex}-${yIndex}`].includes(listing.id)
+            ).length;
+        })
+    );
+    const hottest = Math.max(
+        ...heatMapGrid.reduce((accum, current) => {
+            return [...accum, ...current];
+        }, [])
+    );
+    console.log(
+        '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>MapGrid.js:35 "hottest"',
+        hottest
+    );
     // code to populate DB
 
     // React.useEffect(() => {
@@ -62,6 +89,7 @@ const MapGrid = ({ Props }) => {
         allowStaging: false,
         mouseButton: null,
     });
+
     const handlePaintingClassChange = (element, paintMode) => {
         const callClassListMethod = paintMode
             ? () => {
@@ -107,32 +135,62 @@ const MapGrid = ({ Props }) => {
         // console.log for debug
         // console.log(ev.target.id);
     };
-
+    const props = showHeatMap
+        ? {}
+        : {
+              onMouseDown: beginStaging,
+              onMouseUp: stopStaging,
+              onMouseLeave: stopStaging,
+          };
     return (
         <TestFlex>
-            <Wrapper
-                id="map-grid-wrapper"
-                onMouseDown={beginStaging}
-                onMouseUp={stopStaging}
-                onMouseLeave={stopStaging}
-            >
+            <Wrapper id="map-grid-wrapper" {...props}>
                 {rows.map((x, xIndex) => {
                     return columns.map((y, yIndex) => {
+                        xIndex === 8 &&
+                            yIndex === 15 &&
+                            console.log(
+                                '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>MapGrid.js:140 "heatMapGrid[xIndex][yIndex]"',
+                                heatMapGrid[xIndex][yIndex]
+                            );
+                        const heatMapBgColor =
+                            heatMapGrid[xIndex][yIndex] &&
+                            `rgba(255, 0,0, ${
+                                Math.floor(
+                                    (50 * heatMapGrid[xIndex][yIndex].length) /
+                                        hottest
+                                ) / 100
+                            }`;
+                        const props = !showHeatMap
+                            ? {
+                                  onMouseEnter: markHover,
+                                  onContextmenu: (ev) => {
+                                      ev.preventDefault();
+                                      return false;
+                                  },
+                              }
+                            : {
+                                  bg: `rgba(255,0,0,${
+                                      Math.floor(
+                                          (100 *
+                                              0.5 *
+                                              heatMapGrid[xIndex][yIndex]) /
+                                              hottest
+                                      ) / 100
+                                  })`,
+                              };
+
                         return (
-                            <div
+                            <GridSlot
                                 id={`${xIndex}-${yIndex}`}
+                                key={`${xIndex}-${yIndex}${
+                                    showHeatMap ? '-heatmap' : ''
+                                }`}
                                 className="grid-slots"
-                                onMouseEnter={markHover}
-                                onContextMenu={(ev) => {
-                                    ev.preventDefault();
-                                    return false;
-                                }}
+                                {...props}
                             >
-                                {!!subdivisionData[`${xIndex}-${yIndex}`]
-                                    ?.length &&
-                                    subdivisionData[`${xIndex}-${yIndex}`]
-                                        ?.length}
-                            </div>
+                                {heatMapGrid[xIndex][yIndex]}
+                            </GridSlot>
                         );
                     });
                 })}
@@ -140,6 +198,9 @@ const MapGrid = ({ Props }) => {
         </TestFlex>
     );
 };
+const GridSlot = styled.div`
+    background-color: ${(props) => props.bg};
+`;
 const selectionAnimation = keyframes`
 0% {
 opacity:0;

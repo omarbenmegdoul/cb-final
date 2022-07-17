@@ -68,6 +68,11 @@ export const attributeDisplay = {
         filterType: 'daterange',
         prettyValues: {},
     },
+    timeposted_int: {
+        pretty: 'Date Posted',
+        filterType: 'daterange',
+        prettyValues: {},
+    },
     dishwasher_s: {
         pretty: 'Dishwasher',
         filterType: 'require',
@@ -207,6 +212,7 @@ export const attributeDisplay = {
 export const keyGroupings = {
     g_basic: [
         'prc',
+        'timeposted_int',
         'dateavailable_tdt',
         'numberbathrooms_s',
         'numberbedrooms_s',

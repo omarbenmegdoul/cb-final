@@ -5,6 +5,7 @@ import MapBgBlock from './Map';
 import MapGrid from './MapGrid';
 const MapStack = () => {
     const { selectedSubdivisions } = React.useContext(SubdivisionContext);
+    const [showHeatMap, setShowHeatmap] = React.useState(false);
     // const handleFilterSave = () => {
     //     fetch;
     // };
@@ -12,9 +13,12 @@ const MapStack = () => {
         <>
             <MetaWrapper>
                 <button>Save this area</button> &middot;{' '}
-                <button>Save these filters</button>
+                <button>Save these filters</button> &middot;
+                <button onClick={() => setShowHeatmap((prev) => !prev)}>{`${
+                    showHeatMap ? 'Hide' : 'Show'
+                } heatmap for filters`}</button>
                 <Wrapper>
-                    <MapGrid />
+                    <MapGrid showHeatMap={showHeatMap} />
                     <MapBgBlock />
                 </Wrapper>
             </MetaWrapper>

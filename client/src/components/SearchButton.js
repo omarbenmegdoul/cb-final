@@ -21,16 +21,18 @@ const SearchButton = ({ myProps }) => {
                         filterSummary,
                     }), // body data type must match "Content-Type" header
                 };
+                console.log(
+                    '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>SearchButton.js:24 "filterSummary.timeposted_int, filterSummary.dateavailable_tdt"',
+                    filterSummary.timeposted_int,
+                    filterSummary.dateavailable_tdt
+                );
                 setSearchPending(true);
                 const res = await fetch(
                     'http://localhost:5678/listings',
                     options
                 );
                 const listings = await res.json();
-                console.log(
-                    '❗ C:>Users>arobe>Documents>concordia-bootcamps>cb-final>client>src>components>SearchButton.js:30 "JSON.parse(listings).data"',
-                    JSON.parse(listings).data
-                );
+
                 setSearchResults(JSON.parse(listings).data);
                 // setUserFilters(filterSummary);
                 setSearchPending(false);
